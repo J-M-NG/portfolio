@@ -343,14 +343,18 @@ const clientPayload = {
         </div>
 
         <div class="jm-two-col">
-          <div class="jm-panel jm-stack jm-stack--tight">
-            <h3>Problem or spark</h3>
-            <p id="detail-problem" class="jm-secondary-text"></p>
-          </div>
-          <div class="jm-panel jm-stack jm-stack--tight">
-            <h3>What I wanted to learn</h3>
-            <p id="detail-learning" class="jm-secondary-text"></p>
-          </div>
+          <section class="jm-panel">
+            <div class="jm-panel__body jm-stack jm-stack--tight">
+              <h3>Problem or spark</h3>
+              <p id="detail-problem" class="jm-secondary-text"></p>
+            </div>
+          </section>
+          <section class="jm-panel">
+            <div class="jm-panel__body jm-stack jm-stack--tight">
+              <h3>What I wanted to learn</h3>
+              <p id="detail-learning" class="jm-secondary-text"></p>
+            </div>
+          </section>
         </div>
 
         <div class="jm-stack jm-stack--tight">
@@ -576,11 +580,13 @@ const clientPayload = {
         if (linkedNote) {
           noteWrap.classList.remove('is-hidden');
           noteWrap.innerHTML = `
-            <div class="jm-panel jm-section-head">
-              <span><strong>Related field note:</strong> ${linkedNote.title}</span>
-              <button type="button" class="jm-button jm-button--secondary jm-button--small" data-open-note="${linkedNote.slug}">
-                Read note
-              </button>
+            <div class="jm-panel">
+              <div class="jm-panel__body jm-section-head">
+                <span><strong>Related field note:</strong> ${linkedNote.title}</span>
+                <button type="button" class="jm-button jm-button--secondary jm-button--small" data-open-note="${linkedNote.slug}">
+                  Read note
+                </button>
+              </div>
             </div>
           `;
           noteWrap.querySelector('[data-open-note]')?.addEventListener('click', () => {
