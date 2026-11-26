@@ -524,8 +524,8 @@ body {
 }
 
 .jm-stage-tabs {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(105px, 1fr));
   gap: 0.25rem;
   padding: 0.25rem;
   border-radius: var(--jm-radius-md);
@@ -536,8 +536,9 @@ body {
 .jm-stage-tab {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.4rem;
-  padding: 0.4rem 0.75rem;
+  padding: 0.45rem 0.65rem;
   border-radius: var(--jm-radius-sm);
   border: var(--jm-border-width) solid transparent;
   background: transparent;
@@ -545,6 +546,7 @@ body {
   font-family: var(--jm-font-family);
   font-size: var(--jm-font-size-xs);
   font-weight: var(--jm-font-weight-semibold);
+  white-space: nowrap;
   cursor: pointer;
   transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
 }
@@ -592,8 +594,9 @@ body {
 
 .jm-reef-card {
   width: 100%;
+  min-height: 126px;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: var(--jm-space-4);
   padding: var(--jm-space-4);
   border-radius: var(--jm-radius-md);
@@ -664,12 +667,18 @@ body {
   font-size: var(--jm-font-size-sm);
   line-height: 1.5;
   color: var(--jm-colour-text-secondary);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 3em;
 }
 
 .jm-reef-card__meta {
   font-size: var(--jm-font-size-xs);
   color: var(--jm-colour-text-secondary);
   opacity: 0.88;
+  margin-top: auto;
 }
 
 .jm-project-list {
@@ -759,6 +768,11 @@ body {
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--jm-space-4);
+  align-items: stretch;
+}
+
+.jm-two-col > .jm-panel {
+  height: 100%;
 }
 
 @media (min-width: 640px) {
