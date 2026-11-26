@@ -141,20 +141,11 @@ const clientPayload = {
 
         <!-- Reef Index (Projects) -->
         <section id="projects" class="jm-stack">
-          <div class="jm-section-head">
-            <div>
-              <h2>Reef index</h2>
-              <p class="jm-secondary-text">
-                Hover a project to spotlight its coral on the left, or select one to read its story.
-              </p>
-            </div>
-            <button
-              id="reset-filters"
-              type="button"
-              class="jm-button jm-button--secondary jm-button--small is-hidden"
-            >
-              Show all
-            </button>
+          <div>
+            <h2>Reef index</h2>
+            <p class="jm-secondary-text">
+              Hover a project to spotlight its coral on the left, or select one to read its story.
+            </p>
           </div>
 
           <div class="jm-stage-tabs" role="region" aria-label="Filter projects by growth stage">
@@ -419,7 +410,6 @@ const clientPayload = {
     const detailViewEl = document.getElementById('project-detail');
     const noteViewEl = document.getElementById('note-detail');
     const captionEl = document.getElementById('reef-caption');
-    const resetBtn = document.getElementById('reset-filters');
     const emptyEl = document.getElementById('project-empty');
 
     function matchesFilters(project) {
@@ -466,7 +456,6 @@ const clientPayload = {
       });
 
       emptyEl?.classList.toggle('is-hidden', visibleCount > 0);
-      resetBtn?.classList.toggle('is-hidden', activeStage === 'all');
 
       document.querySelectorAll('[data-stage-filter]').forEach((btn) => {
         const val = btn.getAttribute('data-stage-filter');
@@ -723,11 +712,6 @@ const clientPayload = {
         activeStage = btn.getAttribute('data-stage-filter') || 'all';
         applyFilters();
       });
-    });
-
-    resetBtn?.addEventListener('click', () => {
-      activeStage = 'all';
-      applyFilters();
     });
 
     // Day / Night toggle

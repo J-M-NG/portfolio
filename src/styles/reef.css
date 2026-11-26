@@ -525,9 +525,9 @@ body {
 
 .jm-stage-tabs {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(105px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(92px, 1fr));
   gap: 0.25rem;
-  padding: 0.25rem;
+  padding: 0.3rem;
   border-radius: var(--jm-radius-md);
   background-color: var(--jm-colour-surface-sunken);
   border: var(--jm-border-width) solid var(--jm-colour-border);
@@ -538,7 +538,7 @@ body {
   align-items: center;
   justify-content: center;
   gap: 0.4rem;
-  padding: 0.45rem 0.65rem;
+  padding: 0.5rem 0.65rem;
   border-radius: var(--jm-radius-sm);
   border: var(--jm-border-width) solid transparent;
   background: transparent;
@@ -548,7 +548,7 @@ body {
   font-weight: var(--jm-font-weight-semibold);
   white-space: nowrap;
   cursor: pointer;
-  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+  transition: background-color 0.16s ease, color 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease;
 }
 
 .jm-stage-tab:hover {
@@ -557,33 +557,39 @@ body {
 }
 
 .jm-stage-tab.is-active {
-  background-color: var(--jm-colour-surface);
-  color: var(--jm-colour-text);
-  border-color: var(--jm-colour-border-strong);
-  box-shadow: 0 1px 3px rgba(10, 30, 52, 0.08);
+  background-color: var(--jm-colour-accent);
+  color: var(--jm-colour-on-accent);
+  border-color: var(--jm-colour-accent);
+  box-shadow: 0 2px 6px rgba(15, 45, 72, 0.16);
+}
+
+.jm-stage-tab.is-active:hover {
+  background-color: var(--jm-colour-accent-hover);
+  border-color: var(--jm-colour-accent-hover);
+  color: var(--jm-colour-on-accent);
 }
 
 .jm-stage-tab.is-empty-stage:not(.is-active) {
-  opacity: 0.65;
+  opacity: 0.6;
 }
 
 .jm-stage-tab__count {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 1.2rem;
+  min-width: 1.25rem;
   padding: 0.05rem 0.35rem;
   border-radius: 999px;
   font-size: 11px;
   font-weight: var(--jm-font-weight-semibold);
-  background-color: var(--jm-colour-background);
+  background-color: var(--jm-colour-surface);
   color: var(--jm-colour-text-secondary);
   font-variant-numeric: tabular-nums;
 }
 
 .jm-stage-tab.is-active .jm-stage-tab__count {
-  background-color: var(--jm-colour-accent-subtle);
-  color: var(--jm-colour-accent);
+  background-color: rgba(255, 255, 255, 0.22);
+  color: var(--jm-colour-on-accent);
 }
 
 .jm-reef-cards {
