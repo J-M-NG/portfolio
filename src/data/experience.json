@@ -2,25 +2,29 @@
   {
     "period": "Present",
     "role": "Associate Consultant",
-    "company": "Bain & Company · London",
+    "company": "Bain & Company",
+    "location": "London",
     "summary": "Working on strategy and transformation engagements primarily across technology, media, and telecoms, focusing on customer strategy, performance improvement, and AI-enabled commercial tooling."
   },
   {
     "period": "2024 – 2026",
     "role": "Associate, Senior Analyst & Analyst",
-    "company": "Candesic · London",
+    "company": "Candesic",
+    "location": "London",
     "summary": "Supported commercial due diligence and growth strategy engagements across healthcare and life sciences, analysing market dynamics, competitive positioning, and long-term strategy."
   },
   {
     "period": "2023 – 2024",
     "role": "Co-founder & Vice-President",
-    "company": "180 Degrees Consulting LSE · London",
+    "company": "180 Degrees Consulting LSE",
+    "location": "London",
     "summary": "Re-established and led LSE's student-run pro-bono consultancy, scaling student teams to deliver strategy projects for non-profit and social-impact organisations."
   },
   {
     "period": "2021 – 2022",
     "role": "Associate Scientist, Biopharmaceuticals (Placement)",
-    "company": "AstraZeneca · Cambridge",
+    "company": "AstraZeneca",
+    "location": "Cambridge",
     "summary": "Completed an industrial placement focused on biopharmaceutical strain engineering and protocol development."
   }
 ]
