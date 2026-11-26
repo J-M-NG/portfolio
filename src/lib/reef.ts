@@ -14,7 +14,7 @@ export const STAGES: StageMeta[] = [
   { id: 'polyp', label: 'Polyp', desc: 'Idea & framing', tagClass: '', displayHeight: 48 },
   { id: 'bud', label: 'Bud', desc: 'Early prototype', tagClass: 'jm-tag--warning', displayHeight: 58 },
   { id: 'branch', label: 'Branch', desc: 'Working MVP', tagClass: 'jm-tag--info', displayHeight: 82 },
-  { id: 'reef', label: 'Blooming reef', desc: 'Shipped & live', tagClass: 'jm-tag--success', displayHeight: 104 },
+  { id: 'reef', label: 'Blooming', desc: 'Shipped & live', tagClass: 'jm-tag--success', displayHeight: 104 },
 ];
 
 export const STAGE_MAP: Record<CoralStage, StageMeta> = {
