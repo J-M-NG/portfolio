@@ -1,12 +1,12 @@
 {
-  "name": "Alex Chen",
-  "roleTag": "Product manager",
-  "headline": "Fostering everyday user problems into a living reef of prototypes",
-  "bio": "You are exploring my living project reef. I work in product management and use AI-assisted vibecoding to turn user stories into working prototypes quickly. Each coral on the left grows through 4 stages as I test ideas, ship improvements, and document what I learned.",
-  "statusLine": "Currently exploring AI-native discovery workflows · Based in Melbourne / Remote",
-  "email": "hello@example.com",
+  "name": "Matt N.",
+  "roleTag": "Product builder",
+  "headline": "Fostering experiments, agent workflows, and accessible tools into a living reef",
+  "bio": "You are exploring my living project reef. I build framework-free design systems, multi-agent coordination tools, and evaluation benchmarks, using AI-assisted workflows to move from user problems to working prototypes quickly. Each coral on the left grows through 4 stages as ideas mature and lessons accumulate.",
+  "statusLine": "Currently building Project Reef, J-M-NG/ui-kit, Agent Noticeboard, and Cheat Arena",
+  "email": null,
   "githubUrl": "https://github.com/J-M-NG",
-  "linkedinUrl": "https://www.linkedin.com",
+  "linkedinUrl": null,
   "resumeBannerTitle": "PDF resume on request",
-  "resumeBannerBody": "Prefer a PDF copy of my resume? Reach out via LinkedIn or email and I will send one over."
+  "resumeBannerBody": "Prefer a PDF copy of my resume? Reach out via GitHub and I will send one over."
 }

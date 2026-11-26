@@ -25,17 +25,19 @@ const { items, bannerTitle, bannerBody } = Astro.props;
     </p>
   </div>
 
-  <ol class="jm-trail">
-    {items.map((item) => (
-      <li>
-        <time>{item.period}</time>
-        <div class="jm-stack jm-stack--tight">
-          <div>
-            <strong>{item.role}</strong> · <span class="jm-trail__meta">{item.company}</span>
+  {items.length > 0 && (
+    <ol class="jm-trail">
+      {items.map((item) => (
+        <li>
+          <time>{item.period}</time>
+          <div class="jm-stack jm-stack--tight">
+            <div>
+              <strong>{item.role}</strong> · <span class="jm-trail__meta">{item.company}</span>
+            </div>
+            <p class="jm-secondary-text">{item.summary}</p>
           </div>
-          <p class="jm-secondary-text">{item.summary}</p>
-        </div>
-      </li>
-    ))}
-  </ol>
+        </li>
+      ))}
+    </ol>
+  )}
 </section>

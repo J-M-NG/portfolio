@@ -273,15 +273,29 @@ const clientPayload = {
             Happy to chat about product ideas, vibecoding prototypes, or share a PDF copy of my resume.
           </p>
           <div class="jm-cluster">
-            <button id="copy-email-btn" type="button" class="jm-button">
-              Copy email address
-            </button>
-            <a href={profile.githubUrl} target="_blank" rel="noopener noreferrer" class="jm-button jm-button--secondary">
+            {profile.email && (
+              <button id="copy-email-btn" type="button" class="jm-button">
+                Copy email address
+              </button>
+            )}
+            <a
+              href={profile.githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class={profile.email ? 'jm-button jm-button--secondary' : 'jm-button'}
+            >
               Open GitHub
             </a>
-            <a href={profile.linkedinUrl} target="_blank" rel="noopener noreferrer" class="jm-button jm-button--secondary">
-              Open LinkedIn
-            </a>
+            {profile.linkedinUrl && (
+              <a
+                href={profile.linkedinUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="jm-button jm-button--secondary"
+              >
+                Open LinkedIn
+              </a>
+            )}
           </div>
           <p class="jm-secondary-text">
             Built with Astro and J-M-NG/ui-kit · Hosted on GitHub Pages
@@ -544,7 +558,7 @@ const clientPayload = {
           `;
         } else {
           ghEl.innerHTML = `
-            <div class="jm-summary-list__row"><dt>Status</dt><dd class="jm-secondary-text">Early polyp concept with no public repository linked yet.</dd></div>
+            <div class="jm-summary-list__row"><dt>Status</dt><dd class="jm-secondary-text">Private repository or local workspace; public GitHub metrics are not linked.</dd></div>
           `;
         }
       }
@@ -587,7 +601,7 @@ const clientPayload = {
         }
         if (!actions.length) {
           actions.push(
-            `<span class="jm-secondary-text">In discovery: repository link coming once budded.</span>`
+            `<span class="jm-secondary-text">Private project: public repository link not published.</span>`
           );
         }
         actionsEl.innerHTML = actions.join('');
