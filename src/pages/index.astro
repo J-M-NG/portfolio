@@ -1,0 +1,755 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ReefPane from '../components/ReefPane.astro';
+import Experience from '../components/Experience.astro';
+import profile from '../data/profile.json';
+import experience from '../data/experience.json';
+import githubMetaFile from '../data/github-meta.json';
+import { STAGES, getCoralSpritePath, getStageMeta } from '../lib/reef';
+
+const baseUrl = import.meta.env.BASE_URL.endsWith('/')
+  ? import.meta.env.BASE_URL
+  : `${import.meta.env.BASE_URL}/`;
+
+const projectEntries = await getCollection('projects');
+const noteEntries = await getCollection('notes');
+
+const stageOrder: Record<string, number> = { reef: 0, branch: 1, bud: 2, polyp: 3 };
+
+const repoCache = (githubMetaFile.repos || {}) as Record<
+  string,
+  { primaryLang: string; lastPush: string; commits: string; stars: string; htmlUrl?: string }
+>;
+
+const projects = projectEntries
+  .map((entry) => {
+    const slug = entry.id.replace(/\.md$/, '');
+    const data = entry.data;
+    const stageMeta = getStageMeta(data.stage);
+    const spriteSrc = getCoralSpritePath(data.stage, data.species, data.spriteVariant, baseUrl);
+    const ghMeta = data.githubRepo ? repoCache[data.githubRepo] ?? null : null;
+    return {
+      slug,
+      title: data.title,
+      stage: data.stage,
+      stageLabel: stageMeta.label,
+      stageDesc: stageMeta.desc,
+      stageTagClass: stageMeta.tagClass,
+      species: data.species,
+      spriteVariant: data.spriteVariant,
+      spriteSrc,
+      posX: data.posX,
+      posY: data.posY,
+      plantedDate: data.plantedDate,
+      themes: data.themes,
+      problem: data.problem,
+      userStory: data.userStory,
+      learningGoal: data.learningGoal,
+      takeaways: data.takeaways,
+      tools: data.tools,
+      githubRepo: data.githubRepo ?? null,
+      demoUrl: data.demoUrl ?? null,
+      githubMeta: ghMeta,
+      screenshotCaption: data.screenshotCaption ?? '',
+      relatedNote: data.relatedNote ?? null,
+      body: entry.body?.trim() ?? '',
+    };
+  })
+  .sort((a, b) => stageOrder[a.stage] - stageOrder[b.stage]);
+
+const notes = noteEntries.map((entry) => {
+  const slug = entry.id.replace(/\.md$/, '');
+  const paragraphs = (entry.body ?? '')
+    .split(/\r?\n\r?\n/)
+    .map((p) => p.trim())
+    .filter(Boolean);
+  return {
+    slug,
+    title: entry.data.title,
+    date: entry.data.date,
+    tag: entry.data.tag,
+    projectSlug: entry.data.projectSlug ?? null,
+    paragraphs,
+  };
+});
+
+const allThemes = ['Workflow', 'Daily Friction', 'Learning Lab', 'Creative'];
+const syncedAt = githubMetaFile.syncedAt || '26 November 2026';
+
+const clientPayload = {
+  stages: STAGES,
+  projects,
+  notes,
+  email: profile.email,
+  baseUrl,
+};
+---
+
+<BaseLayout title={`${profile.name} — Project Reef`}>
+  <div class="jm-split">
+    <ReefPane
+      projects={projects.map((p) => ({
+        slug: p.slug,
+        title: p.title,
+        stage: p.stage,
+        species: p.species,
+        spriteVariant: p.spriteVariant,
+        posX: p.posX,
+        posY: p.posY,
+      }))}
+      baseUrl={baseUrl}
+    />
+
+    <div class="jm-dossier">
+      <header class="jm-header jm-dossier__header">
+        <div class="jm-header__inner">
+          <button type="button" class="jm-header__name-btn" data-show-dossier>
+            {profile.name}
+          </button>
+          <nav class="jm-header__nav" aria-label="Primary">
+            <ul>
+              <li><a href="#about" data-show-dossier>About</a></li>
+              <li><a href="#projects" data-show-dossier>Reef</a></li>
+              <li><a href="#experience" data-show-dossier>Experience</a></li>
+              <li><a href="#notes" data-show-dossier>Field notes</a></li>
+              <li><a href="#contact" data-show-dossier>Contact</a></li>
+            </ul>
+          </nav>
+        </div>
+      </header>
+
+      <!-- VIEW 1: MAIN DOSSIER -->
+      <main id="main" class="jm-dossier__body jm-stack jm-stack--loose">
+        <!-- About -->
+        <section id="about" class="jm-stack">
+          <div class="jm-cluster">
+            <span class="jm-tag jm-tag--info">{profile.roleTag}</span>
+            <span class="jm-tag jm-tag--success">{projects.length} corals growing</span>
+          </div>
+          <h1>{profile.headline}</h1>
+          <p class="jm-secondary-text">{profile.bio}</p>
+          <p class="jm-secondary-text">{profile.statusLine}</p>
+        </section>
+
+        <!-- Reef Index (Projects) -->
+        <section id="projects" class="jm-stack">
+          <div class="jm-section-head">
+            <div>
+              <h2>Reef index</h2>
+              <p class="jm-secondary-text">
+                Hover a project to spotlight its coral on the left, or select one to open its user story.
+              </p>
+            </div>
+            <button
+              id="reset-filters"
+              type="button"
+              class="jm-button jm-button--secondary jm-button--small is-hidden"
+            >
+              Reset filters
+            </button>
+          </div>
+
+          <div class="jm-filters jm-stack jm-stack--tight" role="region" aria-label="Filter projects">
+            <div id="stage-filters" class="jm-cluster">
+              <button type="button" class="jm-button jm-button--small" data-stage-filter="all" aria-pressed="true">
+                All stages
+              </button>
+              {STAGES.map((stage) => (
+                <button
+                  type="button"
+                  class="jm-button jm-button--secondary jm-button--small"
+                  data-stage-filter={stage.id}
+                  aria-pressed="false"
+                >
+                  {stage.label}
+                </button>
+              ))}
+            </div>
+            <div id="theme-filters" class="jm-cluster">
+              <button type="button" class="jm-button jm-button--small" data-theme-filter="all" aria-pressed="true">
+                All focuses
+              </button>
+              {allThemes.map((theme) => (
+                <button
+                  type="button"
+                  class="jm-button jm-button--secondary jm-button--small"
+                  data-theme-filter={theme}
+                  aria-pressed="false"
+                >
+                  {theme}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div id="project-list" class="jm-project-list">
+            {projects.map((p) => (
+              <button
+                type="button"
+                class="jm-project-row"
+                data-project-row={p.slug}
+                data-stage={p.stage}
+                data-themes={p.themes.join('|')}
+              >
+                <span class="jm-project-row__thumb">
+                  <img
+                    src={p.spriteSrc}
+                    alt=""
+                    class="jm-pixel-sprite"
+                    style="max-height: 36px; max-width: 36px; width: auto; height: auto;"
+                  />
+                </span>
+                <span class="jm-project-row__content">
+                  <span class="jm-project-row__top">
+                    <span class="jm-cluster">
+                      <strong class="jm-project-row__title">{p.title}</strong>
+                      <span class={`jm-tag ${p.stageTagClass}`}>{p.stageLabel}</span>
+                    </span>
+                    <span class="jm-secondary-text" aria-hidden="true">→</span>
+                  </span>
+                  <span class="jm-project-row__desc">{p.problem}</span>
+                </span>
+              </button>
+            ))}
+          </div>
+
+          <div id="project-empty" class="jm-panel jm-empty is-hidden">
+            <p class="jm-empty__title">No corals match those filters</p>
+            <p class="jm-secondary-text">Reset the filters to view all projects in the reef.</p>
+          </div>
+
+          <p class="jm-secondary-text">
+            Growth stages are set manually; GitHub repository metadata synced on{' '}
+            <span class="jm-num">{syncedAt}</span>.
+          </p>
+        </section>
+
+        <!-- Work Experience -->
+        <Experience
+          items={experience}
+          bannerTitle={profile.resumeBannerTitle}
+          bannerBody={profile.resumeBannerBody}
+        />
+
+        <!-- Field Notes -->
+        <section id="notes" class="jm-stack">
+          <div>
+            <h2>Field notes</h2>
+            <p class="jm-secondary-text">
+              Short reflections on scoping, user stories, and vibecoding, linked to corals in the reef.
+            </p>
+          </div>
+          <div id="notes-list" class="jm-project-list">
+            {notes.map((n) => {
+              const linkedProject = projects.find((p) => p.slug === n.projectSlug);
+              return (
+                <button
+                  type="button"
+                  class="jm-project-row jm-note-row"
+                  data-note-row={n.slug}
+                  data-linked-project={n.projectSlug ?? ''}
+                >
+                  <span class="jm-project-row__content">
+                    <strong class="jm-project-row__title">{n.title}</strong>
+                    <span class="jm-project-row__desc">
+                      {n.tag}
+                      {linkedProject ? ` · Linked to ${linkedProject.title}` : ''}
+                    </span>
+                  </span>
+                  <span class="jm-secondary-text jm-num" style="flex-shrink: 0;">
+                    {n.date} →
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </section>
+
+        <!-- Contact & Footer -->
+        <footer id="contact" class="jm-footer jm-stack">
+          <h2>Get in touch</h2>
+          <p class="jm-secondary-text">
+            Happy to chat about product ideas, vibecoding prototypes, or share a PDF copy of my resume.
+          </p>
+          <div class="jm-cluster">
+            <button id="copy-email-btn" type="button" class="jm-button">
+              Copy email address
+            </button>
+            <a href={profile.githubUrl} target="_blank" rel="noopener noreferrer" class="jm-button jm-button--secondary">
+              Open GitHub
+            </a>
+            <a href={profile.linkedinUrl} target="_blank" rel="noopener noreferrer" class="jm-button jm-button--secondary">
+              Open LinkedIn
+            </a>
+          </div>
+          <p class="jm-secondary-text">
+            Built with Astro and J-M-NG/ui-kit · Hosted on GitHub Pages
+          </p>
+        </footer>
+      </main>
+
+      <!-- VIEW 2: INLINE PROJECT STORY VIEW -->
+      <section id="project-detail" class="jm-dossier__body jm-stack is-hidden" aria-live="polite">
+        <div class="jm-section-head">
+          <button type="button" class="jm-button jm-button--secondary jm-button--small" data-show-dossier>
+            ← Return to reef index
+          </button>
+          <span id="detail-planted" class="jm-secondary-text jm-num"></span>
+        </div>
+
+        <div class="jm-detail-hero">
+          <div id="detail-sprite" class="jm-panel jm-detail-sprite-box"></div>
+          <div class="jm-stack jm-stack--tight">
+            <div class="jm-cluster">
+              <span id="detail-stage-tag" class="jm-tag"></span>
+              <span id="detail-species-tag" class="jm-tag" style="text-transform: capitalize;"></span>
+              <span class="jm-tag">Vibecoded</span>
+            </div>
+            <h2 id="detail-title"></h2>
+            <div id="detail-themes" class="jm-cluster"></div>
+          </div>
+        </div>
+
+        <div class="jm-stack jm-stack--tight">
+          <div class="jm-secondary-text">Growth lifecycle (4 stages)</div>
+          <div id="detail-stage-bar" class="jm-stage-grid"></div>
+        </div>
+
+        <div class="jm-banner">
+          <p class="jm-banner__title">User story</p>
+          <p id="detail-user-story"></p>
+        </div>
+
+        <div class="jm-two-col">
+          <div class="jm-panel jm-stack jm-stack--tight">
+            <h3>Problem or spark</h3>
+            <p id="detail-problem" class="jm-secondary-text"></p>
+          </div>
+          <div class="jm-panel jm-stack jm-stack--tight">
+            <h3>What I wanted to learn</h3>
+            <p id="detail-learning" class="jm-secondary-text"></p>
+          </div>
+        </div>
+
+        <div class="jm-stack jm-stack--tight">
+          <h3>Key takeaways</h3>
+          <ul id="detail-takeaways" class="jm-takeaways"></ul>
+        </div>
+
+        <details class="jm-details">
+          <summary>View prototype preview &amp; build tools</summary>
+          <div class="jm-details__text jm-stack jm-stack--tight">
+            <p id="detail-screenshot"></p>
+            <div id="detail-tools" class="jm-cluster"></div>
+          </div>
+        </details>
+
+        <div class="jm-stack jm-stack--tight">
+          <h3>Auto-synced GitHub metadata</h3>
+          <dl id="detail-github" class="jm-summary-list jm-summary-list--no-actions"></dl>
+        </div>
+
+        <div id="detail-note-wrap" class="is-hidden"></div>
+        <div id="detail-actions" class="jm-cluster"></div>
+      </section>
+
+      <!-- VIEW 3: INLINE FIELD NOTE READER -->
+      <section id="note-detail" class="jm-dossier__body jm-stack is-hidden" aria-live="polite">
+        <div class="jm-section-head">
+          <button type="button" class="jm-button jm-button--secondary jm-button--small" data-show-dossier>
+            ← Return to reef index
+          </button>
+          <a id="note-permalink" href="#" class="jm-secondary-text">Open standalone page</a>
+        </div>
+        <div class="jm-stack jm-stack--tight">
+          <span id="note-meta" class="jm-secondary-text jm-num"></span>
+          <h2 id="note-title"></h2>
+        </div>
+        <div id="note-body" class="jm-stack"></div>
+        <div id="note-linked" class="jm-section-head"></div>
+      </section>
+    </div>
+  </div>
+
+  <div id="toast" class="jm-toast is-hidden" role="status" aria-live="polite"></div>
+
+  <script id="reef-data" type="application/json" set:html={JSON.stringify(clientPayload)}></script>
+
+  <script>
+    const rawData = document.getElementById('reef-data')?.textContent || '{}';
+    const DATA = JSON.parse(rawData);
+    const PROJECTS = DATA.projects || [];
+    const NOTES = DATA.notes || [];
+    const STAGES = DATA.stages || [];
+    const EMAIL = DATA.email || 'hello@example.com';
+    const BASE_URL = DATA.baseUrl || '/';
+
+    let currentTheme = 'light';
+    let showLabels = true;
+    let activeStage = 'all';
+    let activeTheme = 'all';
+    let hoveredSlug = null;
+    let selectedSlug = null;
+
+    const rootEl = document.documentElement;
+    const reefPaneEl = document.getElementById('reef-pane');
+    const mainViewEl = document.getElementById('main');
+    const detailViewEl = document.getElementById('project-detail');
+    const noteViewEl = document.getElementById('note-detail');
+    const captionEl = document.getElementById('reef-caption');
+    const resetBtn = document.getElementById('reset-filters');
+    const emptyEl = document.getElementById('project-empty');
+
+    function matchesFilters(project) {
+      const stageOk = activeStage === 'all' || project.stage === activeStage;
+      const themeOk = activeTheme === 'all' || (project.themes || []).includes(activeTheme);
+      return stageOk && themeOk;
+    }
+
+    function syncReefHighlight() {
+      document.querySelectorAll('.jm-coral-node').forEach((node) => {
+        const slug = node.getAttribute('data-slug');
+        const project = PROJECTS.find((item) => item.slug === slug);
+        if (!project) return;
+        const matches = matchesFilters(project);
+        const isSel = selectedSlug === slug;
+        const isHov = hoveredSlug === slug;
+        node.classList.toggle('is-selected', isSel);
+        node.classList.toggle('is-highlighted', isHov);
+        const dimForFocus = (hoveredSlug && !isHov && !isSel) || (selectedSlug && !isSel && !isHov);
+        node.classList.toggle('is-dimmed', !matches || Boolean(dimForFocus));
+      });
+
+      const focusSlug = hoveredSlug || selectedSlug;
+      if (focusSlug && captionEl) {
+        const project = PROJECTS.find((item) => item.slug === focusSlug);
+        if (project) {
+          captionEl.textContent = `${project.title} · ${project.stageLabel} (${project.species})`;
+        }
+      } else if (captionEl) {
+        const count = PROJECTS.filter(matchesFilters).length;
+        captionEl.textContent =
+          count === PROJECTS.length
+            ? 'Select any coral to read its user story'
+            : `Showing ${count} of ${PROJECTS.length} corals`;
+      }
+    }
+
+    function applyFilters() {
+      let visibleCount = 0;
+      document.querySelectorAll('[data-project-row]').forEach((row) => {
+        const slug = row.getAttribute('data-project-row');
+        const project = PROJECTS.find((item) => item.slug === slug);
+        const visible = project ? matchesFilters(project) : false;
+        row.classList.toggle('is-hidden', !visible);
+        if (visible) visibleCount += 1;
+      });
+
+      emptyEl?.classList.toggle('is-hidden', visibleCount > 0);
+      resetBtn?.classList.toggle('is-hidden', activeStage === 'all' && activeTheme === 'all');
+
+      document.querySelectorAll('[data-stage-filter]').forEach((btn) => {
+        const val = btn.getAttribute('data-stage-filter');
+        const active = val === activeStage;
+        btn.classList.toggle('jm-button--secondary', !active);
+        btn.setAttribute('aria-pressed', String(active));
+      });
+
+      document.querySelectorAll('[data-theme-filter]').forEach((btn) => {
+        const val = btn.getAttribute('data-theme-filter');
+        const active = val === activeTheme;
+        btn.classList.toggle('jm-button--secondary', !active);
+        btn.setAttribute('aria-pressed', String(active));
+      });
+
+      syncReefHighlight();
+    }
+
+    function showMainDossier() {
+      selectedSlug = null;
+      mainViewEl?.classList.remove('is-hidden');
+      detailViewEl?.classList.add('is-hidden');
+      noteViewEl?.classList.add('is-hidden');
+      syncReefHighlight();
+    }
+
+    function openProjectDetail(slug) {
+      const p = PROJECTS.find((item) => item.slug === slug);
+      if (!p) return;
+      selectedSlug = slug;
+
+      const setText = (id, text) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = text;
+      };
+
+      setText('detail-planted', `Planted ${p.plantedDate}`);
+      const spriteBox = document.getElementById('detail-sprite');
+      if (spriteBox) {
+        spriteBox.innerHTML = `<img src="${p.spriteSrc}" alt="${p.title} coral sprite" class="jm-pixel-sprite" style="max-height: 74px; max-width: 74px; width: auto; height: auto;" />`;
+      }
+
+      const stageTag = document.getElementById('detail-stage-tag');
+      if (stageTag) {
+        stageTag.className = `jm-tag ${p.stageTagClass}`;
+        stageTag.textContent = `${p.stageLabel} · ${p.stageDesc}`;
+      }
+
+      setText('detail-species-tag', `${p.species} coral`);
+      setText('detail-title', p.title);
+
+      const themesEl = document.getElementById('detail-themes');
+      if (themesEl) {
+        themesEl.innerHTML = p.themes.map((t) => `<span class="jm-tag">${t}</span>`).join('');
+      }
+
+      const stageIds = ['polyp', 'bud', 'branch', 'reef'];
+      const activeIdx = stageIds.indexOf(p.stage);
+      const stageBar = document.getElementById('detail-stage-bar');
+      if (stageBar) {
+        stageBar.innerHTML = STAGES.map(
+          (st, i) => `<div class="jm-stage-step ${i <= activeIdx ? 'is-active' : ''}">${st.label}</div>`
+        ).join('');
+      }
+
+      setText('detail-user-story', `"${p.userStory}"`);
+      setText('detail-problem', p.problem);
+      setText('detail-learning', p.learningGoal);
+
+      const takeawaysEl = document.getElementById('detail-takeaways');
+      if (takeawaysEl) {
+        takeawaysEl.innerHTML = p.takeaways.map((t) => `<li>${t}</li>`).join('');
+      }
+
+      setText('detail-screenshot', p.screenshotCaption || 'Prototype preview notes coming soon.');
+      const toolsEl = document.getElementById('detail-tools');
+      if (toolsEl) {
+        toolsEl.innerHTML = p.tools.map((t) => `<span class="jm-tag">${t}</span>`).join('');
+      }
+
+      const ghEl = document.getElementById('detail-github');
+      if (ghEl) {
+        if (p.githubMeta) {
+          ghEl.innerHTML = `
+            <div class="jm-summary-list__row"><dt>Repository</dt><dd class="jm-num">${p.githubRepo}</dd></div>
+            <div class="jm-summary-list__row"><dt>Primary language</dt><dd>${p.githubMeta.primaryLang}</dd></div>
+            <div class="jm-summary-list__row"><dt>Last updated</dt><dd class="jm-num">${p.githubMeta.lastPush}</dd></div>
+            <div class="jm-summary-list__row"><dt>Activity</dt><dd class="jm-num">${p.githubMeta.commits} · ${p.githubMeta.stars}</dd></div>
+          `;
+        } else if (p.githubRepo) {
+          ghEl.innerHTML = `
+            <div class="jm-summary-list__row"><dt>Repository</dt><dd class="jm-num">${p.githubRepo}</dd></div>
+            <div class="jm-summary-list__row"><dt>Sync status</dt><dd class="jm-secondary-text">Private or not yet synced; metadata refreshes on the next scheduled build.</dd></div>
+          `;
+        } else {
+          ghEl.innerHTML = `
+            <div class="jm-summary-list__row"><dt>Status</dt><dd class="jm-secondary-text">Early polyp concept with no public repository linked yet.</dd></div>
+          `;
+        }
+      }
+
+      const noteWrap = document.getElementById('detail-note-wrap');
+      const linkedNote = NOTES.find((n) => n.slug === p.relatedNote);
+      if (noteWrap) {
+        if (linkedNote) {
+          noteWrap.classList.remove('is-hidden');
+          noteWrap.innerHTML = `
+            <div class="jm-panel jm-section-head">
+              <span><strong>Related field note:</strong> ${linkedNote.title}</span>
+              <button type="button" class="jm-button jm-button--secondary jm-button--small" data-open-note="${linkedNote.slug}">
+                Read note
+              </button>
+            </div>
+          `;
+          noteWrap.querySelector('[data-open-note]')?.addEventListener('click', () => {
+            openNoteDetail(linkedNote.slug);
+          });
+        } else {
+          noteWrap.classList.add('is-hidden');
+          noteWrap.innerHTML = '';
+        }
+      }
+
+      const actionsEl = document.getElementById('detail-actions');
+      if (actionsEl) {
+        const actions = [];
+        if (p.githubRepo) {
+          const repoUrl = p.githubMeta?.htmlUrl || `https://github.com/${p.githubRepo}`;
+          actions.push(
+            `<a href="${repoUrl}" target="_blank" rel="noopener noreferrer" class="jm-button">Open GitHub repository</a>`
+          );
+        }
+        if (p.demoUrl) {
+          actions.push(
+            `<a href="${p.demoUrl}" target="_blank" rel="noopener noreferrer" class="jm-button jm-button--secondary">Try live prototype</a>`
+          );
+        }
+        if (!actions.length) {
+          actions.push(
+            `<span class="jm-secondary-text">In discovery: repository link coming once budded.</span>`
+          );
+        }
+        actionsEl.innerHTML = actions.join('');
+      }
+
+      mainViewEl?.classList.add('is-hidden');
+      noteViewEl?.classList.add('is-hidden');
+      detailViewEl?.classList.remove('is-hidden');
+      syncReefHighlight();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function openNoteDetail(slug) {
+      const note = NOTES.find((item) => item.slug === slug);
+      if (!note) return;
+      selectedSlug = note.projectSlug;
+
+      const proj = PROJECTS.find((p) => p.slug === note.projectSlug);
+      const metaEl = document.getElementById('note-meta');
+      const titleEl = document.getElementById('note-title');
+      const bodyEl = document.getElementById('note-body');
+      const linkedEl = document.getElementById('note-linked');
+      const permalinkEl = document.getElementById('note-permalink');
+
+      if (metaEl) metaEl.textContent = `${note.date} · ${note.tag}`;
+      if (titleEl) titleEl.textContent = note.title;
+      if (permalinkEl) permalinkEl.setAttribute('href', `${BASE_URL}notes/${note.slug}/`);
+      if (bodyEl) {
+        bodyEl.innerHTML = note.paragraphs
+          .map((para) => `<p class="jm-secondary-text">${para}</p>`)
+          .join('');
+      }
+
+      if (linkedEl) {
+        if (proj) {
+          linkedEl.innerHTML = `
+            <span class="jm-secondary-text">Linked coral</span>
+            <button type="button" class="jm-button jm-button--secondary jm-button--small" data-open-project="${proj.slug}">
+              <img src="${proj.spriteSrc}" alt="" class="jm-pixel-sprite" style="height: 18px; width: auto;" />
+              Inspect ${proj.title}
+            </button>
+          `;
+          linkedEl.querySelector('[data-open-project]')?.addEventListener('click', () => {
+            openProjectDetail(proj.slug);
+          });
+        } else {
+          linkedEl.innerHTML = '';
+        }
+      }
+
+      mainViewEl?.classList.add('is-hidden');
+      detailViewEl?.classList.add('is-hidden');
+      noteViewEl?.classList.remove('is-hidden');
+      syncReefHighlight();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    let toastTimer;
+    function showToast(msg) {
+      const el = document.getElementById('toast');
+      if (!el) return;
+      el.textContent = msg;
+      el.classList.remove('is-hidden');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => el.classList.add('is-hidden'), 2400);
+    }
+
+    // Bind coral nodes
+    document.querySelectorAll('.jm-coral-node').forEach((node) => {
+      const slug = node.getAttribute('data-slug');
+      node.addEventListener('click', () => slug && openProjectDetail(slug));
+      node.addEventListener('mouseenter', () => {
+        hoveredSlug = slug;
+        syncReefHighlight();
+      });
+      node.addEventListener('mouseleave', () => {
+        hoveredSlug = null;
+        syncReefHighlight();
+      });
+    });
+
+    // Bind project rows
+    document.querySelectorAll('[data-project-row]').forEach((row) => {
+      const slug = row.getAttribute('data-project-row');
+      row.addEventListener('click', () => slug && openProjectDetail(slug));
+      row.addEventListener('mouseenter', () => {
+        hoveredSlug = slug;
+        syncReefHighlight();
+      });
+      row.addEventListener('mouseleave', () => {
+        hoveredSlug = null;
+        syncReefHighlight();
+      });
+    });
+
+    // Bind note rows
+    document.querySelectorAll('[data-note-row]').forEach((row) => {
+      const slug = row.getAttribute('data-note-row');
+      const linked = row.getAttribute('data-linked-project') || null;
+      row.addEventListener('click', () => slug && openNoteDetail(slug));
+      row.addEventListener('mouseenter', () => {
+        hoveredSlug = linked;
+        syncReefHighlight();
+      });
+      row.addEventListener('mouseleave', () => {
+        hoveredSlug = null;
+        syncReefHighlight();
+      });
+    });
+
+    // Bind dossier return triggers
+    document.querySelectorAll('[data-show-dossier]').forEach((el) => {
+      el.addEventListener('click', () => showMainDossier());
+    });
+
+    // Bind filters
+    document.querySelectorAll('[data-stage-filter]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        activeStage = btn.getAttribute('data-stage-filter') || 'all';
+        applyFilters();
+      });
+    });
+
+    document.querySelectorAll('[data-theme-filter]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        activeTheme = btn.getAttribute('data-theme-filter') || 'all';
+        applyFilters();
+      });
+    });
+
+    resetBtn?.addEventListener('click', () => {
+      activeStage = 'all';
+      activeTheme = 'all';
+      applyFilters();
+    });
+
+    // Day / Night toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    themeToggle?.addEventListener('click', () => {
+      currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+      rootEl.setAttribute('data-theme', currentTheme);
+      themeToggle.textContent = currentTheme === 'light' ? 'Switch to night' : 'Switch to day';
+      themeToggle.setAttribute('aria-pressed', String(currentTheme === 'dark'));
+    });
+
+    // Labels toggle
+    const labelsToggle = document.getElementById('labels-toggle');
+    labelsToggle?.addEventListener('click', () => {
+      showLabels = !showLabels;
+      reefPaneEl?.classList.toggle('labels-off', !showLabels);
+      labelsToggle.textContent = showLabels ? 'Hide labels' : 'Show labels';
+      labelsToggle.setAttribute('aria-pressed', String(showLabels));
+    });
+
+    // Copy email
+    document.getElementById('copy-email-btn')?.addEventListener('click', () => {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(EMAIL).catch(() => {});
+      }
+      showToast(`Copied ${EMAIL} to clipboard`);
+    });
+
+    applyFilters();
+  </script>
+</BaseLayout>

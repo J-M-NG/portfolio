@@ -1,0 +1,232 @@
+---
+import { getCoralSpritePath, getStageMeta, type CoralStage, type CoralSpecies, type SpriteVariant } from '../lib/reef';
+
+export interface ReefProjectItem {
+  slug: string;
+  title: string;
+  stage: CoralStage;
+  species: CoralSpecies;
+  spriteVariant: SpriteVariant;
+  posX: number;
+  posY: number;
+}
+
+interface Props {
+  projects: ReefProjectItem[];
+  baseUrl: string;
+}
+
+const { projects, baseUrl } = Astro.props;
+const prefix = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
+const sortedProjects = [...projects].sort((a, b) => a.posY - b.posY);
+---
+
+<aside id="reef-pane" class="jm-reef" aria-label="Interactive project coral reef">
+  <!-- Underwater Backdrop SVG: Surface Shimmer, Sunbeams, Distant Ridges & Sandy Seabed -->
+  <svg
+    class="jm-reef__backdrop"
+    viewBox="0 0 640 720"
+    preserveAspectRatio="none"
+    shape-rendering="crispEdges"
+    aria-hidden="true"
+  >
+    <rect x="0" y="0" width="640" height="14" fill="rgba(255,255,255,0.2)" />
+    <rect x="40" y="18" width="90" height="4" fill="rgba(255,255,255,0.28)" />
+    <rect x="210" y="14" width="130" height="4" fill="rgba(255,255,255,0.22)" />
+    <rect x="440" y="20" width="110" height="4" fill="rgba(255,255,255,0.25)" />
+
+    <polygon points="90,0 185,0 110,480 25,480" fill="var(--ray-color)" />
+    <polygon points="290,0 410,0 320,480 210,480" fill="var(--ray-color)" />
+    <polygon points="500,0 590,0 520,480 430,480" fill="var(--ray-color)" />
+
+    <rect x="0" y="340" width="640" height="140" fill="var(--reef-far)" opacity="0.65" />
+    <rect x="30" y="305" width="140" height="45" fill="var(--reef-far)" opacity="0.65" />
+    <rect x="230" y="315" width="180" height="35" fill="var(--reef-far)" opacity="0.65" />
+    <rect x="470" y="295" width="150" height="55" fill="var(--reef-far)" opacity="0.65" />
+
+    <rect x="0" y="405" width="640" height="80" fill="var(--reef-mid)" opacity="0.7" />
+    <rect x="105" y="385" width="120" height="28" fill="var(--reef-mid)" opacity="0.7" />
+    <rect x="375" y="378" width="160" height="34" fill="var(--reef-mid)" opacity="0.7" />
+
+    <rect x="0" y="472" width="640" height="248" fill="var(--sand-1)" />
+    <rect x="0" y="464" width="220" height="14" fill="var(--sand-1)" />
+    <rect x="360" y="466" width="280" height="12" fill="var(--sand-1)" />
+    <rect x="0" y="560" width="640" height="160" fill="var(--sand-2)" opacity="0.65" />
+    <rect x="0" y="646" width="640" height="74" fill="var(--sand-3)" opacity="0.65" />
+
+    <rect x="64" y="518" width="38" height="4" fill="var(--sand-2)" />
+    <rect x="240" y="544" width="52" height="4" fill="var(--sand-2)" />
+    <rect x="470" y="528" width="44" height="4" fill="var(--sand-2)" />
+    <rect x="148" y="618" width="46" height="4" fill="var(--sand-3)" />
+    <rect x="392" y="626" width="58" height="4" fill="var(--sand-3)" />
+  </svg>
+
+  <!-- Seabed Landmarks & Props -->
+  <div class="jm-reef__props" aria-hidden="true">
+    <img
+      src={`${prefix}sprites/prop-rock-arch.png`}
+      alt=""
+      class="jm-pixel-sprite jm-reef-prop jm-reef-prop--arch"
+      style="left: 48%; top: 67%; height: 132px; width: auto;"
+    />
+    <img
+      src={`${prefix}sprites/prop-reef-boulder.png`}
+      alt=""
+      class="jm-pixel-sprite jm-reef-prop"
+      style="left: 10%; top: 69%; height: 64px; width: auto;"
+    />
+    <img
+      src={`${prefix}sprites/prop-reef-boulder.png`}
+      alt=""
+      class="jm-pixel-sprite jm-reef-prop"
+      style="left: 88%; top: 75%; height: 56px; width: auto;"
+    />
+    <img
+      src={`${prefix}sprites/prop-seagrass.png`}
+      alt=""
+      class="jm-pixel-sprite jm-reef-prop jm-reef-prop--seagrass"
+      style="left: 7%; top: 78%; height: 58px; width: auto;"
+    />
+    <img
+      src={`${prefix}sprites/prop-seagrass.png`}
+      alt=""
+      class="jm-pixel-sprite jm-reef-prop jm-reef-prop--seagrass"
+      style="left: 92%; top: 82%; height: 54px; width: auto; animation-delay: -2.2s;"
+    />
+    <img
+      src={`${prefix}sprites/prop-pearl-clam.png`}
+      alt=""
+      class="jm-pixel-sprite jm-reef-prop jm-reef-prop--clam"
+      style="left: 65%; top: 74%; height: 48px; width: auto;"
+    />
+    <img
+      src={`${prefix}sprites/prop-starfish-shell.png`}
+      alt=""
+      class="jm-pixel-sprite jm-reef-prop"
+      style="left: 85%; top: 92%; height: 38px; width: auto;"
+    />
+    <img
+      src={`${prefix}sprites/prop-bottle.png`}
+      alt=""
+      class="jm-pixel-sprite jm-reef-prop"
+      style="left: 16%; top: 94%; height: 36px; width: auto;"
+    />
+  </div>
+
+  <!-- Swimming & Drifting Sea Creatures -->
+  <div class="jm-reef__critters" aria-hidden="true">
+    <img
+      src={`${prefix}sprites/critter-turtle.png`}
+      alt=""
+      class="jm-pixel-sprite jm-reef-critter jm-reef-critter--turtle"
+      style="top: 15%; left: 16%; height: 46px; width: auto;"
+    />
+    <img
+      src={`${prefix}sprites/critter-school.png`}
+      alt=""
+      class="jm-pixel-sprite jm-reef-critter jm-reef-critter--school"
+      style="top: 28%; left: 56%; height: 28px; width: auto; animation-delay: -4s;"
+    />
+    <img
+      src={`${prefix}sprites/critter-clownfish.png`}
+      alt=""
+      class="jm-pixel-sprite jm-reef-critter jm-reef-critter--fish-a"
+      style="top: 43%; left: 26%; height: 26px; width: auto;"
+    />
+    <img
+      src={`${prefix}sprites/critter-tang.png`}
+      alt=""
+      class="jm-pixel-sprite jm-reef-critter jm-reef-critter--fish-b"
+      style="top: 39%; left: 68%; height: 24px; width: auto; animation-delay: -3.5s;"
+    />
+    <img
+      src={`${prefix}sprites/critter-jellyfish.png`}
+      alt=""
+      class="jm-pixel-sprite jm-reef-critter jm-reef-critter--jellyfish"
+      style="top: 22%; left: 80%; height: 46px; width: auto;"
+    />
+    <img
+      src={`${prefix}sprites/critter-crab.png`}
+      alt=""
+      class="jm-pixel-sprite jm-reef-critter jm-reef-critter--crab"
+      style="top: 93%; left: 64%; height: 32px; width: auto;"
+    />
+  </div>
+
+  <!-- Rising Pixel Bubbles -->
+  <div class="jm-bubble" style="bottom: 18%; left: 22%; animation-delay: 0s;" aria-hidden="true"></div>
+  <div class="jm-bubble" style="bottom: 24%; left: 56%; animation-delay: 2.1s; width: 5px; height: 5px;" aria-hidden="true"></div>
+  <div class="jm-bubble" style="bottom: 14%; left: 78%; animation-delay: 4.3s;" aria-hidden="true"></div>
+  <div class="jm-bubble" style="bottom: 30%; left: 38%; animation-delay: 3.2s; width: 4px; height: 4px;" aria-hidden="true"></div>
+
+  <!-- Bioluminescent Night Plankton -->
+  <div class="night-only" aria-hidden="true">
+    <div class="jm-plankton" style="top: 38%; left: 20%; animation-delay: 0s;"></div>
+    <div class="jm-plankton" style="top: 52%; left: 46%; animation-delay: 1.4s;"></div>
+    <div class="jm-plankton" style="top: 42%; left: 76%; animation-delay: 2.6s;"></div>
+    <div class="jm-plankton" style="top: 64%; left: 30%; animation-delay: 0.9s;"></div>
+    <div class="jm-plankton" style="top: 70%; left: 68%; animation-delay: 2s;"></div>
+  </div>
+
+  <!-- Floating Controls -->
+  <div class="jm-reef__hud">
+    <button
+      id="theme-toggle"
+      type="button"
+      class="jm-reef-pill"
+      aria-label="Switch between sunlit day and bioluminescent night"
+      aria-pressed="false"
+    >
+      Switch to night
+    </button>
+    <button
+      id="labels-toggle"
+      type="button"
+      class="jm-reef-pill"
+      aria-pressed="true"
+    >
+      Hide labels
+    </button>
+  </div>
+
+  <!-- Interactive Project Corals -->
+  <div id="reef-corals" class="jm-reef__corals">
+    {sortedProjects.map((project, idx) => {
+      const stageMeta = getStageMeta(project.stage);
+      const spriteSrc = getCoralSpritePath(project.stage, project.species, project.spriteVariant, baseUrl);
+      const z = Math.round(project.posY / 2);
+      const shouldSway = project.stage === 'reef' || project.stage === 'branch';
+      return (
+        <button
+          type="button"
+          class="jm-coral-node"
+          data-slug={project.slug}
+          style={`left: ${project.posX}%; top: ${project.posY}%; z-index: ${z};`}
+          aria-label={`${project.title} (${stageMeta.label})`}
+        >
+          <span class="jm-coral-node__ring" aria-hidden="true"></span>
+          <span
+            class={`jm-coral-node__sprite-wrap${shouldSway ? ' jm-sway' : ''}`}
+            style={`animation-delay: -${((idx * 0.8) % 4).toFixed(1)}s;`}
+          >
+            <img
+              src={spriteSrc}
+              alt=""
+              class="jm-pixel-sprite"
+              style={`height: ${stageMeta.displayHeight}px; width: auto;`}
+              loading="eager"
+            />
+          </span>
+          <span class="jm-coral-node__tag">{project.title}</span>
+        </button>
+      );
+    })}
+  </div>
+
+  <!-- Bottom Status Caption -->
+  <div class="jm-reef__caption">
+    <div class="jm-reef-pill jm-reef-pill--static">
+      <span id="reef-caption">Select any coral to read its user story</span>
+    </div>
+  </div>
+</aside>

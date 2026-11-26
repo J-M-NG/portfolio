@@ -1,0 +1,53 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import profile from '../../data/profile.json';
+
+export async function getStaticPaths() {
+  const notes = await getCollection('notes');
+  return notes.map((note) => ({
+    params: { slug: note.id.replace(/\.md$/, '') },
+    props: { note },
+  }));
+}
+
+const { note } = Astro.props;
+const { Content } = await render(note);
+const baseUrl = import.meta.env.BASE_URL.endsWith('/')
+  ? import.meta.env.BASE_URL
+  : `${import.meta.env.BASE_URL}/`;
+---
+
+<BaseLayout title={`${note.data.title} — ${profile.name}`}>
+  <div class="jm-page">
+    <header class="jm-header">
+      <div class="jm-header__inner">
+        <a class="jm-header__name" href={baseUrl}>{profile.name}</a>
+        <nav class="jm-header__nav" aria-label="Primary">
+          <ul>
+            <li><a href={baseUrl}>Return to reef</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main" class="jm-container jm-stack jm-stack--loose" style="padding-top: var(--jm-space-6); padding-bottom: var(--jm-space-7);">
+      <article class="jm-stack">
+        <div>
+          <a href={baseUrl} class="jm-button jm-button--secondary jm-button--small">
+            ← Return to reef index
+          </a>
+        </div>
+        <div class="jm-stack jm-stack--tight">
+          <p class="jm-secondary-text jm-num">
+            {note.data.date} · {note.data.tag}
+          </p>
+          <h1>{note.data.title}</h1>
+        </div>
+        <div class="jm-stack">
+          <Content />
+        </div>
+      </article>
+    </main>
+  </div>
+</BaseLayout>

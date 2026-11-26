@@ -1,0 +1,628 @@
+/* ============================================================================
+   Project Reef — Layout & Living Pixel Coral Reef Styles
+   Loaded after J-M-NG/ui-kit (ui-kit.css). Uses semantic --jm-* tokens
+   natively without overriding ui-kit's blue/slate palette.
+   ============================================================================ */
+
+:root,
+:root[data-theme="light"] {
+  /* Underwater Cove Scene (Day — Sunlit Turquoise Shallows) */
+  --sea-top: #79cbe0;
+  --sea-mid: #3a94b8;
+  --sea-deep: #1e628a;
+  --reef-far: #267299;
+  --reef-mid: #1c587c;
+  --sand-1: #e8d8b5;
+  --sand-2: #d6c196;
+  --sand-3: #c2aa7c;
+  --ray-color: rgba(255, 252, 232, 0.22);
+  --bio-glow: rgba(94, 242, 214, 0);
+  --frame-edge: #1b4d6e;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --sea-top: #071324;
+    --sea-mid: #0a1e36;
+    --sea-deep: #061426;
+    --reef-far: #0e2845;
+    --reef-mid: #091d36;
+    --sand-1: #1f3347;
+    --sand-2: #172738;
+    --sand-3: #101d2b;
+    --ray-color: rgba(112, 214, 255, 0.08);
+    --bio-glow: rgba(94, 242, 214, 0.72);
+    --frame-edge: #2c4a6b;
+  }
+}
+
+:root[data-theme="dark"] {
+  --sea-top: #071324;
+  --sea-mid: #0a1e36;
+  --sea-deep: #061426;
+  --reef-far: #0e2845;
+  --reef-mid: #091d36;
+  --sand-1: #1f3347;
+  --sand-2: #172738;
+  --sand-3: #101d2b;
+  --ray-color: rgba(112, 214, 255, 0.08);
+  --bio-glow: rgba(94, 242, 214, 0.72);
+  --frame-edge: #2c4a6b;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+/* ============================================================================
+   Split-Screen Layout A (45% Sticky Reef / 55% Scrolling ui-kit Dossier)
+   ============================================================================ */
+.jm-split {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+@media (min-width: 1024px) {
+  .jm-split {
+    flex-direction: row;
+  }
+}
+
+.jm-reef {
+  position: relative;
+  width: 100%;
+  height: 430px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: linear-gradient(
+    180deg,
+    var(--sea-top) 0%,
+    var(--sea-mid) 36%,
+    var(--sea-deep) 66%,
+    var(--sand-1) 66%,
+    var(--sand-2) 86%,
+    var(--sand-3) 100%
+  );
+  border-bottom: var(--jm-border-width-heavy) solid var(--frame-edge);
+  transition: background 0.4s ease;
+}
+
+@media (min-width: 1024px) {
+  .jm-reef {
+    width: 45%;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    border-bottom: 0;
+    border-right: var(--jm-border-width-heavy) solid var(--frame-edge);
+  }
+}
+
+.jm-dossier {
+  flex: 1;
+  min-width: 0;
+  background-color: var(--jm-colour-background);
+}
+
+.jm-dossier__header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+}
+
+.jm-dossier__header .jm-header__inner {
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: var(--jm-space-3) var(--jm-space-6);
+}
+
+.jm-dossier__body {
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: var(--jm-space-6);
+}
+
+.jm-header__name-btn {
+  font-family: var(--jm-font-family-heading);
+  font-size: var(--jm-font-size-lg);
+  font-weight: var(--jm-font-weight-bold);
+  color: var(--jm-colour-text);
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.jm-header__name-btn:hover {
+  color: var(--jm-colour-link);
+}
+
+/* ============================================================================
+   Reef HUD & Scene Layers
+   ============================================================================ */
+.jm-reef__backdrop {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.jm-reef__props {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.jm-reef__critters {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 16;
+}
+
+.jm-reef__corals {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: 20;
+}
+
+.jm-reef__hud {
+  position: absolute;
+  top: var(--jm-space-4);
+  left: var(--jm-space-4);
+  z-index: 35;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--jm-space-2);
+}
+
+.jm-reef__caption {
+  position: absolute;
+  bottom: var(--jm-space-4);
+  left: var(--jm-space-4);
+  right: var(--jm-space-4);
+  z-index: 35;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--jm-space-2);
+  pointer-events: none;
+}
+
+.jm-reef-pill {
+  background-color: var(--jm-colour-surface);
+  color: var(--jm-colour-text);
+  border: var(--jm-border-width-thick) solid var(--jm-colour-border-strong);
+  border-radius: var(--jm-radius-sm);
+  padding: 0.35rem 0.7rem;
+  font-family: var(--jm-font-family);
+  font-size: var(--jm-font-size-xs);
+  font-weight: var(--jm-font-weight-semibold);
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(8, 28, 48, 0.22);
+}
+
+.jm-reef-pill:hover {
+  background-color: var(--jm-colour-surface-sunken);
+}
+
+.jm-reef-pill--static {
+  cursor: default;
+}
+
+.jm-reef-pill--static:hover {
+  background-color: var(--jm-colour-surface);
+}
+
+/* ============================================================================
+   Pixel Sprites (Corals, Props, Critters)
+   ============================================================================ */
+.jm-pixel-sprite {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.jm-reef-prop {
+  position: absolute;
+  transform: translate(-50%, -86%);
+  pointer-events: none;
+}
+
+.jm-reef-prop--arch {
+  opacity: 0.88;
+}
+
+.jm-reef-prop--seagrass {
+  transform-origin: 50% 95%;
+  animation: coralSway 6s ease-in-out infinite;
+}
+
+.jm-reef-critter {
+  position: absolute;
+  pointer-events: none;
+}
+
+.jm-reef-critter--turtle {
+  animation: turtleGlide 16s ease-in-out infinite;
+}
+
+.jm-reef-critter--fish-a {
+  animation: fishSwim 9s ease-in-out infinite;
+}
+
+.jm-reef-critter--fish-b {
+  animation: fishSwimReverse 11s ease-in-out infinite;
+}
+
+.jm-reef-critter--school {
+  animation: fishSwim 13s ease-in-out infinite;
+  opacity: 0.9;
+}
+
+.jm-reef-critter--jellyfish {
+  animation: jellyDrift 7s ease-in-out infinite;
+}
+
+.jm-reef-critter--crab {
+  transform: translate(-50%, -85%);
+}
+
+/* Interactive Coral Nodes */
+.jm-coral-node {
+  position: absolute;
+  transform: translate(-50%, -84%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: transparent;
+  border: 0;
+  padding: 4px;
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.22s ease, filter 0.22s ease;
+}
+
+.jm-coral-node:hover,
+.jm-coral-node:focus-visible,
+.jm-coral-node.is-highlighted,
+.jm-coral-node.is-selected {
+  transform: translate(-50%, -90%) scale(1.1);
+  z-index: 45 !important;
+}
+
+.jm-coral-node.is-dimmed {
+  opacity: 0.26;
+  filter: grayscale(0.45);
+}
+
+.jm-coral-node.is-dimmed:hover,
+.jm-coral-node.is-dimmed:focus-visible {
+  opacity: 0.92;
+  filter: none;
+}
+
+.jm-coral-node__ring {
+  position: absolute;
+  bottom: 18px;
+  width: 68%;
+  height: 12px;
+  border-radius: 9999px;
+  background: rgba(12, 38, 60, 0.24);
+  pointer-events: none;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.jm-coral-node.is-highlighted .jm-coral-node__ring,
+.jm-coral-node.is-selected .jm-coral-node__ring {
+  background: rgba(94, 242, 214, 0.38);
+  box-shadow: 0 0 0 2px #5ef2d6;
+}
+
+.jm-coral-node__sprite-wrap {
+  position: relative;
+  z-index: 1;
+}
+
+.jm-coral-node__tag {
+  position: relative;
+  z-index: 2;
+  margin-top: -2px;
+  background-color: var(--jm-colour-surface);
+  color: var(--jm-colour-text);
+  border: var(--jm-border-width) solid var(--jm-colour-border-strong);
+  border-radius: var(--jm-radius-sm);
+  padding: 0.1rem 0.45rem;
+  font-family: var(--jm-font-family);
+  font-size: 11px;
+  font-weight: var(--jm-font-weight-semibold);
+  white-space: nowrap;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.labels-off .jm-coral-node__tag {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(4px);
+}
+
+.labels-off .jm-coral-node:hover .jm-coral-node__tag,
+.labels-off .jm-coral-node:focus-visible .jm-coral-node__tag,
+.labels-off .jm-coral-node.is-highlighted .jm-coral-node__tag,
+.labels-off .jm-coral-node.is-selected .jm-coral-node__tag {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Night bioluminescent glow */
+:root[data-theme="dark"] .jm-coral-node__sprite-wrap,
+:root[data-theme="dark"] .jm-reef-critter--jellyfish {
+  filter: drop-shadow(0 0 6px var(--bio-glow));
+}
+
+:root[data-theme="dark"] .jm-reef-prop--clam {
+  filter: drop-shadow(0 0 5px rgba(180, 240, 255, 0.55));
+}
+
+:root[data-theme="light"] .night-only {
+  display: none;
+}
+
+/* ============================================================================
+   Dossier Project List, Stage Progress & Inline Detail Views
+   ============================================================================ */
+.jm-button--small {
+  padding: 0.3rem 0.65rem;
+  font-size: var(--jm-font-size-xs);
+}
+
+.jm-project-list {
+  border-top: var(--jm-border-width) solid var(--jm-colour-border);
+}
+
+.jm-project-row {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--jm-space-3);
+  padding: var(--jm-space-3) var(--jm-space-2);
+  border: 0;
+  border-bottom: var(--jm-border-width) solid var(--jm-colour-border);
+  background: transparent;
+  color: var(--jm-colour-text);
+  text-align: left;
+  cursor: pointer;
+  font-family: var(--jm-font-family);
+  transition: background-color 0.15s ease;
+}
+
+.jm-project-row:hover,
+.jm-project-row:focus-visible {
+  background-color: var(--jm-colour-surface-sunken);
+}
+
+.jm-project-row__thumb {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--jm-radius-sm);
+  background: linear-gradient(180deg, var(--sea-mid), var(--sea-deep));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 4px;
+}
+
+.jm-project-row__content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--jm-space-1);
+}
+
+.jm-project-row__top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--jm-space-2);
+}
+
+.jm-project-row__title {
+  font-size: var(--jm-font-size-sm);
+  font-weight: var(--jm-font-weight-semibold);
+}
+
+.jm-project-row__desc {
+  font-size: var(--jm-font-size-xs);
+  color: var(--jm-colour-text-secondary);
+}
+
+.jm-detail-hero {
+  display: flex;
+  gap: var(--jm-space-4);
+  align-items: flex-start;
+}
+
+.jm-detail-sprite-box {
+  width: 92px;
+  height: 92px;
+  padding: var(--jm-space-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: linear-gradient(180deg, var(--sea-mid), var(--sea-deep));
+}
+
+.jm-stage-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--jm-space-2);
+}
+
+.jm-stage-step {
+  text-align: center;
+  padding: 0.35rem 0.25rem;
+  border-radius: var(--jm-radius-sm);
+  font-size: var(--jm-font-size-xs);
+  font-weight: var(--jm-font-weight-semibold);
+  border: var(--jm-border-width) solid var(--jm-colour-border);
+  background-color: var(--jm-colour-surface-sunken);
+  color: var(--jm-colour-text-secondary);
+}
+
+.jm-stage-step.is-active {
+  background-color: var(--jm-colour-accent);
+  border-color: var(--jm-colour-accent);
+  color: var(--jm-colour-on-accent);
+}
+
+.jm-two-col {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--jm-space-4);
+}
+
+@media (min-width: 640px) {
+  .jm-two-col {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.jm-takeaways {
+  margin: 0;
+  padding-left: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: var(--jm-space-2);
+  font-size: var(--jm-font-size-sm);
+}
+
+.jm-section-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--jm-space-2);
+}
+
+.jm-note-row {
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.jm-toast {
+  position: fixed;
+  bottom: 1.25rem;
+  right: 1.25rem;
+  z-index: 60;
+  background-color: var(--jm-colour-surface);
+  border: var(--jm-border-width-thick) solid var(--jm-colour-accent);
+  color: var(--jm-colour-text);
+  padding: 0.5rem 0.9rem;
+  border-radius: var(--jm-radius-sm);
+  font-size: var(--jm-font-size-xs);
+  font-weight: var(--jm-font-weight-semibold);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+}
+
+.is-hidden {
+  display: none !important;
+}
+
+/* ============================================================================
+   Underwater Ambient Motion (prefers-reduced-motion safe)
+   ============================================================================ */
+@keyframes bubbleRise {
+  0% { transform: translateY(0) translateX(0); opacity: 0; }
+  15% { opacity: 0.75; }
+  85% { opacity: 0.55; }
+  100% { transform: translateY(-220px) translateX(8px); opacity: 0; }
+}
+
+@keyframes fishSwim {
+  0%, 100% { transform: translateX(0px) translateY(0px); }
+  50% { transform: translateX(28px) translateY(-4px); }
+}
+
+@keyframes fishSwimReverse {
+  0%, 100% { transform: translateX(0px) translateY(0px) scaleX(-1); }
+  50% { transform: translateX(-26px) translateY(4px) scaleX(-1); }
+}
+
+@keyframes turtleGlide {
+  0%, 100% { transform: translateX(0px) translateY(0px); }
+  50% { transform: translateX(36px) translateY(-8px); }
+}
+
+@keyframes jellyDrift {
+  0%, 100% { transform: translateY(0px) translateX(0px); }
+  50% { transform: translateY(-14px) translateX(5px); }
+}
+
+@keyframes coralSway {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(1.4deg); }
+}
+
+@keyframes planktonGlow {
+  0%, 100% { opacity: 0.15; transform: translate(0, 0); }
+  50% { opacity: 0.95; transform: translate(5px, -8px); }
+}
+
+.jm-bubble {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border: 1.5px solid rgba(255, 255, 255, 0.78);
+  background: rgba(255, 255, 255, 0.25);
+  pointer-events: none;
+  z-index: 25;
+  animation: bubbleRise 6.5s linear infinite;
+}
+
+.jm-sway {
+  transform-origin: 50% 92%;
+  animation: coralSway 5.5s ease-in-out infinite;
+}
+
+.jm-plankton {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: #6fffe9;
+  box-shadow: 0 0 10px 3px rgba(111, 255, 233, 0.75);
+  pointer-events: none;
+  animation: planktonGlow 4.2s ease-in-out infinite;
+  z-index: 32;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jm-bubble,
+  .jm-sway,
+  .jm-plankton,
+  .jm-reef-prop--seagrass,
+  .jm-reef-critter--turtle,
+  .jm-reef-critter--fish-a,
+  .jm-reef-critter--fish-b,
+  .jm-reef-critter--school,
+  .jm-reef-critter--jellyfish {
+    animation: none !important;
+  }
+
+  .jm-coral-node,
+  .jm-coral-node__tag,
+  .jm-project-row {
+    transition: none !important;
+  }
+}

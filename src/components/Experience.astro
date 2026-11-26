@@ -1,0 +1,41 @@
+---
+interface ExperienceItem {
+  period: string;
+  role: string;
+  company: string;
+  summary: string;
+}
+
+interface Props {
+  items: ExperienceItem[];
+  bannerTitle: string;
+  bannerBody: string;
+}
+
+const { items, bannerTitle, bannerBody } = Astro.props;
+---
+
+<section id="experience" class="jm-stack">
+  <h2>Work experience</h2>
+
+  <div class="jm-banner" role="region" aria-label={bannerTitle}>
+    <p class="jm-banner__title">{bannerTitle}</p>
+    <p>
+      {bannerBody} <a href="#contact">Go to contact details</a>.
+    </p>
+  </div>
+
+  <ol class="jm-trail">
+    {items.map((item) => (
+      <li>
+        <time>{item.period}</time>
+        <div class="jm-stack jm-stack--tight">
+          <div>
+            <strong>{item.role}</strong> · <span class="jm-trail__meta">{item.company}</span>
+          </div>
+          <p class="jm-secondary-text">{item.summary}</p>
+        </div>
+      </li>
+    ))}
+  </ol>
+</section>

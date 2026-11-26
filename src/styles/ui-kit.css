@@ -1,0 +1,1904 @@
+/*!
+ * ui-kit 1.0.0, untagged (tokens, components, dashboard patterns)
+ * https://github.com/J-M-NG/ui-kit
+ * MIT licence. See LICENSE.
+ *
+ * Layer order: jm.tokens, jm.base, jm.components, jm.utilities.
+ * Styles outside any layer (your project's CSS) always win, with no !important needed.
+ *
+ * Themes: follows the operating system (prefers-color-scheme) by default.
+ * Force a theme with data-theme="light" or data-theme="dark" on <html>.
+ *
+ * Project hooks (see README "Project hooks"): a project may override, in its
+ * own unlayered stylesheet, the accent colours, --jm-radius-scale (0 = square
+ * corners, 1 = default) and --jm-font-family-heading. Nothing else.
+ *
+ * Token names use British spelling ("colour"). Use the semantic tokens
+ * (--jm-colour-text, --jm-colour-accent, ...) in components and projects;
+ * the palette tokens (--jm-blue-600, ...) exist only to define them.
+ */
+
+@layer jm.tokens, jm.base, jm.components, jm.utilities;
+
+@layer jm.tokens {
+  /* ------------------------------------------------------------------
+     Palette (theme independent). Do not use directly in components.
+     ------------------------------------------------------------------ */
+  :root {
+    --jm-grey-0: #ffffff;
+    --jm-grey-50: #f5f6f8;
+    --jm-grey-100: #eaecef;
+    --jm-grey-200: #d9dce1;
+    --jm-grey-300: #bcc1c8;
+    --jm-grey-400: #8a919b;
+    --jm-grey-500: #646b75;
+    --jm-grey-600: #4b515a;
+    --jm-grey-700: #363b42;
+    --jm-grey-800: #24282d;
+    --jm-grey-900: #17191c;
+    --jm-grey-950: #0e1012;
+
+    --jm-blue-50: #eef4fb;
+    --jm-blue-100: #d6e4f5;
+    --jm-blue-200: #adc8eb;
+    --jm-blue-300: #7fa8dd;
+    --jm-blue-400: #4f86cc;
+    --jm-blue-500: #2b67b5;
+    --jm-blue-600: #1f5296;
+    --jm-blue-700: #1a4378;
+    --jm-blue-800: #15355e;
+    --jm-blue-900: #0f2644;
+    --jm-blue-950: #0b1a2e;
+
+    --jm-green-50: #eaf6ee;
+    --jm-green-300: #6cc08a;
+    --jm-green-600: #1e7a43;
+    --jm-green-700: #17623a;
+    --jm-green-950: #0d2818;
+
+    --jm-amber-50: #fdf5e3;
+    --jm-amber-300: #f0b44c;
+    --jm-amber-600: #9a5b00;
+    --jm-amber-700: #7a4800;
+    --jm-amber-950: #2e1d02;
+
+    --jm-red-50: #fcecec;
+    --jm-red-300: #ee8a8a;
+    --jm-red-600: #c02b2b;
+    --jm-red-700: #9e2222;
+    --jm-red-950: #2e0f0f;
+
+    --jm-sky-50: #e8f5fa;
+    --jm-sky-300: #5fb6d6;
+    --jm-sky-600: #0b6e8f;
+    --jm-sky-700: #095a75;
+    --jm-sky-950: #062633;
+
+    --jm-purple-300: #c3a6e6;
+    --jm-purple-600: #6a3d9a;
+  }
+
+  /* ------------------------------------------------------------------
+     Theme-independent scales
+     ------------------------------------------------------------------ */
+  :root {
+    /* Spacing: 4px base. Use for margin, padding and gap. */
+    --jm-space-0: 0;
+    --jm-space-1: 0.25rem; /* 4px */
+    --jm-space-2: 0.5rem; /* 8px */
+    --jm-space-3: 0.75rem; /* 12px */
+    --jm-space-4: 1rem; /* 16px */
+    --jm-space-5: 1.5rem; /* 24px */
+    --jm-space-6: 2rem; /* 32px */
+    --jm-space-7: 3rem; /* 48px */
+    --jm-space-8: 4rem; /* 64px */
+    --jm-space-9: 6rem; /* 96px */
+
+    /* Typography: system sans for body and component labels; serif for page and
+       section headings (h1 to h3) only. The heading stack ends in common Linux and
+       Android serifs so it never falls back to a generic Times. Hook: set to sans. */
+    --jm-font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+    --jm-font-family-heading: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, "Noto Serif", "DejaVu Serif", serif;
+    --jm-font-family-mono: ui-monospace, "SFMono-Regular", "Cascadia Mono", Menlo, Consolas, "Liberation Mono", monospace;
+
+    --jm-font-size-xs: 0.8125rem; /* 13px: captions only, never body text */
+    --jm-font-size-sm: 0.875rem; /* 14px */
+    --jm-font-size-md: 1rem; /* 16px: body */
+    --jm-font-size-lg: 1.1875rem; /* 19px: lead text, h4 */
+    --jm-font-size-xl: 1.5rem; /* 24px: h3 */
+    --jm-font-size-2xl: 2rem; /* 32px: h2 */
+    --jm-font-size-3xl: 2.75rem; /* 44px: h1 */
+
+    --jm-line-height-tight: 1.2;
+    --jm-line-height-normal: 1.5;
+
+    --jm-font-weight-normal: 400;
+    --jm-font-weight-medium: 500;
+    --jm-font-weight-semibold: 600;
+    --jm-font-weight-bold: 700;
+
+    /* Readable line length for prose. */
+    --jm-measure: 70ch;
+    --jm-toc-offset: 0px; /* height of a sticky header, if a project adds one */
+
+    /* Corner radius. --jm-radius-scale is a project hook: 0 gives square corners. */
+    --jm-radius-scale: 1;
+    --jm-radius-sm: calc(3px * var(--jm-radius-scale));
+    --jm-radius-md: calc(6px * var(--jm-radius-scale));
+    --jm-radius-lg: calc(10px * var(--jm-radius-scale));
+    --jm-radius-pill: 999px;
+
+    /* Borders. */
+    --jm-border-width: 1px;
+    --jm-border-width-thick: 2px;
+    --jm-border-width-heavy: 5px; /* error-field and inset left borders */
+
+    /* Focus: a two-tone ring (background-coloured gap, then a solid ring)
+       stays visible on any surface, including accent-filled buttons. */
+    --jm-focus-width: 3px;
+    --jm-focus-gap: 2px;
+
+    /* Breakpoints, for reference and JavaScript. Custom properties cannot be
+       used inside @media, so media queries repeat these literal values:
+       sm 40em (640px), md 48em (768px), lg 64em (1024px), xl 80em (1280px). */
+    --jm-breakpoint-sm: 40em;
+    --jm-breakpoint-md: 48em;
+    --jm-breakpoint-lg: 64em;
+    --jm-breakpoint-xl: 80em;
+
+    /* Motion. Set to 0ms under prefers-reduced-motion below. */
+    --jm-duration-fast: 120ms;
+    --jm-duration-normal: 200ms;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :root {
+      --jm-duration-fast: 0ms;
+      --jm-duration-normal: 0ms;
+    }
+  }
+
+  /* ------------------------------------------------------------------
+     Light theme (default).
+     Text pairs must reach 4.5:1; borders, focus and status marks 3:1.
+     Checked by tests/check_contrast.py.
+     ------------------------------------------------------------------ */
+  :root {
+    color-scheme: light;
+
+    --jm-colour-background: var(--jm-grey-50);
+    --jm-colour-surface: var(--jm-grey-0);
+    --jm-colour-surface-sunken: var(--jm-grey-100);
+
+    --jm-colour-text: var(--jm-grey-900);
+    --jm-colour-text-secondary: var(--jm-grey-600);
+
+    --jm-colour-border: var(--jm-grey-200); /* decorative dividers only */
+    --jm-colour-border-strong: var(--jm-grey-500); /* form controls: 3:1 */
+
+    --jm-colour-accent: var(--jm-blue-500);
+    --jm-colour-accent-hover: var(--jm-blue-600);
+    --jm-colour-accent-subtle: var(--jm-blue-50);
+    --jm-colour-on-accent: var(--jm-grey-0);
+
+    --jm-colour-link: var(--jm-blue-500);
+    --jm-colour-link-hover: var(--jm-blue-700);
+    --jm-colour-link-visited: var(--jm-purple-600);
+
+    --jm-colour-focus: var(--jm-blue-600);
+
+    --jm-colour-success: var(--jm-green-600);
+    --jm-colour-success-text: var(--jm-green-700);
+    --jm-colour-success-background: var(--jm-green-50);
+
+    --jm-colour-warning: var(--jm-amber-600);
+    --jm-colour-warning-text: var(--jm-amber-700);
+    --jm-colour-warning-background: var(--jm-amber-50);
+
+    --jm-colour-error: var(--jm-red-600);
+    --jm-colour-error-text: var(--jm-red-700);
+    --jm-colour-error-background: var(--jm-red-50);
+
+    --jm-colour-info: var(--jm-sky-600);
+    --jm-colour-info-text: var(--jm-sky-700);
+    --jm-colour-info-background: var(--jm-sky-50);
+
+    /* Chart series, in fixed order: always use 1, 2, 3 ... so one colour keeps one meaning.
+       Five or fewer series; grey for "other". Label series directly; never rely on colour alone. */
+    --jm-colour-chart-1: var(--jm-blue-600);
+    --jm-colour-chart-2: var(--jm-amber-600);
+    --jm-colour-chart-3: var(--jm-purple-600);
+    --jm-colour-chart-4: var(--jm-green-700);
+    --jm-colour-chart-5: var(--jm-red-700);
+    --jm-colour-chart-other: var(--jm-grey-500);
+
+    /* Sequential scale for heat cells and ranked values: five steps with the matching text colour.
+       Light theme: darkest = largest. Dark theme: lightest = largest. Always print the value in the cell. */
+    --jm-colour-heat-1: var(--jm-blue-100);
+    --jm-colour-heat-2: var(--jm-blue-200);
+    --jm-colour-heat-3: var(--jm-blue-300);
+    --jm-colour-heat-4: var(--jm-blue-600);
+    --jm-colour-heat-5: var(--jm-blue-800);
+    --jm-colour-heat-text-1: var(--jm-grey-900);
+    --jm-colour-heat-text-2: var(--jm-grey-900);
+    --jm-colour-heat-text-3: var(--jm-grey-900);
+    --jm-colour-heat-text-4: var(--jm-grey-0);
+    --jm-colour-heat-text-5: var(--jm-grey-0);
+
+    --jm-shadow-sm: 0 1px 2px rgb(14 16 18 / 0.08);
+    --jm-shadow-md: 0 2px 6px rgb(14 16 18 / 0.10), 0 1px 2px rgb(14 16 18 / 0.06);
+    --jm-shadow-lg: 0 8px 24px rgb(14 16 18 / 0.14), 0 2px 6px rgb(14 16 18 / 0.08);
+  }
+
+  /* ------------------------------------------------------------------
+     Dark theme. The two blocks below must stay identical;
+     tests/check_contrast.py fails if they differ.
+     ------------------------------------------------------------------ */
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+
+      --jm-colour-background: var(--jm-grey-900);
+      --jm-colour-surface: var(--jm-grey-800);
+      --jm-colour-surface-sunken: var(--jm-grey-950);
+
+      --jm-colour-text: var(--jm-grey-50);
+      --jm-colour-text-secondary: var(--jm-grey-300);
+
+      --jm-colour-border: var(--jm-grey-700);
+      --jm-colour-border-strong: var(--jm-grey-400);
+
+      --jm-colour-accent: var(--jm-blue-300);
+      --jm-colour-accent-hover: var(--jm-blue-200);
+      --jm-colour-accent-subtle: var(--jm-blue-950);
+      --jm-colour-on-accent: var(--jm-grey-950);
+
+      --jm-colour-link: var(--jm-blue-300);
+      --jm-colour-link-hover: var(--jm-blue-200);
+      --jm-colour-link-visited: var(--jm-purple-300);
+
+      --jm-colour-focus: var(--jm-blue-300);
+
+      --jm-colour-success: var(--jm-green-300);
+      --jm-colour-success-text: var(--jm-green-300);
+      --jm-colour-success-background: var(--jm-green-950);
+
+      --jm-colour-warning: var(--jm-amber-300);
+      --jm-colour-warning-text: var(--jm-amber-300);
+      --jm-colour-warning-background: var(--jm-amber-950);
+
+      --jm-colour-error: var(--jm-red-300);
+      --jm-colour-error-text: var(--jm-red-300);
+      --jm-colour-error-background: var(--jm-red-950);
+
+      --jm-colour-info: var(--jm-sky-300);
+      --jm-colour-info-text: var(--jm-sky-300);
+      --jm-colour-info-background: var(--jm-sky-950);
+
+      --jm-colour-chart-1: var(--jm-blue-300);
+      --jm-colour-chart-2: var(--jm-amber-300);
+      --jm-colour-chart-3: var(--jm-purple-300);
+      --jm-colour-chart-4: var(--jm-green-300);
+      --jm-colour-chart-5: var(--jm-red-300);
+      --jm-colour-chart-other: var(--jm-grey-400);
+
+      --jm-colour-heat-1: var(--jm-blue-900);
+      --jm-colour-heat-2: var(--jm-blue-800);
+      --jm-colour-heat-3: var(--jm-blue-700);
+      --jm-colour-heat-4: var(--jm-blue-300);
+      --jm-colour-heat-5: var(--jm-blue-200);
+      --jm-colour-heat-text-1: var(--jm-grey-0);
+      --jm-colour-heat-text-2: var(--jm-grey-0);
+      --jm-colour-heat-text-3: var(--jm-grey-0);
+      --jm-colour-heat-text-4: var(--jm-grey-900);
+      --jm-colour-heat-text-5: var(--jm-grey-900);
+
+      --jm-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.40);
+      --jm-shadow-md: 0 2px 6px rgb(0 0 0 / 0.45), 0 1px 2px rgb(0 0 0 / 0.30);
+      --jm-shadow-lg: 0 8px 24px rgb(0 0 0 / 0.55), 0 2px 6px rgb(0 0 0 / 0.35);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+
+    --jm-colour-background: var(--jm-grey-900);
+    --jm-colour-surface: var(--jm-grey-800);
+    --jm-colour-surface-sunken: var(--jm-grey-950);
+
+    --jm-colour-text: var(--jm-grey-50);
+    --jm-colour-text-secondary: var(--jm-grey-300);
+
+    --jm-colour-border: var(--jm-grey-700);
+    --jm-colour-border-strong: var(--jm-grey-400);
+
+    --jm-colour-accent: var(--jm-blue-300);
+    --jm-colour-accent-hover: var(--jm-blue-200);
+    --jm-colour-accent-subtle: var(--jm-blue-950);
+    --jm-colour-on-accent: var(--jm-grey-950);
+
+    --jm-colour-link: var(--jm-blue-300);
+    --jm-colour-link-hover: var(--jm-blue-200);
+    --jm-colour-link-visited: var(--jm-purple-300);
+
+    --jm-colour-focus: var(--jm-blue-300);
+
+    --jm-colour-success: var(--jm-green-300);
+    --jm-colour-success-text: var(--jm-green-300);
+    --jm-colour-success-background: var(--jm-green-950);
+
+    --jm-colour-warning: var(--jm-amber-300);
+    --jm-colour-warning-text: var(--jm-amber-300);
+    --jm-colour-warning-background: var(--jm-amber-950);
+
+    --jm-colour-error: var(--jm-red-300);
+    --jm-colour-error-text: var(--jm-red-300);
+    --jm-colour-error-background: var(--jm-red-950);
+
+    --jm-colour-info: var(--jm-sky-300);
+    --jm-colour-info-text: var(--jm-sky-300);
+    --jm-colour-info-background: var(--jm-sky-950);
+
+    --jm-colour-chart-1: var(--jm-blue-300);
+    --jm-colour-chart-2: var(--jm-amber-300);
+    --jm-colour-chart-3: var(--jm-purple-300);
+    --jm-colour-chart-4: var(--jm-green-300);
+    --jm-colour-chart-5: var(--jm-red-300);
+    --jm-colour-chart-other: var(--jm-grey-400);
+
+    --jm-colour-heat-1: var(--jm-blue-900);
+    --jm-colour-heat-2: var(--jm-blue-800);
+    --jm-colour-heat-3: var(--jm-blue-700);
+    --jm-colour-heat-4: var(--jm-blue-300);
+    --jm-colour-heat-5: var(--jm-blue-200);
+    --jm-colour-heat-text-1: var(--jm-grey-0);
+    --jm-colour-heat-text-2: var(--jm-grey-0);
+    --jm-colour-heat-text-3: var(--jm-grey-0);
+    --jm-colour-heat-text-4: var(--jm-grey-900);
+    --jm-colour-heat-text-5: var(--jm-grey-900);
+
+    --jm-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.40);
+    --jm-shadow-md: 0 2px 6px rgb(0 0 0 / 0.45), 0 1px 2px rgb(0 0 0 / 0.30);
+    --jm-shadow-lg: 0 8px 24px rgb(0 0 0 / 0.55), 0 2px 6px rgb(0 0 0 / 0.35);
+  }
+
+  /* Composite focus ring, built from the colour tokens above. */
+  :root {
+    --jm-focus-ring: 0 0 0 var(--jm-focus-gap) var(--jm-colour-background),
+      0 0 0 calc(var(--jm-focus-gap) + var(--jm-focus-width)) var(--jm-colour-focus);
+  }
+}
+
+/* ------------------------------------------------------------------
+   Base: minimal element defaults so pages pick up the tokens.
+   Components arrive in phase 2.
+   ------------------------------------------------------------------ */
+@layer jm.base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  /* Keep the hidden attribute working when a class sets display.
+     !important inside a layer beats normal unlayered rules. */
+  [hidden] {
+    display: none !important;
+  }
+
+  /* Reserve the scrollbar's space on every page, so content does not move
+     sideways between pages that scroll and pages that do not. */
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    scrollbar-gutter: stable;
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--jm-colour-background);
+    color: var(--jm-colour-text);
+    font-family: var(--jm-font-family);
+    font-size: var(--jm-font-size-md);
+    line-height: var(--jm-line-height-normal);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    margin: 0 0 var(--jm-space-4);
+    font-family: var(--jm-font-family-heading);
+    line-height: var(--jm-line-height-tight);
+    font-weight: var(--jm-font-weight-semibold);
+  }
+
+  h1 {
+    font-size: clamp(2rem, 1.5rem + 2vw, var(--jm-font-size-3xl));
+    letter-spacing: -0.02em;
+  }
+  h2 { font-size: var(--jm-font-size-2xl); letter-spacing: -0.01em; }
+  h3 { font-size: var(--jm-font-size-xl); }
+
+  /* h4 is a component-level label: sans, like panel and card titles. */
+  h4 {
+    font-family: var(--jm-font-family);
+    font-size: var(--jm-font-size-lg);
+  }
+
+  p {
+    margin: 0 0 var(--jm-space-4);
+    max-width: var(--jm-measure);
+  }
+
+  code,
+  kbd,
+  pre,
+  samp {
+    font-family: var(--jm-font-family-mono);
+    font-size: 0.9375em;
+  }
+
+  a {
+    color: var(--jm-colour-link);
+    text-decoration-thickness: max(1px, 0.0625rem);
+    text-underline-offset: 0.15em;
+  }
+
+  a:visited {
+    color: var(--jm-colour-link-visited);
+  }
+
+  a:hover {
+    color: var(--jm-colour-link-hover);
+    text-decoration-thickness: max(3px, 0.1875rem);
+  }
+
+  /* Visible focus on every interactive element (WCAG 2.2: 2.4.7, 2.4.11).
+     The transparent outline keeps a ring in Windows forced-colours mode,
+     where box-shadow is removed. */
+  :focus-visible {
+    outline: var(--jm-focus-width) solid transparent;
+    outline-offset: var(--jm-focus-gap);
+    box-shadow: var(--jm-focus-ring);
+  }
+
+  @media (forced-colors: active) {
+    :focus-visible {
+      outline-color: Highlight;
+    }
+  }
+}
+
+/* ------------------------------------------------------------------
+   Components (phase 2). Semantic HTML first: each class styles a real
+   element (button, input, table, dl, details), it never replaces one.
+   ------------------------------------------------------------------ */
+@layer jm.components {
+  /* ---- Page layout ---- */
+  .jm-skip-link {
+    position: absolute;
+    left: var(--jm-space-3);
+    top: -100px;
+    z-index: 10;
+    padding: var(--jm-space-2) var(--jm-space-4);
+    background: var(--jm-colour-background);
+    color: var(--jm-colour-link);
+    font-weight: var(--jm-font-weight-bold);
+  }
+
+  .jm-skip-link:focus {
+    top: var(--jm-space-3);
+  }
+
+  .jm-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  .jm-page > main {
+    flex: 1 0 auto;
+  }
+
+  .jm-container {
+    width: 100%;
+    max-width: 64rem;
+    margin-inline: auto;
+    padding: var(--jm-space-6) var(--jm-space-4) var(--jm-space-8);
+  }
+
+  .jm-container--wide {
+    max-width: 80rem;
+  }
+
+  /* Vertical rhythm: direct children spaced evenly. */
+  .jm-stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--jm-space-5);
+  }
+
+  .jm-stack > * {
+    margin-block: 0;
+  }
+
+  /* A button in a stack keeps its own width instead of stretching. */
+  .jm-stack > .jm-button {
+    align-self: flex-start;
+  }
+
+  .jm-stack--tight {
+    gap: var(--jm-space-3);
+  }
+
+  .jm-stack--loose {
+    gap: var(--jm-space-7);
+  }
+
+  /* Horizontal group that wraps (button rows, filters). */
+  .jm-cluster {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--jm-space-3);
+  }
+
+  /* ---- Header and footer ---- */
+  .jm-header {
+    border-bottom: var(--jm-border-width) solid var(--jm-colour-border);
+    background: var(--jm-colour-surface);
+  }
+
+  .jm-header__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--jm-space-2) var(--jm-space-5);
+    max-width: 80rem;
+    margin-inline: auto;
+    padding: var(--jm-space-3) var(--jm-space-4);
+  }
+
+  .jm-header__name {
+    margin-right: auto;
+    font-family: var(--jm-font-family-heading);
+    font-size: var(--jm-font-size-lg);
+    font-weight: var(--jm-font-weight-semibold);
+    color: var(--jm-colour-text);
+    text-decoration: none;
+  }
+
+  .jm-header__name:visited {
+    color: var(--jm-colour-text);
+  }
+
+  .jm-header__nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--jm-space-1);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .jm-header__nav a,
+  .jm-header__nav a:visited {
+    display: inline-block;
+    padding: var(--jm-space-1) var(--jm-space-3);
+    border-radius: var(--jm-radius-md);
+    color: var(--jm-colour-text-secondary);
+    font-size: var(--jm-font-size-sm);
+    text-decoration: none;
+  }
+
+  .jm-header__nav a:hover {
+    background: var(--jm-colour-surface-sunken);
+    color: var(--jm-colour-text);
+  }
+
+  /* Phones: name and utilities on the first row, navigation on its own row. */
+  @media (max-width: 47.99em) {
+    .jm-header__nav {
+      order: 1;
+      flex-basis: 100%;
+      margin-inline: calc(-1 * var(--jm-space-3));
+    }
+
+    .jm-header__nav ul {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+    }
+  }
+
+  /* No weight change: a bolder current link is wider on fonts with a medium
+     face, which moves every other link as you change page. */
+  .jm-header__nav a[aria-current="page"] {
+    background: var(--jm-colour-accent-subtle);
+    color: var(--jm-colour-accent);
+  }
+
+  .jm-footer {
+    border-top: var(--jm-border-width) solid var(--jm-colour-border);
+    background: transparent;
+    color: var(--jm-colour-text-secondary);
+    font-size: var(--jm-font-size-sm);
+  }
+
+  .jm-footer__inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--jm-space-2) var(--jm-space-4);
+    max-width: 80rem;
+    margin-inline: auto;
+    padding: var(--jm-space-4) var(--jm-space-4) var(--jm-space-6);
+  }
+
+  /* ---- Buttons ---- */
+  .jm-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--jm-space-2);
+    min-height: 2.75rem; /* 44px target */
+    margin: 0;
+    padding: var(--jm-space-2) var(--jm-space-5);
+    border: var(--jm-border-width-thick) solid transparent;
+    border-radius: var(--jm-radius-lg);
+    background: var(--jm-colour-accent);
+    box-shadow: none;
+    color: var(--jm-colour-on-accent);
+    font: inherit;
+    font-weight: var(--jm-font-weight-medium);
+    line-height: var(--jm-line-height-tight);
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color var(--jm-duration-fast), color var(--jm-duration-fast);
+  }
+
+  .jm-button:visited {
+    color: var(--jm-colour-on-accent);
+  }
+
+  .jm-button:hover {
+    background: var(--jm-colour-accent-hover);
+    color: var(--jm-colour-on-accent);
+    text-decoration: none;
+  }
+
+  .jm-button:active {
+    filter: brightness(0.96);
+  }
+
+  .jm-button--secondary,
+  .jm-button--secondary:visited {
+    border-color: var(--jm-colour-border-strong);
+    background: transparent;
+    box-shadow: none;
+    color: var(--jm-colour-text);
+  }
+
+  .jm-button--secondary:hover {
+    background: var(--jm-colour-surface-sunken);
+    color: var(--jm-colour-text);
+  }
+
+  /* Destructive actions only. */
+  .jm-button--warning,
+  .jm-button--warning:visited {
+    background: var(--jm-colour-error-text);
+    box-shadow: none;
+    color: var(--jm-colour-background);
+  }
+
+  .jm-button--warning:hover {
+    background: var(--jm-colour-error);
+    color: var(--jm-colour-background);
+  }
+
+  .jm-button:disabled,
+  .jm-button[aria-disabled="true"] {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  /* ---- Form fields ---- */
+  .jm-field {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--jm-space-2);
+  }
+
+  .jm-field--error {
+    padding-left: var(--jm-space-3);
+    border-left: var(--jm-border-width-thick) solid var(--jm-colour-error);
+  }
+
+  .jm-label {
+    font-weight: var(--jm-font-weight-bold);
+  }
+
+  .jm-label--large {
+    font-family: var(--jm-font-family-heading);
+    font-size: var(--jm-font-size-xl);
+    line-height: var(--jm-line-height-tight);
+  }
+
+  .jm-hint {
+    color: var(--jm-colour-text-secondary);
+  }
+
+  .jm-error-message {
+    color: var(--jm-colour-error-text);
+    font-weight: var(--jm-font-weight-bold);
+  }
+
+  .jm-input,
+  .jm-select,
+  .jm-textarea {
+    width: 100%;
+    min-height: 2.75rem;
+    padding: var(--jm-space-2) var(--jm-space-3);
+    border: var(--jm-border-width-thick) solid var(--jm-colour-border-strong);
+    border-radius: var(--jm-radius-sm);
+    background: var(--jm-colour-background);
+    color: var(--jm-colour-text);
+    font: inherit;
+  }
+
+  .jm-textarea {
+    min-height: 7rem;
+    resize: vertical;
+  }
+
+  .jm-select {
+    width: auto;
+    max-width: 100%;
+  }
+
+  .jm-input--error,
+  .jm-select--error,
+  .jm-textarea--error {
+    border-color: var(--jm-colour-error);
+  }
+
+  /* Widths in characters, sized to the expected answer. */
+  .jm-input--width-2 { max-width: calc(2ch + 2.25rem); }
+  .jm-input--width-4 { max-width: calc(4ch + 2.25rem); }
+  .jm-input--width-10 { max-width: calc(10ch + 2.25rem); }
+  .jm-input--width-20 { max-width: calc(20ch + 2.25rem); }
+
+  .jm-fieldset {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--jm-space-2);
+  }
+
+  .jm-fieldset > legend {
+    padding: 0;
+    margin-bottom: var(--jm-space-2);
+  }
+
+  .jm-date {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--jm-space-4);
+  }
+
+  /* Checkbox and radio: input then label, as siblings. */
+  .jm-choices {
+    display: flex;
+    flex-direction: column;
+    gap: var(--jm-space-2);
+  }
+
+  .jm-choices--inline {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: var(--jm-space-2) var(--jm-space-5);
+  }
+
+  .jm-choice {
+    display: grid;
+    grid-template-columns: 1.5rem 1fr;
+    column-gap: var(--jm-space-3);
+    align-items: start;
+  }
+
+  .jm-choice__input {
+    width: 1.5rem;
+    height: 1.5rem;
+    margin: 0.25rem 0 0;
+    accent-color: var(--jm-colour-accent);
+    cursor: pointer;
+  }
+
+  .jm-choice__label {
+    padding-block: var(--jm-space-1);
+    cursor: pointer;
+  }
+
+  .jm-choice__hint {
+    grid-column: 2;
+    color: var(--jm-colour-text-secondary);
+  }
+
+  /* ---- Error summary (top of the page after a failed submit) ---- */
+  .jm-error-summary {
+    padding: var(--jm-space-4) var(--jm-space-5);
+    border: var(--jm-border-width) solid var(--jm-colour-border);
+    border-left: var(--jm-border-width-heavy) solid var(--jm-colour-error);
+    border-radius: var(--jm-radius-lg);
+    background: var(--jm-colour-error-background);
+  }
+
+  .jm-error-summary__title {
+    margin: 0 0 var(--jm-space-3);
+    color: var(--jm-colour-error-text);
+    font-family: var(--jm-font-family);
+    font-size: var(--jm-font-size-lg);
+    font-weight: var(--jm-font-weight-bold);
+  }
+
+  .jm-error-summary ul {
+    display: flex;
+    flex-direction: column;
+    gap: var(--jm-space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .jm-error-summary a,
+  .jm-error-summary a:visited {
+    color: var(--jm-colour-error-text);
+    font-weight: var(--jm-font-weight-bold);
+  }
+
+  /* ---- Summary list (label and value review rows) ---- */
+  .jm-summary-list {
+    display: grid;
+    grid-template-columns: minmax(8rem, 1fr) 2fr auto;
+    margin: 0;
+  }
+
+  .jm-summary-list__row {
+    display: contents;
+  }
+
+  .jm-summary-list dt,
+  .jm-summary-list dd {
+    margin: 0;
+    padding: var(--jm-space-3) var(--jm-space-4) var(--jm-space-3) 0;
+    border-bottom: var(--jm-border-width) solid var(--jm-colour-border);
+  }
+
+  .jm-summary-list dt {
+    font-weight: var(--jm-font-weight-bold);
+  }
+
+  .jm-summary-list__actions {
+    text-align: right;
+  }
+
+  .jm-summary-list--no-actions {
+    grid-template-columns: minmax(8rem, 1fr) 2fr;
+  }
+
+  @media (max-width: 40em) {
+    .jm-summary-list,
+    .jm-summary-list--no-actions {
+      grid-template-columns: 1fr;
+    }
+
+    .jm-summary-list dt {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .jm-summary-list__actions {
+      text-align: left;
+    }
+  }
+
+  /* ---- Status tag (always a word, never colour alone) ---- */
+  .jm-tag {
+    display: inline-block;
+    padding: 0.15rem var(--jm-space-3);
+    border-radius: var(--jm-radius-pill);
+    background: var(--jm-colour-surface-sunken);
+    color: var(--jm-colour-text);
+    font-size: var(--jm-font-size-sm);
+    font-weight: var(--jm-font-weight-medium);
+    line-height: 1.4;
+    white-space: nowrap;
+  }
+
+  .jm-tag--success { background: var(--jm-colour-success-background); color: var(--jm-colour-success-text); }
+  .jm-tag--warning { background: var(--jm-colour-warning-background); color: var(--jm-colour-warning-text); }
+  .jm-tag--error { background: var(--jm-colour-error-background); color: var(--jm-colour-error-text); }
+  .jm-tag--info { background: var(--jm-colour-info-background); color: var(--jm-colour-info-text); }
+
+  /* ---- Notification banner ---- */
+  .jm-banner {
+    padding: var(--jm-space-4) var(--jm-space-5);
+    border: var(--jm-border-width) solid var(--jm-colour-border);
+    border-left: var(--jm-border-width-heavy) solid var(--jm-colour-info);
+    border-radius: var(--jm-radius-lg);
+    background: var(--jm-colour-info-background);
+  }
+
+  .jm-banner__title {
+    margin: 0 0 var(--jm-space-1);
+    color: var(--jm-colour-info-text);
+    font-weight: var(--jm-font-weight-bold);
+  }
+
+  .jm-banner > :last-child {
+    margin-bottom: 0;
+  }
+
+  .jm-banner--success {
+    border-color: var(--jm-colour-border);
+    border-left-color: var(--jm-colour-success);
+    background: var(--jm-colour-success-background);
+  }
+
+  .jm-banner--success .jm-banner__title {
+    color: var(--jm-colour-success-text);
+  }
+
+  /* ---- Table ---- */
+  /* Wrap wide tables: <div class="jm-table-wrap" role="region" aria-label="..." tabindex="0"> */
+  .jm-table-wrap {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  .jm-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .jm-table caption {
+    padding-bottom: var(--jm-space-3);
+    font-size: var(--jm-font-size-lg);
+    font-weight: var(--jm-font-weight-semibold);
+    text-align: left;
+  }
+
+  .jm-table th,
+  .jm-table td {
+    padding: var(--jm-space-3) var(--jm-space-4) var(--jm-space-3) 0;
+    border-bottom: var(--jm-border-width) solid var(--jm-colour-border);
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .jm-table thead th {
+    border-bottom: var(--jm-border-width) solid var(--jm-colour-border-strong);
+    color: var(--jm-colour-text-secondary);
+    font-size: var(--jm-font-size-sm);
+    font-weight: var(--jm-font-weight-semibold);
+    white-space: nowrap;
+  }
+
+  .jm-table tbody th {
+    font-weight: var(--jm-font-weight-normal);
+  }
+
+  .jm-table .jm-table__num {
+    text-align: right;
+  }
+
+  .jm-table td.jm-table__num {
+    font-family: var(--jm-font-family-mono);
+    font-size: 0.95em;
+  }
+
+  .jm-table--compact th,
+  .jm-table--compact td {
+    padding-block: var(--jm-space-2);
+    font-size: var(--jm-font-size-sm);
+  }
+
+  /* ---- Details (expand and collapse, no JavaScript) ---- */
+  .jm-details > summary {
+    display: inline-block;
+    cursor: pointer;
+    color: var(--jm-colour-link);
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+
+  .jm-details > summary::before {
+    content: "";
+    display: inline-block;
+    margin-right: var(--jm-space-2);
+    border-style: solid;
+    border-color: transparent;
+    border-width: 0.4em 0 0.4em 0.65em;
+    border-left-color: currentColor;
+    vertical-align: 0.05em;
+  }
+
+  .jm-details[open] > summary::before {
+    border-width: 0.65em 0.4em 0 0.4em;
+    border-color: currentColor transparent transparent;
+  }
+
+  .jm-details > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .jm-details__text {
+    margin-top: var(--jm-space-3);
+    padding: var(--jm-space-3) var(--jm-space-4);
+    border-left: var(--jm-border-width-heavy) solid var(--jm-colour-border-strong);
+  }
+
+  /* ---- Phase 3: dashboard patterns ---- */
+
+  /* Banner variants. */
+  .jm-banner--warning {
+    border-color: var(--jm-colour-border);
+    border-left-color: var(--jm-colour-warning);
+    background: var(--jm-colour-warning-background);
+  }
+
+  .jm-banner--warning .jm-banner__title {
+    color: var(--jm-colour-warning-text);
+  }
+
+  .jm-banner--error {
+    border-color: var(--jm-colour-border);
+    border-left-color: var(--jm-colour-error);
+    background: var(--jm-colour-error-background);
+  }
+
+  .jm-banner--error .jm-banner__title {
+    color: var(--jm-colour-error-text);
+  }
+
+  /* Sidebar layout: <div class="jm-app"> <nav class="jm-app__sidebar"> + <main class="jm-app__main">.
+     One column on phones; sidebar and content side by side from 48em. */
+  .jm-app {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    min-height: 100vh;
+  }
+
+  .jm-app__sidebar {
+    padding: var(--jm-space-4);
+    border-bottom: var(--jm-border-width) solid var(--jm-colour-border);
+    background: var(--jm-colour-surface-sunken);
+  }
+
+  .jm-app__main {
+    min-width: 0;
+    padding: var(--jm-space-5) var(--jm-space-4) var(--jm-space-8);
+  }
+
+  @media (min-width: 48em) {
+    .jm-app {
+      grid-template-columns: 15rem minmax(0, 1fr);
+    }
+
+    .jm-app__sidebar {
+      border-right: var(--jm-border-width) solid var(--jm-colour-border);
+      border-bottom: 0;
+    }
+
+    .jm-app__main {
+      padding: var(--jm-space-6) var(--jm-space-6) var(--jm-space-8);
+    }
+  }
+
+  /* Sidebar navigation: sentence-case links, current page marked with weight and an underline
+     (aria-current), not colour alone. */
+  .jm-sidenav {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .jm-sidenav a {
+    display: block;
+    padding: var(--jm-space-2) 0;
+    color: var(--jm-colour-text);
+    text-decoration: none;
+  }
+
+  .jm-sidenav a:hover {
+    text-decoration: underline;
+  }
+
+  .jm-sidenav a[aria-current="page"] {
+    font-weight: var(--jm-font-weight-bold);
+    text-decoration: underline;
+    text-decoration-thickness: var(--jm-border-width-thick);
+    text-underline-offset: 0.25em;
+  }
+
+  /* On this page: links to the page's h2 sections that stay in view while scrolling.
+     <main class="jm-container jm-container--wide jm-with-toc">
+       <div class="jm-with-toc__intro">h1 and lead</div>
+       <nav class="jm-toc" aria-label="On this page">
+         <details class="jm-toc__details">
+           <summary class="jm-toc__summary">On this page <span class="jm-toc__current"></span></summary>
+           <p class="jm-toc__title">On this page</p>
+           <ol class="jm-toc__list"><li><a href="#section-id">Section</a></li></ol>
+         </details>
+       </nav>
+       <div class="jm-with-toc__main">sections</div>
+     </main>
+     From 48em: a sticky side column that scrolls on its own when taller than the
+     viewport. Below 48em: a sticky bar whose <details> opens to the list.
+     Browsers without ::details-content show the collapsible version at every width.
+     Set --jm-toc-offset to the height of any sticky header. Also works inside
+     .jm-app__sidebar. ui-kit.js marks the current section and closes the bar after
+     a link is chosen; without it the list still works. */
+  .jm-with-toc {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--jm-space-6);
+  }
+
+  .jm-with-toc [id] {
+    scroll-margin-top: calc(var(--jm-toc-offset) + var(--jm-space-4));
+  }
+
+  .jm-toc {
+    font-size: var(--jm-font-size-sm);
+  }
+
+  .jm-toc__summary {
+    display: flex;
+    gap: var(--jm-space-2);
+    align-items: baseline;
+    min-height: 2.75rem;
+    padding: var(--jm-space-3) 0;
+    font-weight: var(--jm-font-weight-semibold);
+    cursor: pointer;
+  }
+
+  .jm-toc__summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .jm-toc__summary::after {
+    content: "▾" / "";
+    margin-left: auto;
+    color: var(--jm-colour-text-secondary);
+  }
+
+  .jm-toc__details[open] > .jm-toc__summary::after {
+    content: "▴" / "";
+  }
+
+  .jm-toc__current {
+    overflow: hidden;
+    color: var(--jm-colour-text-secondary);
+    font-weight: var(--jm-font-weight-normal);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .jm-toc__current:empty {
+    display: none;
+  }
+
+  .jm-toc__current::before {
+    content: "· ";
+  }
+
+  .jm-toc__title {
+    display: none;
+    margin: 0 0 var(--jm-space-2);
+    font-weight: var(--jm-font-weight-semibold);
+  }
+
+  .jm-toc__list {
+    margin: 0;
+    padding: 0 0 var(--jm-space-3);
+    list-style: none;
+  }
+
+  .jm-toc__list a {
+    display: block;
+    padding: var(--jm-space-1) var(--jm-space-3);
+    border-left: var(--jm-border-width-thick) solid var(--jm-colour-border);
+    color: var(--jm-colour-text-secondary);
+    text-decoration: none;
+  }
+
+  .jm-toc__list a:hover {
+    color: var(--jm-colour-text);
+    text-decoration: underline;
+  }
+
+  /* Colour and border only: a weight change would widen the link. */
+  .jm-toc__list a[aria-current="true"] {
+    border-left-color: var(--jm-colour-accent);
+    color: var(--jm-colour-text);
+  }
+
+  @media (max-width: 47.99em) {
+    .jm-toc {
+      position: sticky;
+      top: var(--jm-toc-offset);
+      z-index: 5;
+      margin-inline: calc(-1 * var(--jm-space-4));
+      padding-inline: var(--jm-space-4);
+      border-block: var(--jm-border-width) solid var(--jm-colour-border);
+      background: var(--jm-colour-surface);
+    }
+
+    .jm-app .jm-toc {
+      margin-inline: 0;
+    }
+
+    .jm-app__sidebar:has(> .jm-toc) {
+      display: contents;
+    }
+
+    .jm-toc__list {
+      max-height: 60vh;
+      overflow-y: auto;
+    }
+
+    .jm-with-toc [id],
+    .jm-app [id] {
+      scroll-margin-top: calc(var(--jm-toc-offset) + 2.75rem + var(--jm-space-4));
+    }
+  }
+
+  @media (min-width: 48em) {
+    .jm-with-toc {
+      grid-template-columns: minmax(10rem, 13rem) minmax(0, 1fr);
+      grid-template-rows: auto 1fr;
+      column-gap: var(--jm-space-7);
+      row-gap: var(--jm-space-7);
+    }
+
+    .jm-with-toc > .jm-toc {
+      grid-column: 1;
+      grid-row: 1 / -1;
+    }
+
+    .jm-with-toc__intro,
+    .jm-with-toc__main {
+      grid-column: 2;
+    }
+
+    .jm-toc {
+      position: sticky;
+      top: calc(var(--jm-toc-offset) + var(--jm-space-5));
+      align-self: start;
+      max-height: calc(100vh - var(--jm-toc-offset) - 2 * var(--jm-space-5));
+      overflow-y: auto;
+    }
+
+    .jm-app__sidebar .jm-toc {
+      top: calc(var(--jm-toc-offset) + var(--jm-space-4));
+    }
+  }
+
+  @supports selector(::details-content) {
+    @media (min-width: 48em) {
+      .jm-toc__summary {
+        display: none;
+      }
+
+      .jm-toc__title {
+        display: block;
+      }
+
+      .jm-toc__details::details-content {
+        content-visibility: visible;
+      }
+    }
+  }
+
+  /* Flat panel: a raised surface and a border, no shadow. Put content in __body. */
+  .jm-panel {
+    border: var(--jm-border-width) solid var(--jm-colour-border);
+    border-radius: var(--jm-radius-lg);
+    background: var(--jm-colour-surface);
+  }
+
+  .jm-panel__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--jm-space-2) var(--jm-space-4);
+    padding: var(--jm-space-3) var(--jm-space-4);
+    border-bottom: var(--jm-border-width) solid var(--jm-colour-border);
+  }
+
+  .jm-panel__title {
+    margin: 0;
+    font-family: var(--jm-font-family);
+    font-size: var(--jm-font-size-md);
+    font-weight: var(--jm-font-weight-semibold);
+    letter-spacing: 0;
+  }
+
+  .jm-panel__body {
+    padding: var(--jm-space-4);
+  }
+
+  .jm-panel__body > :last-child {
+    margin-bottom: 0;
+  }
+
+  /* A table placed directly in the panel (not in __body) lines up with the header. */
+  .jm-panel > .jm-table-wrap {
+    padding-inline: var(--jm-space-4);
+  }
+
+  /* Key figures: a definition list read as a row of numbers, separated by rules, not cards.
+     <dl class="jm-figures"><div><dt>Label</dt><dd>12</dd></div>...</dl>
+     Put the label first in the source so it reads "label, value". */
+  .jm-figures {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+    margin: 0;
+  }
+
+  .jm-figures > div {
+    padding: var(--jm-space-2) var(--jm-space-4);
+    border-left: var(--jm-border-width) solid var(--jm-colour-border);
+  }
+
+  .jm-figures > div:first-child {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .jm-figures dt {
+    color: var(--jm-colour-text-secondary);
+    font-size: var(--jm-font-size-sm);
+  }
+
+  .jm-figures dd {
+    margin: var(--jm-space-1) 0 0;
+    font-size: var(--jm-font-size-2xl);
+    font-weight: var(--jm-font-weight-semibold);
+    font-variant-numeric: tabular-nums lining-nums;
+    letter-spacing: -0.01em;
+    line-height: var(--jm-line-height-tight);
+  }
+
+  .jm-figures__note {
+    display: block;
+    margin-top: var(--jm-space-1);
+    color: var(--jm-colour-text-secondary);
+    font-size: var(--jm-font-size-sm);
+    font-weight: var(--jm-font-weight-normal);
+    letter-spacing: 0;
+  }
+
+  @media (max-width: 30em) {
+    .jm-figures {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .jm-figures > div,
+    .jm-figures > div:first-child {
+      padding: var(--jm-space-3) 0;
+      border-left: 0;
+      border-top: var(--jm-border-width) solid var(--jm-colour-border);
+    }
+
+    .jm-figures > div:first-child {
+      border-top: 0;
+    }
+  }
+
+  /* Filter bar above a table: <form class="jm-filters" role="search">. */
+  .jm-filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: var(--jm-space-3) var(--jm-space-4);
+  }
+
+  .jm-filters .jm-field {
+    margin: 0;
+  }
+
+  /* Sortable table headers (ui-kit.js adds the buttons and aria-sort). Works as a plain table without it. */
+  .jm-table th[aria-sort] {
+    padding: 0;
+  }
+
+  .jm-sort {
+    display: flex;
+    align-items: center;
+    gap: var(--jm-space-1);
+    width: 100%;
+    padding: var(--jm-space-3) var(--jm-space-4) var(--jm-space-3) 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    font-weight: var(--jm-font-weight-bold);
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .jm-table__num .jm-sort {
+    justify-content: flex-end;
+  }
+
+  .jm-sort::after {
+    content: "\2195";
+    color: var(--jm-colour-text-secondary);
+    font-weight: var(--jm-font-weight-normal);
+  }
+
+  th[aria-sort="ascending"] .jm-sort::after {
+    content: "\2191";
+    color: var(--jm-colour-text);
+  }
+
+  th[aria-sort="descending"] .jm-sort::after {
+    content: "\2193";
+    color: var(--jm-colour-text);
+  }
+
+  /* Trail: an ordered list of events with a time and a plain-language description.
+     <ol class="jm-trail"><li><time>...</time> <span class="jm-trail__text">...</span></li></ol> */
+  .jm-trail {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .jm-trail > li {
+    display: grid;
+    grid-template-columns: 8rem minmax(0, 1fr);
+    gap: var(--jm-space-1) var(--jm-space-4);
+    padding: var(--jm-space-3) 0;
+    border-bottom: var(--jm-border-width) solid var(--jm-colour-border);
+  }
+
+  .jm-trail > li:last-child {
+    border-bottom: 0;
+  }
+
+  .jm-trail time,
+  .jm-trail__meta {
+    font-family: var(--jm-font-family-mono);
+    color: var(--jm-colour-text-secondary);
+    font-size: var(--jm-font-size-sm);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .jm-trail__id {
+    font-family: var(--jm-font-family-mono);
+    font-size: var(--jm-font-size-sm);
+  }
+
+  @media (max-width: 30em) {
+    .jm-trail > li {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  /* Bar chart made of a list, so the values are real text:
+     <ul class="jm-bars"><li style="--jm-bar: 62%"><span class="jm-bars__label">Label</span>
+     <span class="jm-bars__track" aria-hidden="true"><span class="jm-bars__fill"></span></span>
+     <span class="jm-bars__value">62</span></li></ul> */
+  .jm-bars {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .jm-bars > li {
+    display: grid;
+    grid-template-columns: minmax(6rem, 12rem) minmax(0, 1fr) 3.5rem;
+    align-items: center;
+    gap: var(--jm-space-3);
+    padding: var(--jm-space-1) 0;
+  }
+
+  .jm-bars__track {
+    display: block;
+    height: 0.75rem;
+    background: var(--jm-colour-surface-sunken);
+    border-radius: var(--jm-radius-sm);
+  }
+
+  .jm-bars__fill {
+    display: block;
+    width: var(--jm-bar, 0%);
+    height: 100%;
+    background: var(--jm-series, var(--jm-colour-chart-1));
+    border-radius: var(--jm-radius-pill);
+  }
+
+  .jm-bars > li:nth-child(1) { --jm-series: var(--jm-colour-chart-1); }
+  .jm-bars > li:nth-child(2) { --jm-series: var(--jm-colour-chart-2); }
+  .jm-bars > li:nth-child(3) { --jm-series: var(--jm-colour-chart-3); }
+  .jm-bars > li:nth-child(4) { --jm-series: var(--jm-colour-chart-4); }
+  .jm-bars > li:nth-child(5) { --jm-series: var(--jm-colour-chart-5); }
+
+  .jm-bars__value {
+    font-family: var(--jm-font-family-mono);
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (max-width: 30em) {
+    .jm-bars > li {
+      grid-template-columns: minmax(0, 1fr) 3.5rem;
+    }
+
+    .jm-bars__track {
+      grid-column: 1 / -1;
+      grid-row: 2;
+    }
+  }
+
+  /* Series colours, in fixed order (see the chart tokens). Set on a bar, line or label. */
+  .jm-series-1 { --jm-series: var(--jm-colour-chart-1); }
+  .jm-series-2 { --jm-series: var(--jm-colour-chart-2); }
+  .jm-series-3 { --jm-series: var(--jm-colour-chart-3); }
+  .jm-series-4 { --jm-series: var(--jm-colour-chart-4); }
+  .jm-series-5 { --jm-series: var(--jm-colour-chart-5); }
+  .jm-series-other { --jm-series: var(--jm-colour-chart-other); }
+
+  /* Chart with a title that says what to see, the unit, and one plain note.
+     <figure class="jm-chart"><figcaption class="jm-chart__title">...</figcaption>
+     <p class="jm-chart__note">unit and annotation</p> ...chart... </figure>
+     Two text levels only: the title, and the grey note. */
+  .jm-chart {
+    margin: 0;
+  }
+
+  .jm-chart__title {
+    margin: 0 0 var(--jm-space-1);
+    font-weight: var(--jm-font-weight-semibold);
+  }
+
+  .jm-chart__note {
+    margin: 0 0 var(--jm-space-3);
+    color: var(--jm-colour-text-secondary);
+    font-size: var(--jm-font-size-sm);
+  }
+
+  /* Line chart in inline SVG with direct labels at the line ends instead of a legend.
+     <svg class="jm-lines" role="img" aria-label="..."> <polyline class="jm-series-1" points="..."/>
+     <text class="jm-series-1" x y>Label</text> */
+  .jm-lines {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: 28rem;
+    overflow: visible;
+  }
+
+  .jm-lines polyline {
+    fill: none;
+    stroke: var(--jm-series);
+    stroke-width: 2;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+
+  .jm-lines text {
+    fill: var(--jm-series, var(--jm-colour-text));
+    font-size: 14px; /* user units: the viewBox is about 1:1 with pixels at phone width */
+    font-weight: var(--jm-font-weight-bold);
+    paint-order: stroke;
+    stroke: var(--jm-colour-background);
+    stroke-width: 3px;
+  }
+
+  /* Heat cells: sequential scale. Print the value in the cell. */
+  .jm-heat-1 { background: var(--jm-colour-heat-1); color: var(--jm-colour-heat-text-1); }
+  .jm-heat-2 { background: var(--jm-colour-heat-2); color: var(--jm-colour-heat-text-2); }
+  .jm-heat-3 { background: var(--jm-colour-heat-3); color: var(--jm-colour-heat-text-3); }
+  .jm-heat-4 { background: var(--jm-colour-heat-4); color: var(--jm-colour-heat-text-4); }
+  .jm-heat-5 { background: var(--jm-colour-heat-5); color: var(--jm-colour-heat-text-5); }
+
+  /* Sparkline: an inline SVG with role="img" and an aria-label that states the trend. */
+  .jm-spark {
+    display: inline-block;
+    width: 6rem;
+    height: 1.5rem;
+    vertical-align: middle;
+    fill: none;
+    stroke: var(--jm-colour-accent);
+    stroke-width: 2;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+
+  /* Empty, loading and error states. */
+  .jm-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--jm-space-2);
+    padding: var(--jm-space-7) var(--jm-space-4);
+    text-align: center;
+  }
+
+  .jm-empty > * {
+    margin: 0;
+  }
+
+  .jm-empty > :last-child:not(:first-child) {
+    margin-top: var(--jm-space-3);
+  }
+
+  .jm-empty__title {
+    font-size: var(--jm-font-size-lg);
+    font-weight: var(--jm-font-weight-semibold);
+  }
+
+  /* Loading: tell people in words (role="status"); the bar is decoration. */
+  .jm-loading {
+    display: flex;
+    align-items: center;
+    gap: var(--jm-space-3);
+    color: var(--jm-colour-text-secondary);
+  }
+
+  .jm-loading::before {
+    content: "";
+    flex: none;
+    width: 1.25rem;
+    height: 1.25rem;
+    border: var(--jm-border-width-thick) solid var(--jm-colour-border-strong);
+    border-top-color: var(--jm-colour-accent);
+    border-radius: 50%;
+    animation: jm-spin 0.9s linear infinite;
+  }
+
+  @keyframes jm-spin {
+    to { transform: rotate(360deg); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .jm-loading::before {
+      animation: none;
+      border-top-color: var(--jm-colour-border-strong);
+    }
+  }
+
+  /* Breadcrumbs: <nav class="jm-breadcrumbs" aria-label="Breadcrumb"><ol>...</ol></nav> */
+  .jm-breadcrumbs ol {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--jm-space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: var(--jm-font-size-sm);
+  }
+
+  .jm-breadcrumbs li + li::before {
+    content: "/";
+    margin-right: var(--jm-space-2);
+    color: var(--jm-colour-text-secondary);
+  }
+
+  .jm-breadcrumbs [aria-current="page"] {
+    color: var(--jm-colour-text);
+    font-weight: var(--jm-font-weight-medium);
+    text-decoration: none;
+  }
+
+  /* Pagination: <nav class="jm-pagination" aria-label="Results pages"><ul>...</ul></nav> */
+  .jm-pagination ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--jm-space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .jm-pagination a,
+  .jm-pagination span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    padding: var(--jm-space-1) var(--jm-space-3);
+    border: var(--jm-border-width) solid var(--jm-colour-border-strong);
+    border-radius: var(--jm-radius-sm);
+    color: var(--jm-colour-link);
+    text-decoration: none;
+    font-size: var(--jm-font-size-sm);
+  }
+
+  .jm-pagination a:hover {
+    background: var(--jm-colour-surface-sunken);
+  }
+
+  .jm-pagination [aria-current="page"] {
+    border-color: var(--jm-colour-accent);
+    background: var(--jm-colour-accent);
+    color: var(--jm-colour-on-accent);
+    font-weight: var(--jm-font-weight-bold);
+  }
+
+  /* Tabs: pair tab buttons with panels; ui-kit.js wires keyboard and selection when data-jm-tabs is set. */
+  /* Selected tab: an accent underline, so tabs work on any surface. */
+  .jm-tabs__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--jm-space-4);
+    margin: 0 0 var(--jm-space-4);
+    padding: 0;
+    border-bottom: var(--jm-border-width) solid var(--jm-colour-border);
+    list-style: none;
+  }
+
+  .jm-tabs__tab {
+    margin: 0 0 calc(-1 * var(--jm-border-width));
+    padding: var(--jm-space-2) 0;
+    border: 0;
+    border-bottom: var(--jm-border-width-thick) solid transparent;
+    background: none;
+    color: var(--jm-colour-text-secondary);
+    font: inherit;
+    font-size: var(--jm-font-size-sm);
+    font-weight: var(--jm-font-weight-medium);
+    cursor: pointer;
+  }
+
+  .jm-tabs__tab:hover {
+    color: var(--jm-colour-text);
+  }
+
+  /* Same weight as unselected tabs, so selecting one does not shift the row. */
+  .jm-tabs__tab[aria-selected="true"] {
+    border-bottom-color: var(--jm-colour-accent);
+    color: var(--jm-colour-text);
+  }
+
+  .jm-tabs__panel {
+    margin: 0;
+  }
+
+  /* Card: bordered content block with optional header/footer (distinct from dashboard .jm-panel). */
+  .jm-card {
+    border: var(--jm-border-width) solid var(--jm-colour-border);
+    border-radius: var(--jm-radius-lg);
+    background: var(--jm-colour-surface);
+  }
+
+  .jm-card__header,
+  .jm-card__footer {
+    padding: var(--jm-space-3) var(--jm-space-4);
+    border-bottom: var(--jm-border-width) solid var(--jm-colour-border);
+  }
+
+  .jm-card__footer {
+    border-bottom: 0;
+    border-top: var(--jm-border-width) solid var(--jm-colour-border);
+  }
+
+  .jm-card__title {
+    margin: 0;
+    font-family: var(--jm-font-family);
+    font-size: var(--jm-font-size-md);
+    font-weight: var(--jm-font-weight-semibold);
+    letter-spacing: 0;
+  }
+
+  .jm-card__body {
+    padding: var(--jm-space-4);
+  }
+
+  .jm-card__body > :last-child {
+    margin-bottom: 0;
+  }
+
+  /* Dialog: native <dialog class="jm-dialog">; open with showModal() (ui-kit.js optional). */
+  .jm-dialog {
+    width: min(32rem, calc(100vw - var(--jm-space-8)));
+    max-height: calc(100vh - var(--jm-space-8));
+    margin: auto;
+    padding: 0;
+    border: var(--jm-border-width) solid var(--jm-colour-border-strong);
+    border-radius: var(--jm-radius-md);
+    background: var(--jm-colour-surface);
+    color: var(--jm-colour-text);
+    box-shadow: var(--jm-shadow-lg);
+  }
+
+  .jm-dialog::backdrop {
+    background: rgb(23 25 28 / 0.55);
+  }
+
+  .jm-dialog__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--jm-space-3);
+    padding: var(--jm-space-4) var(--jm-space-4) var(--jm-space-3);
+    border-bottom: var(--jm-border-width) solid var(--jm-colour-border);
+  }
+
+  .jm-dialog__title {
+    margin: 0;
+    font-family: var(--jm-font-family);
+    font-size: var(--jm-font-size-lg);
+    font-weight: var(--jm-font-weight-semibold);
+    letter-spacing: 0;
+    line-height: var(--jm-line-height-tight);
+  }
+
+  .jm-dialog__body {
+    padding: var(--jm-space-4);
+  }
+
+  .jm-dialog__footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: var(--jm-space-3);
+    padding: var(--jm-space-3) var(--jm-space-4) var(--jm-space-4);
+    border-top: var(--jm-border-width) solid var(--jm-colour-border);
+  }
+
+  .jm-dialog__close {
+    min-height: 2.75rem;
+    padding: var(--jm-space-1) var(--jm-space-3);
+    border: 0;
+    background: none;
+    color: var(--jm-colour-link);
+    font: inherit;
+    font-size: var(--jm-font-size-sm);
+    cursor: pointer;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Utilities: single-purpose helpers.
+   ------------------------------------------------------------------ */
+@layer jm.utilities {
+  /* Hidden on screen, read by screen readers. */
+  .jm-visually-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    clip: rect(0 0 0 0) !important;
+    clip-path: inset(50%) !important;
+    border: 0 !important;
+    white-space: nowrap !important;
+  }
+
+  /* Numbers, ids and timestamps: monospace with tabular figures. Use for those value types only. */
+  .jm-num {
+    font-family: var(--jm-font-family-mono);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .jm-secondary-text {
+    color: var(--jm-colour-text-secondary);
+  }
+}
