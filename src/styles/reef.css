@@ -6,6 +6,8 @@
 
 :root,
 :root[data-theme="light"] {
+  --jm-font-family: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --jm-font-family-heading: "Newsreader", Georgia, "Iowan Old Style", serif;
   --jm-font-family-mono: var(--jm-font-family);
   --sea-top: #5ec1da;
   --sea-deep: #1b5b84;
@@ -29,6 +31,7 @@
 body {
   margin: 0;
   padding: 0;
+  -webkit-font-smoothing: antialiased;
 }
 
 /* ============================================================================
@@ -96,6 +99,9 @@ body {
   opacity: 1;
 }
 
+/* ============================================================================
+   Right-Hand Editorial Dossier
+   ============================================================================ */
 .jm-dossier {
   flex: 1;
   min-width: 0;
@@ -107,52 +113,120 @@ body {
   top: 0;
   z-index: 30;
   background-color: var(--jm-colour-background);
+  border-bottom: var(--jm-border-width) solid var(--jm-colour-border);
 }
 
 .jm-dossier__header .jm-header__inner {
-  max-width: 44rem;
+  max-width: 41rem;
   margin: 0 auto;
-  padding: var(--jm-space-3) var(--jm-space-6);
+  padding: 0.9rem 1.5rem;
 }
 
 .jm-dossier__body {
-  max-width: 44rem;
+  max-width: 41rem;
   margin: 0 auto;
-  padding: var(--jm-space-6);
+  padding: 2.25rem 1.5rem 4rem;
 }
 
-.jm-header__name-btn {
-  font-family: var(--jm-font-family-heading);
-  font-size: var(--jm-font-size-lg);
-  font-weight: var(--jm-font-weight-bold);
-  color: var(--jm-colour-text);
+@media (min-width: 768px) {
+  .jm-dossier__header .jm-header__inner {
+    padding: 1rem 3rem;
+  }
+
+  .jm-dossier__body {
+    padding: 3.5rem 3rem 5.5rem;
+  }
+}
+
+.jm-header__loc-btn {
+  font-family: var(--jm-font-family);
+  font-size: var(--jm-font-size-xs);
+  font-weight: var(--jm-font-weight-medium);
+  color: var(--jm-colour-text-secondary);
   background: none;
   border: 0;
   padding: 0;
   cursor: pointer;
-  text-decoration: none;
 }
 
-.jm-header__name-btn:hover {
-  color: var(--jm-colour-link);
+.jm-header__loc-btn:hover {
+  color: var(--jm-colour-text);
 }
 
-/* Editorial Hero Typography */
-.jm-wip-line {
-  font-size: var(--jm-font-size-xs);
-  color: var(--jm-colour-text-secondary);
-  margin: 0;
+/* Chapter Flow & Editorial Hierarchy */
+.jm-editorial-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.jm-chapter {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding-top: 2.75rem;
+  padding-bottom: 2.75rem;
+  border-top: var(--jm-border-width) solid var(--jm-colour-border);
+}
+
+.jm-chapter--hero {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.jm-chapter__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--jm-space-3);
+}
+
+.jm-chapter__title {
+  font-family: var(--jm-font-family-heading);
+  font-size: 1.55rem;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
 }
 
 .jm-hero-title {
-  font-size: clamp(2rem, 3.2vw, 2.65rem);
-  line-height: 1.12;
-  letter-spacing: -0.02em;
+  font-family: var(--jm-font-family-heading);
+  font-size: clamp(2.25rem, 3.6vw, 2.9rem);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  margin: 0;
 }
 
 .jm-lead-copy {
-  font-size: var(--jm-font-size-md);
-  line-height: 1.65;
+  font-size: 1.03rem;
+  line-height: 1.7;
+  color: var(--jm-colour-text);
+  max-width: 58ch;
+}
+
+.jm-now-strip {
+  margin: 0.5rem 0 0;
+  border-top: var(--jm-border-width) solid var(--jm-colour-border);
+}
+
+.jm-now-strip__row {
+  display: grid;
+  grid-template-columns: 4.5rem 1fr;
+  gap: var(--jm-space-3);
+  padding: 0.65rem 0;
+  border-bottom: var(--jm-border-width) solid var(--jm-colour-border);
+  font-size: var(--jm-font-size-sm);
+  line-height: 1.5;
+}
+
+.jm-now-strip__row dt {
+  color: var(--jm-colour-text-secondary);
+  font-weight: var(--jm-font-weight-medium);
+}
+
+.jm-now-strip__row dd {
+  margin: 0;
   color: var(--jm-colour-text);
 }
 
@@ -389,95 +463,73 @@ body {
 }
 
 /* ============================================================================
-   Dossier Stage Bar, Flat Specimen Cards & Detail Views
+   Editorial Stage Underline Bar & Specimen Index Rows
    ============================================================================ */
-.jm-button--small {
-  padding: 0.3rem 0.65rem;
-  font-size: var(--jm-font-size-xs);
-}
-
 .jm-stage-tabs {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(92px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(84px, 1fr));
   gap: 0.25rem;
-  padding: 0.25rem;
-  border-radius: var(--jm-radius-sm);
-  background-color: var(--jm-colour-surface-sunken);
-  border: var(--jm-border-width) solid var(--jm-colour-border);
+  border-bottom: var(--jm-border-width) solid var(--jm-colour-border);
 }
 
 .jm-stage-tab {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.4rem;
-  padding: 0.45rem 0.65rem;
-  border-radius: var(--jm-radius-sm);
-  border: var(--jm-border-width) solid transparent;
+  gap: 0.35rem;
+  padding: 0.55rem 0.5rem 0.65rem;
+  margin-bottom: -1px;
+  border: 0;
+  border-bottom: 2px solid transparent;
   background: transparent;
   color: var(--jm-colour-text-secondary);
   font-family: var(--jm-font-family);
   font-size: var(--jm-font-size-xs);
-  font-weight: var(--jm-font-weight-semibold);
+  font-weight: var(--jm-font-weight-medium);
   white-space: nowrap;
   cursor: pointer;
-  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  transition: color 0.15s ease, border-color 0.15s ease;
 }
 
 .jm-stage-tab:hover {
   color: var(--jm-colour-text);
-  background-color: var(--jm-colour-surface);
 }
 
 .jm-stage-tab.is-active {
-  background-color: var(--jm-colour-accent);
-  color: var(--jm-colour-on-accent);
-  border-color: var(--jm-colour-accent);
-}
-
-.jm-stage-tab.is-active:hover {
-  background-color: var(--jm-colour-accent-hover);
-  border-color: var(--jm-colour-accent-hover);
-  color: var(--jm-colour-on-accent);
+  color: var(--jm-colour-text);
+  font-weight: var(--jm-font-weight-semibold);
+  border-bottom-color: var(--jm-colour-accent);
 }
 
 .jm-stage-tab.is-empty-stage:not(.is-active) {
-  opacity: 0.58;
+  opacity: 0.55;
 }
 
 .jm-stage-tab__count {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 1.25rem;
-  padding: 0.05rem 0.35rem;
-  border-radius: 999px;
   font-size: 11px;
-  font-weight: var(--jm-font-weight-semibold);
-  background-color: var(--jm-colour-surface);
   color: var(--jm-colour-text-secondary);
   font-variant-numeric: tabular-nums;
 }
 
 .jm-stage-tab.is-active .jm-stage-tab__count {
-  background-color: rgba(255, 255, 255, 0.22);
-  color: var(--jm-colour-on-accent);
+  color: var(--jm-colour-accent);
 }
 
-/* Flat, border-only specimen cards (no drop-shadows or hover-lift) */
+/* Uniform Flat Specimen Index Cards */
 .jm-reef-cards {
   display: flex;
   flex-direction: column;
-  gap: var(--jm-space-3);
+  gap: 0.75rem;
 }
 
 .jm-reef-card {
   width: 100%;
-  min-height: 122px;
+  min-height: 118px;
   display: flex;
   align-items: center;
-  gap: var(--jm-space-4);
-  padding: var(--jm-space-4);
+  gap: 1.1rem;
+  padding: 1rem 1.1rem;
   border-radius: var(--jm-radius-sm);
   border: var(--jm-border-width) solid var(--jm-colour-border);
   background-color: var(--jm-colour-surface);
@@ -495,8 +547,8 @@ body {
 }
 
 .jm-reef-card__thumb {
-  width: 56px;
-  height: 56px;
+  width: 54px;
+  height: 54px;
   border-radius: var(--jm-radius-sm);
   border: var(--jm-border-width) solid var(--jm-colour-border);
   background-color: var(--sea-deep);
@@ -512,30 +564,71 @@ body {
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 0.3rem;
 }
 
 .jm-reef-card__top {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
   gap: var(--jm-space-2);
 }
 
+.jm-reef-card__heading {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.65rem;
+}
+
 .jm-reef-card__title {
-  font-size: var(--jm-font-size-md);
-  font-weight: var(--jm-font-weight-semibold);
+  font-family: var(--jm-font-family-heading);
+  font-size: 1.18rem;
+  font-weight: 500;
+  line-height: 1.2;
   color: var(--jm-colour-text);
+}
+
+/* Quiet Dot + Word Stage Indicator (Accessible, No Heavy Pill Clutter) */
+.jm-stage-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--jm-font-family);
+  font-size: var(--jm-font-size-xs);
+  font-weight: var(--jm-font-weight-medium);
+  color: var(--jm-colour-text-secondary);
+}
+
+.jm-stage-badge__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--jm-colour-border-strong);
+  flex-shrink: 0;
+}
+
+.jm-stage-badge--reef .jm-stage-badge__dot {
+  background-color: var(--jm-colour-success);
+}
+
+.jm-stage-badge--branch .jm-stage-badge__dot {
+  background-color: var(--jm-colour-info);
+}
+
+.jm-stage-badge--bud .jm-stage-badge__dot {
+  background-color: var(--jm-colour-warning);
 }
 
 .jm-reef-card__arrow {
   color: var(--jm-colour-text-secondary);
+  transition: transform 0.15s ease, color 0.15s ease;
 }
 
 .jm-reef-card:hover .jm-reef-card__arrow,
 .jm-reef-card:focus-visible .jm-reef-card__arrow {
   color: var(--jm-colour-accent);
+  transform: translateX(3px);
 }
 
 .jm-reef-card__desc {
@@ -556,17 +649,24 @@ body {
   margin-top: auto;
 }
 
-/* Editorial Notes List */
-.jm-project-list {
+.jm-empty-inline {
+  padding: 1.25rem 0;
+}
+
+/* Editorial Notes Index */
+.jm-notes-list {
+  display: flex;
+  flex-direction: column;
   border-top: var(--jm-border-width) solid var(--jm-colour-border);
 }
 
-.jm-project-row {
+.jm-note-item {
   width: 100%;
   display: flex;
-  align-items: flex-start;
-  gap: var(--jm-space-3);
-  padding: var(--jm-space-3) var(--jm-space-2);
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--jm-space-4);
+  padding: 0.9rem 0.25rem;
   border: 0;
   border-bottom: var(--jm-border-width) solid var(--jm-colour-border);
   background: transparent;
@@ -577,38 +677,84 @@ body {
   transition: background-color 0.15s ease;
 }
 
-.jm-project-row:hover,
-.jm-project-row:focus-visible {
+.jm-note-item:hover,
+.jm-note-item:focus-visible {
   background-color: var(--jm-colour-surface-sunken);
 }
 
-.jm-project-row__content {
-  flex: 1;
-  min-width: 0;
+.jm-note-item__main {
   display: flex;
   flex-direction: column;
-  gap: var(--jm-space-1);
+  gap: 0.2rem;
+  min-width: 0;
 }
 
-.jm-project-row__title {
-  font-size: var(--jm-font-size-sm);
-  font-weight: var(--jm-font-weight-semibold);
+.jm-note-item__title {
+  font-family: var(--jm-font-family-heading);
+  font-size: 1.08rem;
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--jm-colour-text);
 }
 
-.jm-project-row__desc {
+.jm-note-item__meta {
   font-size: var(--jm-font-size-xs);
   color: var(--jm-colour-text-secondary);
 }
 
+.jm-note-item__date {
+  font-size: var(--jm-font-size-xs);
+  color: var(--jm-colour-text-secondary);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Contact & Colophon */
+.jm-contact-chapter {
+  padding-bottom: 1rem;
+}
+
+.jm-colophon {
+  margin-top: 1rem;
+  font-size: var(--jm-font-size-xs);
+  color: var(--jm-colour-text-secondary);
+}
+
+/* Inline Detail Views */
+.jm-back-link {
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--jm-colour-link);
+  font-family: var(--jm-font-family);
+  font-size: var(--jm-font-size-sm);
+  font-weight: var(--jm-font-weight-medium);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.jm-back-link:hover {
+  color: var(--jm-colour-link-hover);
+}
+
 .jm-detail-hero {
   display: flex;
-  gap: var(--jm-space-4);
+  gap: 1.25rem;
   align-items: center;
 }
 
+.jm-detail-title {
+  font-family: var(--jm-font-family-heading);
+  font-size: clamp(1.75rem, 2.8vw, 2.2rem);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
 .jm-detail-sprite-box {
-  width: 84px;
-  height: 84px;
+  width: 82px;
+  height: 82px;
   padding: var(--jm-space-2);
   border-radius: var(--jm-radius-sm);
   border: var(--jm-border-width) solid var(--jm-colour-border);
@@ -617,6 +763,16 @@ body {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+}
+
+.jm-prose {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  font-size: 1.02rem;
+  line-height: 1.7;
+  color: var(--jm-colour-text);
+  max-width: 58ch;
 }
 
 .jm-stage-grid {
@@ -630,7 +786,7 @@ body {
   padding: 0.35rem 0.25rem;
   border-radius: var(--jm-radius-sm);
   font-size: var(--jm-font-size-xs);
-  font-weight: var(--jm-font-weight-semibold);
+  font-weight: var(--jm-font-weight-medium);
   border: var(--jm-border-width) solid var(--jm-colour-border);
   background-color: var(--jm-colour-surface-sunken);
   color: var(--jm-colour-text-secondary);
@@ -647,7 +803,21 @@ body {
   padding-left: 1.25rem;
   display: flex;
   flex-direction: column;
-  gap: var(--jm-space-2);
+  gap: 0.55rem;
+  font-size: var(--jm-font-size-sm);
+  line-height: 1.6;
+}
+
+.jm-related-note {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--jm-space-3);
+  padding: 0.9rem 1rem;
+  border: var(--jm-border-width) solid var(--jm-colour-border);
+  border-radius: var(--jm-radius-sm);
+  background-color: var(--jm-colour-surface);
   font-size: var(--jm-font-size-sm);
 }
 
@@ -657,11 +827,6 @@ body {
   align-items: baseline;
   justify-content: space-between;
   gap: var(--jm-space-2);
-}
-
-.jm-note-row {
-  justify-content: space-between;
-  align-items: baseline;
 }
 
 .jm-toast {
@@ -770,7 +935,8 @@ body {
   .jm-coral-node,
   .jm-coral-node__tag,
   .jm-reef-card,
-  .jm-project-row,
+  .jm-reef-card__arrow,
+  .jm-note-item,
   .jm-reef__bg {
     transition: none !important;
   }

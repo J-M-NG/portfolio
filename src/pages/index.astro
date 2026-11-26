@@ -105,8 +105,8 @@ const clientPayload = {
     <div class="jm-dossier">
       <header class="jm-header jm-dossier__header">
         <div class="jm-header__inner">
-          <button type="button" class="jm-header__name-btn" data-show-dossier>
-            {profile.name}
+          <button type="button" class="jm-header__loc-btn" data-show-dossier>
+            London, UK
           </button>
           <nav class="jm-header__nav" aria-label="Primary">
             <ul>
@@ -120,19 +120,30 @@ const clientPayload = {
         </div>
       </header>
 
-      <!-- VIEW 1: MAIN DOSSIER -->
-      <main id="main" class="jm-dossier__body jm-stack jm-stack--loose">
+      <!-- VIEW 1: MAIN EDITORIAL DOSSIER -->
+      <main id="main" class="jm-dossier__body jm-editorial-flow">
         <!-- About -->
-        <section id="about" class="jm-stack">
-          <p class="jm-wip-line">{profile.wipNote}</p>
+        <section id="about" class="jm-chapter jm-chapter--hero">
           <h1 class="jm-hero-title">{profile.headline}</h1>
           <p class="jm-lead-copy">{profile.bio}</p>
-          <p class="jm-secondary-text">{profile.nowLine}</p>
+
+          <dl class="jm-now-strip">
+            <div class="jm-now-strip__row">
+              <dt>Now</dt>
+              <dd>{profile.nowLine}</dd>
+            </div>
+            <div class="jm-now-strip__row">
+              <dt>Status</dt>
+              <dd>{profile.wipNote}</dd>
+            </div>
+          </dl>
         </section>
 
         <!-- Reef Index (Projects) -->
-        <section id="projects" class="jm-stack">
-          <h2>Reef index</h2>
+        <section id="projects" class="jm-chapter">
+          <div class="jm-chapter__head">
+            <h2 class="jm-chapter__title">Reef index</h2>
+          </div>
 
           <div class="jm-stage-tabs" role="region" aria-label="Filter projects by growth stage">
             <button
@@ -178,9 +189,12 @@ const clientPayload = {
                 </span>
                 <span class="jm-reef-card__body">
                   <span class="jm-reef-card__top">
-                    <span class="jm-cluster">
-                      <strong class="jm-reef-card__title">{p.title}</strong>
-                      <span class={`jm-tag ${p.stageTagClass}`}>{p.stageLabel}</span>
+                    <span class="jm-reef-card__heading">
+                      <span class="jm-reef-card__title">{p.title}</span>
+                      <span class={`jm-stage-badge jm-stage-badge--${p.stage}`}>
+                        <span class="jm-stage-badge__dot" aria-hidden="true"></span>
+                        <span>{p.stageLabel}</span>
+                      </span>
                     </span>
                     <span class="jm-reef-card__arrow" aria-hidden="true">→</span>
                   </span>
@@ -196,41 +210,42 @@ const clientPayload = {
             ))}
           </div>
 
-          <div id="project-empty" class="jm-panel jm-empty is-hidden">
-            <p class="jm-empty__title">No corals in this stage yet</p>
-            <p class="jm-secondary-text">Select another stage above to view the rest of the reef.</p>
+          <div id="project-empty" class="jm-empty-inline is-hidden">
+            <p class="jm-secondary-text">No corals in this stage yet. Select another stage above to view the rest of the reef.</p>
           </div>
         </section>
 
         <!-- Work Experience -->
-        <Experience
-          items={experience}
-          resumeNote={profile.resumeNote}
-        />
+        <div class="jm-chapter">
+          <Experience
+            items={experience}
+            resumeNote={profile.resumeNote}
+          />
+        </div>
 
-        <!-- Field Notes -->
-        <section id="notes" class="jm-stack">
-          <h2>Notes</h2>
-          <div id="notes-list" class="jm-project-list">
+        <!-- Notes -->
+        <section id="notes" class="jm-chapter">
+          <div class="jm-chapter__head">
+            <h2 class="jm-chapter__title">Notes</h2>
+          </div>
+          <div id="notes-list" class="jm-notes-list">
             {notes.map((n) => {
               const linkedProject = projects.find((p) => p.slug === n.projectSlug);
               return (
                 <button
                   type="button"
-                  class="jm-project-row jm-note-row"
+                  class="jm-note-item"
                   data-note-row={n.slug}
                   data-linked-project={n.projectSlug ?? ''}
                 >
-                  <span class="jm-project-row__content">
-                    <strong class="jm-project-row__title">{n.title}</strong>
-                    <span class="jm-project-row__desc">
+                  <span class="jm-note-item__main">
+                    <span class="jm-note-item__title">{n.title}</span>
+                    <span class="jm-note-item__meta">
                       {n.tag}
                       {linkedProject ? ` · ${linkedProject.title}` : ''}
                     </span>
                   </span>
-                  <span class="jm-secondary-text" style="flex-shrink: 0; font-size: var(--jm-font-size-xs);">
-                    {n.date} →
-                  </span>
+                  <span class="jm-note-item__date">{n.date}</span>
                 </button>
               );
             })}
@@ -238,8 +253,10 @@ const clientPayload = {
         </section>
 
         <!-- Contact & Footer -->
-        <footer id="contact" class="jm-footer jm-stack">
-          <h2>Get in touch</h2>
+        <footer id="contact" class="jm-chapter jm-contact-chapter">
+          <div class="jm-chapter__head">
+            <h2 class="jm-chapter__title">Get in touch</h2>
+          </div>
           <p class="jm-secondary-text">
             Happy to chat about product ideas, side projects, or share a PDF copy of my CV.
           </p>
@@ -268,16 +285,16 @@ const clientPayload = {
               </a>
             )}
           </div>
-          <p class="jm-secondary-text" style="font-size: var(--jm-font-size-xs);">
+          <p class="jm-colophon">
             {profile.name} · London · Repo stats last synced {syncedAt}
           </p>
         </footer>
       </main>
 
       <!-- VIEW 2: INLINE EDITORIAL PROJECT VIEW -->
-      <section id="project-detail" class="jm-dossier__body jm-stack is-hidden" aria-live="polite">
+      <section id="project-detail" class="jm-dossier__body jm-stack jm-stack--loose is-hidden" aria-live="polite">
         <div class="jm-section-head">
-          <button type="button" class="jm-button jm-button--secondary jm-button--small" data-show-dossier>
+          <button type="button" class="jm-back-link" data-show-dossier>
             ← Back to index
           </button>
           <span id="detail-planted" class="jm-secondary-text" style="font-size: var(--jm-font-size-xs);"></span>
@@ -287,19 +304,19 @@ const clientPayload = {
           <div id="detail-sprite" class="jm-detail-sprite-box"></div>
           <div class="jm-stack jm-stack--tight">
             <div class="jm-cluster">
-              <span id="detail-stage-tag" class="jm-tag"></span>
+              <span id="detail-stage-badge" class="jm-stage-badge"></span>
               <span id="detail-species-meta" class="jm-secondary-text" style="font-size: var(--jm-font-size-xs); text-transform: capitalize;"></span>
             </div>
-            <h2 id="detail-title"></h2>
+            <h2 id="detail-title" class="jm-detail-title"></h2>
             <p id="detail-tools-line" class="jm-secondary-text" style="font-size: var(--jm-font-size-xs);"></p>
           </div>
         </div>
 
         <div id="detail-stage-bar" class="jm-stage-grid" aria-label="Growth stage progress"></div>
 
-        <div id="detail-story" class="jm-stack"></div>
+        <div id="detail-story" class="jm-prose"></div>
 
-        <figure id="detail-figure" class="jm-stack jm-stack--tight is-hidden">
+        <figure id="detail-figure" class="jm-stack jm-stack--tight is-hidden" style="margin: 0;">
           <img id="detail-figure-img" src="" alt="" style="width: 100%; border-radius: var(--jm-radius-sm); border: 1px solid var(--jm-colour-border);" />
           <figcaption id="detail-figure-caption" class="jm-secondary-text" style="font-size: var(--jm-font-size-xs);"></figcaption>
         </figure>
@@ -319,19 +336,19 @@ const clientPayload = {
       </section>
 
       <!-- VIEW 3: INLINE FIELD NOTE READER -->
-      <section id="note-detail" class="jm-dossier__body jm-stack is-hidden" aria-live="polite">
+      <section id="note-detail" class="jm-dossier__body jm-stack jm-stack--loose is-hidden" aria-live="polite">
         <div class="jm-section-head">
-          <button type="button" class="jm-button jm-button--secondary jm-button--small" data-show-dossier>
+          <button type="button" class="jm-back-link" data-show-dossier>
             ← Back to index
           </button>
           <a id="note-permalink" href="#" class="jm-secondary-text" style="font-size: var(--jm-font-size-xs);">Permalink</a>
         </div>
         <div class="jm-stack jm-stack--tight">
           <span id="note-meta" class="jm-secondary-text" style="font-size: var(--jm-font-size-xs);"></span>
-          <h2 id="note-title"></h2>
+          <h2 id="note-title" class="jm-detail-title"></h2>
         </div>
-        <div id="note-body" class="jm-stack"></div>
-        <div id="note-linked" class="jm-section-head"></div>
+        <div id="note-body" class="jm-prose"></div>
+        <div id="note-linked" class="jm-section-head" style="padding-top: var(--jm-space-4); border-top: 1px solid var(--jm-colour-border);"></div>
       </section>
     </div>
   </div>
@@ -439,13 +456,13 @@ const clientPayload = {
       setText('detail-planted', `Started ${p.plantedDate}`);
       const spriteBox = document.getElementById('detail-sprite');
       if (spriteBox) {
-        spriteBox.innerHTML = `<img src="${p.spriteSrc}" alt="${p.title} coral sprite" class="jm-pixel-sprite" style="max-height: 70px; max-width: 70px; width: auto; height: auto;" />`;
+        spriteBox.innerHTML = `<img src="${p.spriteSrc}" alt="${p.title} coral sprite" class="jm-pixel-sprite" style="max-height: 68px; max-width: 68px; width: auto; height: auto;" />`;
       }
 
-      const stageTag = document.getElementById('detail-stage-tag');
-      if (stageTag) {
-        stageTag.className = `jm-tag ${p.stageTagClass}`;
-        stageTag.textContent = p.stageLabel;
+      const stageBadge = document.getElementById('detail-stage-badge');
+      if (stageBadge) {
+        stageBadge.className = `jm-stage-badge jm-stage-badge--${p.stage}`;
+        stageBadge.innerHTML = `<span class="jm-stage-badge__dot" aria-hidden="true"></span><span>${p.stageLabel}</span>`;
       }
 
       setText('detail-species-meta', `${p.species} coral`);
@@ -519,13 +536,11 @@ const clientPayload = {
         if (linkedNote) {
           noteWrap.classList.remove('is-hidden');
           noteWrap.innerHTML = `
-            <div class="jm-panel">
-              <div class="jm-panel__body jm-section-head">
-                <span><strong>Related note:</strong> ${linkedNote.title}</span>
-                <button type="button" class="jm-button jm-button--secondary jm-button--small" data-open-note="${linkedNote.slug}">
-                  Read note
-                </button>
-              </div>
+            <div class="jm-related-note">
+              <span><strong>Related note:</strong> ${linkedNote.title}</span>
+              <button type="button" class="jm-back-link" data-open-note="${linkedNote.slug}">
+                Read note →
+              </button>
             </div>
           `;
           noteWrap.querySelector('[data-open-note]')?.addEventListener('click', () => {
@@ -590,10 +605,9 @@ const clientPayload = {
       if (linkedEl) {
         if (proj) {
           linkedEl.innerHTML = `
-            <span class="jm-secondary-text">Linked project</span>
-            <button type="button" class="jm-button jm-button--secondary jm-button--small" data-open-project="${proj.slug}">
-              <img src="${proj.spriteSrc}" alt="" class="jm-pixel-sprite" style="height: 18px; width: auto;" />
-              Inspect ${proj.title}
+            <span class="jm-secondary-text" style="font-size: var(--jm-font-size-sm);">Linked project</span>
+            <button type="button" class="jm-back-link" data-open-project="${proj.slug}">
+              Inspect ${proj.title} →
             </button>
           `;
           linkedEl.querySelector('[data-open-project]')?.addEventListener('click', () => {
