@@ -642,11 +642,38 @@ body {
   min-height: 3em;
 }
 
+.jm-reef-card__footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 0.9rem;
+  margin-top: auto;
+}
+
 .jm-reef-card__meta {
   font-size: var(--jm-font-size-xs);
   color: var(--jm-colour-text-secondary);
   opacity: 0.85;
-  margin-top: auto;
+}
+
+.jm-reef-card__links {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.jm-reef-card__link {
+  font-size: var(--jm-font-size-xs);
+  font-weight: var(--jm-font-weight-medium);
+  color: var(--jm-colour-link);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.jm-reef-card__link:hover {
+  color: var(--jm-colour-link-hover);
 }
 
 .jm-empty-inline {

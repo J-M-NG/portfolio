@@ -173,11 +173,13 @@ const clientPayload = {
 
           <div id="project-list" class="jm-reef-cards">
             {projects.map((p) => (
-              <button
-                type="button"
+              <article
                 class="jm-reef-card"
                 data-project-row={p.slug}
                 data-stage={p.stage}
+                tabindex="0"
+                role="button"
+                aria-label={`Read about ${p.title}`}
               >
                 <span class="jm-reef-card__thumb">
                   <img
@@ -199,14 +201,40 @@ const clientPayload = {
                     <span class="jm-reef-card__arrow" aria-hidden="true">→</span>
                   </span>
                   <span class="jm-reef-card__desc">{p.summary}</span>
-                  <span class="jm-reef-card__meta">
-                    <span style="text-transform: capitalize;">{p.species} coral</span>
-                    {p.tools.length > 0 && (
-                      <span> · {p.tools.slice(0, 3).join(', ')}</span>
+                  <span class="jm-reef-card__footer">
+                    <span class="jm-reef-card__meta">
+                      <span style="text-transform: capitalize;">{p.species} coral</span>
+                      {p.tools.length > 0 && (
+                        <span> · {p.tools.slice(0, 3).join(', ')}</span>
+                      )}
+                    </span>
+                    {(p.demoUrl || p.githubRepo) && (
+                      <span class="jm-reef-card__links">
+                        {p.demoUrl && (
+                          <a
+                            href={p.demoUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="jm-reef-card__link"
+                          >
+                            Live site ↗
+                          </a>
+                        )}
+                        {p.githubRepo && (
+                          <a
+                            href={`https://github.com/${p.githubRepo}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="jm-reef-card__link"
+                          >
+                            GitHub ↗
+                          </a>
+                        )}
+                      </span>
                     )}
                   </span>
                 </span>
-              </button>
+              </article>
             ))}
           </div>
 
@@ -652,7 +680,17 @@ const clientPayload = {
     // Bind project rows
     document.querySelectorAll('[data-project-row]').forEach((row) => {
       const slug = row.getAttribute('data-project-row');
-      row.addEventListener('click', () => slug && openProjectDetail(slug));
+      row.addEventListener('click', (e) => {
+        if (e.target instanceof Element && e.target.closest('a')) return;
+        if (slug) openProjectDetail(slug);
+      });
+      row.addEventListener('keydown', (e) => {
+        if (e.target instanceof Element && e.target.closest('a')) return;
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          if (slug) openProjectDetail(slug);
+        }
+      });
       row.addEventListener('mouseenter', () => {
         hoveredSlug = slug;
         syncReefHighlight();
