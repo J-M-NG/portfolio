@@ -3,8 +3,8 @@ title: "Project Reef"
 stage: "reef"
 species: "staghorn"
 spriteVariant: "default"
-posX: 54
-posY: 74
+posX: 56
+posY: 71
 plantedDate: "24 November 2026"
 themes: ["Creative", "Learning Lab"]
 problem: "Traditional portfolios only show polished final outputs and hide the curiosity, rough ideas, and lessons learned along the way."

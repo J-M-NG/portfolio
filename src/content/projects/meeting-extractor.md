@@ -3,7 +3,7 @@ title: "Meeting Extractor"
 stage: "branch"
 species: "anemone"
 posX: 74
-posY: 83
+posY: 79
 plantedDate: "12 June 2026"
 themes: ["Workflow", "Learning Lab"]
 problem: "Raw meeting notes pile up in Markdown folders while owners and follow-up dates quietly get buried."

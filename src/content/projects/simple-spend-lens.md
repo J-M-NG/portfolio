@@ -2,8 +2,8 @@
 title: "Simple Spend Lens"
 stage: "branch"
 species: "brain"
-posX: 35
-posY: 82
+posX: 36
+posY: 76
 plantedDate: "19 January 2026"
 themes: ["Daily Friction", "Learning Lab"]
 problem: "Budgeting apps felt overwhelming and required linking bank credentials just to spot recurring subscriptions."

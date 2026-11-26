@@ -3,8 +3,8 @@ title: "Story Bank"
 stage: "polyp"
 species: "anemone"
 spriteVariant: "default"
-posX: 28
-posY: 90
+posX: 33
+posY: 89
 plantedDate: "20 November 2026"
 themes: ["Workflow", "Learning Lab"]
 problem: "It is hard to remember your best project stories and metrics months later when prepping for reviews or interviews."

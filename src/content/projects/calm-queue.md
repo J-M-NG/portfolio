@@ -3,7 +3,7 @@ title: "Calm Queue"
 stage: "bud"
 species: "staghorn"
 spriteVariant: "alt"
-posX: 14
+posX: 16
 posY: 84
 plantedDate: "9 November 2025"
 themes: ["Daily Friction", "Creative"]

@@ -2,8 +2,8 @@
 title: "Focus Soundscape"
 stage: "reef"
 species: "kelp"
-posX: 82
-posY: 70
+posX: 84
+posY: 66
 plantedDate: "8 August 2025"
 themes: ["Creative", "Daily Friction"]
 problem: "Existing ambient focus apps were either paywalled, cluttered with accounts, or played repetitive 2-minute loops."

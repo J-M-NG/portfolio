@@ -3,8 +3,8 @@ title: "Commute Radar"
 stage: "bud"
 species: "fan"
 spriteVariant: "default"
-posX: 52
-posY: 88
+posX: 50
+posY: 86
 plantedDate: "12 October 2026"
 themes: ["Daily Friction"]
 problem: "Checking 3 transit apps every morning just to see if my express train was delayed or cancelled."

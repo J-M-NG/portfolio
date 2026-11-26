@@ -2,8 +2,8 @@
 title: "Weekly Digest Bot"
 stage: "reef"
 species: "fan"
-posX: 20
-posY: 71
+posX: 21
+posY: 64
 plantedDate: "14 March 2025"
 themes: ["Workflow", "Daily Friction"]
 problem: "Writing Friday stakeholder updates meant digging through scattered tickets, docs, and threads for 45 minutes every week."
