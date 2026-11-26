@@ -113,7 +113,7 @@ const clientPayload = {
               <li><a href="#about" data-show-dossier>About</a></li>
               <li><a href="#projects" data-show-dossier>Projects</a></li>
               <li><a href="#experience" data-show-dossier>Experience</a></li>
-              <li><a href="#notes" data-show-dossier>Notes</a></li>
+              <li><a href="#notes" data-show-dossier>Learnings</a></li>
               <li><a href="#contact" data-show-dossier>Contact</a></li>
             </ul>
           </nav>
@@ -223,10 +223,10 @@ const clientPayload = {
           />
         </div>
 
-        <!-- Notes -->
+        <!-- Learnings -->
         <section id="notes" class="jm-chapter">
           <div class="jm-chapter__head">
-            <h2 class="jm-chapter__title">Notes</h2>
+            <h2 class="jm-chapter__title">Learnings</h2>
           </div>
           <div id="notes-list" class="jm-notes-list">
             {notes.map((n) => {
@@ -537,9 +537,9 @@ const clientPayload = {
           noteWrap.classList.remove('is-hidden');
           noteWrap.innerHTML = `
             <div class="jm-related-note">
-              <span><strong>Related note:</strong> ${linkedNote.title}</span>
+              <span><strong>Related learning:</strong> ${linkedNote.title}</span>
               <button type="button" class="jm-back-link" data-open-note="${linkedNote.slug}">
-                Read note →
+                Read →
               </button>
             </div>
           `;
