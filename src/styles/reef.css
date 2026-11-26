@@ -6,6 +6,9 @@
 
 :root,
 :root[data-theme="light"] {
+  /* Use clean body sans-serif everywhere instead of monospace */
+  --jm-font-family-mono: var(--jm-font-family);
+
   /* Underwater Cove Scene (Day — Sunlit Turquoise Shallows) */
   --sea-surface: #94dfee;
   --sea-top: #5ec1da;
