@@ -37,97 +37,232 @@ function getDepthLayer(posY: number): 'far' | 'mid' | 'near' {
   <!-- Animated Surface Caustics -->
   <div class="jm-reef__surface-shimmer" aria-hidden="true"></div>
 
-  <!-- Underwater Backdrop SVG: Layered Reef Silhouettes, Sunbeams & Organic Terraced Seabed -->
+  <!-- Rich 16-bit Pixel-Art Underwater Backdrop SVG -->
   <svg
     class="jm-reef__backdrop"
-    viewBox="0 0 640 760"
+    viewBox="0 0 320 380"
     preserveAspectRatio="none"
     shape-rendering="crispEdges"
     aria-hidden="true"
   >
-    <!-- Water surface shimmer pixels -->
-    <rect x="0" y="0" width="640" height="10" fill="rgba(255,255,255,0.16)" />
-    <rect x="24" y="14" width="96" height="4" fill="rgba(255,255,255,0.22)" />
-    <rect x="196" y="10" width="144" height="4" fill="rgba(255,255,255,0.18)" />
-    <rect x="424" y="16" width="128" height="4" fill="rgba(255,255,255,0.2)" />
-    <rect x="572" y="12" width="52" height="4" fill="rgba(255,255,255,0.16)" />
+    <defs>
+      <!-- Soft volumetric sunbeam / moonbeam gradients -->
+      <linearGradient id="rayGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="var(--ray-top)" />
+        <stop offset="55%" stop-color="var(--ray-mid)" />
+        <stop offset="100%" stop-color="var(--ray-fade)" />
+      </linearGradient>
 
-    <!-- Soft Diagonal Sunbeams / Moonlight Shafts -->
-    <g class="jm-sunbeams">
-      <polygon points="48,0 164,0 76,520 -20,520" fill="var(--ray-color)" />
-      <polygon points="248,0 388,0 278,560 156,560" fill="var(--ray-color)" />
-      <polygon points="472,0 596,0 496,540 392,540" fill="var(--ray-color)" />
+      <!-- Water-to-seabed depth gradient for subtle underwater mist -->
+      <linearGradient id="waterHazeGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="var(--sea-mid)" stop-opacity="0" />
+        <stop offset="70%" stop-color="var(--sea-deep)" stop-opacity="0.22" />
+        <stop offset="100%" stop-color="var(--sea-deep)" stop-opacity="0.45" />
+      </linearGradient>
+
+      <!-- Authentic 16-bit pixel dithering pattern for sand grain -->
+      <pattern id="sandDitherLight" width="8" height="8" patternUnits="userSpaceOnUse">
+        <rect x="0" y="0" width="2" height="2" fill="var(--sand-highlight)" opacity="0.28" />
+        <rect x="4" y="2" width="2" height="2" fill="var(--sand-highlight)" opacity="0.2" />
+        <rect x="2" y="6" width="2" height="2" fill="var(--sand-2)" opacity="0.25" />
+        <rect x="6" y="4" width="2" height="2" fill="var(--sand-2)" opacity="0.22" />
+      </pattern>
+
+      <pattern id="sandDitherDeep" width="8" height="8" patternUnits="userSpaceOnUse">
+        <rect x="0" y="2" width="2" height="2" fill="var(--sand-ripple)" opacity="0.32" />
+        <rect x="4" y="0" width="2" height="2" fill="var(--sand-2)" opacity="0.24" />
+        <rect x="2" y="6" width="2" height="2" fill="var(--sand-ripple)" opacity="0.28" />
+        <rect x="6" y="4" width="2" height="2" fill="var(--sand-1)" opacity="0.14" />
+      </pattern>
+
+      <!-- Subtle water pixel-dither texture -->
+      <pattern id="waterDither" width="12" height="12" patternUnits="userSpaceOnUse">
+        <rect x="2" y="2" width="2" height="2" fill="rgba(255,255,255,0.06)" />
+        <rect x="8" y="6" width="2" height="2" fill="rgba(255,255,255,0.04)" />
+        <rect x="4" y="10" width="2" height="2" fill="rgba(0,20,40,0.05)" />
+      </pattern>
+    </defs>
+
+    <!-- Subtle Water Dither Texture -->
+    <rect x="0" y="0" width="320" height="250" fill="url(#waterDither)" />
+
+    <!-- Pixel-Stepped Water Surface Waves & Underside Shimmer -->
+    <g class="jm-surface-waves">
+      <rect x="0" y="0" width="320" height="4" fill="rgba(255,255,255,0.28)" />
+      <rect x="0" y="4" width="52" height="3" fill="rgba(255,255,255,0.22)" />
+      <rect x="68" y="4" width="76" height="3" fill="rgba(255,255,255,0.26)" />
+      <rect x="164" y="4" width="64" height="3" fill="rgba(255,255,255,0.2)" />
+      <rect x="244" y="4" width="76" height="3" fill="rgba(255,255,255,0.24)" />
+      <rect x="16" y="8" width="44" height="2" fill="rgba(255,255,255,0.34)" />
+      <rect x="92" y="9" width="58" height="2" fill="rgba(255,255,255,0.28)" />
+      <rect x="188" y="8" width="48" height="2" fill="rgba(255,255,255,0.3)" />
+      <rect x="262" y="10" width="42" height="2" fill="rgba(255,255,255,0.26)" />
+      <rect x="42" y="13" width="26" height="2" fill="rgba(255,255,255,0.18)" />
+      <rect x="148" y="14" width="32" height="2" fill="rgba(255,255,255,0.16)" />
+      <rect x="234" y="15" width="24" height="2" fill="rgba(255,255,255,0.18)" />
     </g>
 
-    <!-- Distant Reef Silhouette Ridge (Far Haze) -->
-    <polygon
-      points="0,420 0,348 36,348 36,332 84,332 84,320 148,320 148,336 192,336 192,356 256,356 256,340 316,340 316,328 384,328 384,344 440,344 440,360 496,360 496,324 568,324 568,312 612,312 612,336 640,336 640,420"
-      fill="var(--reef-far)"
-      opacity="0.48"
-    />
+    <!-- Volumetric Diagonal Sunbeams / Moonlight Shafts -->
+    <g class="jm-sunbeams">
+      <polygon points="18,0 78,0 32,272 -18,272" fill="url(#rayGrad)" />
+      <polygon points="108,0 184,0 132,295 66,295" fill="url(#rayGrad)" />
+      <polygon points="216,0 288,0 242,286 184,286" fill="url(#rayGrad)" />
+      <polygon points="140,0 162,0 124,250 104,250" fill="url(#rayGrad)" opacity="0.65" />
+    </g>
 
-    <!-- Mid-Distance Reef Shelf -->
-    <polygon
-      points="0,476 0,416 52,416 52,400 124,400 124,392 184,392 184,412 244,412 244,428 336,428 336,412 412,412 412,396 488,396 488,408 552,408 552,424 640,424 640,476"
-      fill="var(--reef-mid)"
-      opacity="0.62"
-    />
+    <!-- LAYER 1: Far Misty Reef Ridges, Coral Spires & Distant Table Corals -->
+    <g fill="var(--reef-far)" opacity="0.52">
+      <polygon points="0,232 0,180 14,180 14,170 28,170 28,162 46,162 46,156 64,156 64,166 78,166 78,176 96,176 96,184 118,184 118,172 136,172 136,164 156,164 156,170 176,170 176,182 198,182 198,188 220,188 220,174 242,174 242,160 264,160 264,152 282,152 282,164 298,164 298,174 320,174 320,232" />
+      <!-- Far table coral & spire silhouettes -->
+      <rect x="34" y="150" width="24" height="4" />
+      <rect x="44" y="154" width="6" height="8" />
+      <rect x="138" y="156" width="18" height="3" />
+      <rect x="145" y="159" width="4" height="6" />
+      <rect x="266" y="144" width="14" height="4" />
+      <rect x="271" y="148" width="4" height="6" />
+    </g>
 
-    <!-- Back Reef Terrace Slope (Water-to-Sand Soft Blend Band) -->
+    <!-- LAYER 2: Mid-Distance Reef Shelves, Rocky Outcrops & Silhouetted Kelp -->
+    <g fill="var(--reef-mid)" opacity="0.72">
+      <polygon points="0,256 0,206 18,206 18,198 40,198 40,192 66,192 66,202 88,202 88,214 116,214 116,222 148,222 148,212 174,212 174,202 204,202 204,196 232,196 232,206 258,206 258,214 286,214 286,204 306,204 306,210 320,210 320,256" />
+      <!-- Distant silhouetted kelp stalks -->
+      <rect x="10" y="176" width="3" height="30" />
+      <rect x="8" y="182" width="2" height="6" />
+      <rect x="13" y="188" width="2" height="8" />
+      <rect x="304" y="180" width="3" height="28" />
+      <rect x="301" y="186" width="3" height="6" />
+      <rect x="307" y="192" width="2" height="7" />
+      <!-- Subtle rocky ledge highlights -->
+      <rect x="40" y="192" width="26" height="2" fill="var(--reef-far)" opacity="0.7" />
+      <rect x="204" y="196" width="28" height="2" fill="var(--reef-far)" opacity="0.7" />
+    </g>
+
+    <!-- Soft Water-Depth Mist Over Distant Reefs -->
+    <rect x="0" y="150" width="320" height="106" fill="url(#waterHazeGrad)" />
+
+    <!-- LAYER 3: Back Reef Water-to-Sand Transition Shelf -->
     <polygon
-      points="0,504 0,468 72,468 72,456 168,456 168,464 268,464 268,480 376,480 376,472 476,472 476,460 564,460 564,468 640,468 640,504"
+      points="0,260 0,236 28,236 28,230 68,230 68,234 108,234 108,242 152,242 152,246 196,246 196,238 242,238 242,232 284,232 284,236 320,236 320,260"
       fill="var(--sand-haze)"
-      opacity="0.72"
+      opacity="0.78"
     />
 
-    <!-- Organic Pixel-Stepped Sandy Seabed (Upper Sunlit Terrace) -->
+    <!-- LAYER 4: Primary Sunlit Sandy Seabed (Sculpted Pixel-Stepped Dune) -->
     <polygon
-      points="0,760 0,484 60,484 60,476 156,476 156,484 236,484 236,496 320,496 320,504 408,504 408,492 496,492 496,480 576,480 576,488 640,488 640,760"
+      points="0,380 0,244 26,244 26,238 74,238 74,242 114,242 114,248 156,248 156,252 204,252 204,246 248,246 248,240 290,240 290,244 320,244 320,380"
       fill="var(--sand-1)"
     />
-
-    <!-- Sunlit Sand Crest Highlights -->
-    <rect x="64" y="480" width="88" height="6" fill="var(--sand-highlight)" opacity="0.55" />
-    <rect x="498" y="484" width="76" height="6" fill="var(--sand-highlight)" opacity="0.5" />
-    <rect x="244" y="502" width="112" height="6" fill="var(--sand-highlight)" opacity="0.42" />
-
-    <!-- Mid-Slope Sand Dune Contour -->
+    <!-- Pixel-dithered grain overlay on upper sand -->
     <polygon
-      points="0,760 0,564 88,564 88,556 184,556 184,568 276,568 276,580 392,580 392,568 488,568 488,556 572,556 572,564 640,564 640,760"
-      fill="var(--sand-2)"
-      opacity="0.72"
+      points="0,380 0,244 26,244 26,238 74,238 74,242 114,242 114,248 156,248 156,252 204,252 204,246 248,246 248,240 290,240 290,244 320,244 320,380"
+      fill="url(#sandDitherLight)"
     />
 
-    <!-- Foreground Sand Terrace -->
-    <polygon
-      points="0,760 0,664 112,664 112,656 228,656 228,668 356,668 356,676 476,676 476,660 584,660 584,668 640,668 640,760"
-      fill="var(--sand-3)"
-      opacity="0.74"
-    />
-
-    <!-- Pixel-Dithered Sand Ripples & Pebbles -->
-    <g fill="var(--sand-ripple)" opacity="0.55">
-      <rect x="52" y="520" width="44" height="4" />
-      <rect x="64" y="524" width="20" height="4" />
-      <rect x="224" y="538" width="56" height="4" />
-      <rect x="456" y="526" width="48" height="4" />
-      <rect x="136" y="608" width="52" height="4" />
-      <rect x="332" y="620" width="64" height="4" />
-      <rect x="512" y="604" width="44" height="4" />
-      <rect x="208" y="696" width="60" height="4" />
-      <rect x="424" y="704" width="52" height="4" />
+    <!-- Bright Sunlit Sand Crests -->
+    <g fill="var(--sand-highlight)" opacity="0.65">
+      <rect x="28" y="240" width="44" height="3" />
+      <rect x="34" y="243" width="28" height="2" opacity="0.7" />
+      <rect x="250" y="242" width="38" height="3" />
+      <rect x="122" y="250" width="68" height="3" opacity="0.55" />
     </g>
 
-    <!-- Subtle Caustic Light Ribbons on the Sand -->
+    <!-- LAYER 5: Mid-Slope Sandbar Contour + Dither -->
+    <polygon
+      points="0,380 0,284 42,284 42,278 92,278 92,284 138,284 138,292 194,292 194,284 244,284 244,278 286,278 286,284 320,284 320,380"
+      fill="var(--sand-2)"
+      opacity="0.78"
+    />
+    <polygon
+      points="0,380 0,284 42,284 42,278 92,278 92,284 138,284 138,292 194,292 194,284 244,284 244,278 286,278 286,284 320,284 320,380"
+      fill="url(#sandDitherDeep)"
+    />
+
+    <!-- LAYER 6: Foreground Seabed Terrace + Deep Shadow Edge -->
+    <polygon
+      points="0,380 0,332 54,332 54,328 114,328 114,334 176,334 176,338 238,338 238,330 292,330 292,334 320,334 320,380"
+      fill="var(--sand-3)"
+      opacity="0.82"
+    />
+    <polygon
+      points="0,380 0,332 54,332 54,328 114,328 114,334 176,334 176,338 238,338 238,330 292,330 292,334 320,334 320,380"
+      fill="url(#sandDitherDeep)"
+    />
+
+    <!-- Sculpted Pixel Sand Ripples (Paired Highlight + Shadow) -->
+    <g>
+      <rect x="24" y="262" width="26" height="2" fill="var(--sand-ripple)" opacity="0.62" />
+      <rect x="26" y="260" width="20" height="2" fill="var(--sand-highlight)" opacity="0.45" />
+      <rect x="108" y="270" width="32" height="2" fill="var(--sand-ripple)" opacity="0.58" />
+      <rect x="112" y="268" width="22" height="2" fill="var(--sand-highlight)" opacity="0.4" />
+      <rect x="224" y="264" width="28" height="2" fill="var(--sand-ripple)" opacity="0.6" />
+      <rect x="228" y="262" width="20" height="2" fill="var(--sand-highlight)" opacity="0.42" />
+
+      <rect x="64" y="306" width="30" height="2" fill="var(--sand-ripple)" opacity="0.65" />
+      <rect x="68" y="304" width="22" height="2" fill="var(--sand-highlight)" opacity="0.35" />
+      <rect x="164" y="312" width="36" height="2" fill="var(--sand-ripple)" opacity="0.62" />
+      <rect x="170" y="310" width="24" height="2" fill="var(--sand-highlight)" opacity="0.35" />
+      <rect x="256" y="304" width="26" height="2" fill="var(--sand-ripple)" opacity="0.6" />
+
+      <rect x="98" y="352" width="34" height="2" fill="var(--sand-ripple)" opacity="0.7" />
+      <rect x="210" y="356" width="30" height="2" fill="var(--sand-ripple)" opacity="0.68" />
+    </g>
+
+    <!-- Scattered Pixel Pebbles, Coral Rubble & Tiny Shells -->
+    <g>
+      <!-- Pebbles -->
+      <rect x="44" y="294" width="4" height="3" fill="var(--pebble-dark)" />
+      <rect x="45" y="293" width="2" height="1" fill="var(--pebble-light)" />
+      <rect x="50" y="296" width="3" height="2" fill="var(--pebble-dark)" />
+
+      <rect x="148" y="324" width="5" height="3" fill="var(--pebble-dark)" />
+      <rect x="149" y="323" width="3" height="1" fill="var(--pebble-light)" />
+      <rect x="155" y="326" width="3" height="2" fill="var(--pebble-dark)" />
+
+      <rect x="234" y="290" width="4" height="3" fill="var(--pebble-dark)" />
+      <rect x="235" y="289" width="2" height="1" fill="var(--pebble-light)" />
+
+      <rect x="78" y="362" width="5" height="3" fill="var(--pebble-dark)" />
+      <rect x="79" y="361" width="3" height="1" fill="var(--pebble-light)" />
+      <rect x="278" y="366" width="4" height="3" fill="var(--pebble-dark)" />
+
+      <!-- Tiny buried shells & coral fragments -->
+      <rect x="192" y="274" width="4" height="2" fill="#f3c6b8" opacity="0.85" />
+      <rect x="193" y="272" width="2" height="2" fill="#fce4d6" opacity="0.85" />
+      <rect x="122" y="344" width="4" height="2" fill="#e89a9c" opacity="0.8" />
+      <rect x="123" y="342" width="2" height="2" fill="#ffd2c2" opacity="0.8" />
+      <rect x="266" y="322" width="4" height="2" fill="#f5ebe0" opacity="0.85" />
+    </g>
+
+    <!-- Animated Dancing Caustic Light Web on the Sand -->
     <g class="jm-sand-caustics" fill="var(--caustic-color)">
-      <rect x="88" y="508" width="40" height="4" />
-      <rect x="116" y="512" width="24" height="4" />
-      <rect x="292" y="548" width="48" height="4" />
-      <rect x="488" y="516" width="36" height="4" />
-      <rect x="184" y="636" width="44" height="4" />
-      <rect x="384" y="644" width="52" height="4" />
+      <rect x="38" y="252" width="22" height="2" />
+      <rect x="52" y="254" width="16" height="2" />
+      <rect x="44" y="256" width="12" height="2" />
+
+      <rect x="134" y="262" width="28" height="2" />
+      <rect x="150" y="264" width="18" height="2" />
+      <rect x="142" y="266" width="14" height="2" />
+
+      <rect x="238" y="254" width="24" height="2" />
+      <rect x="248" y="256" width="16" height="2" />
+
+      <rect x="86" y="316" width="26" height="2" />
+      <rect x="102" y="318" width="16" height="2" />
+
+      <rect x="188" y="320" width="28" height="2" />
+      <rect x="200" y="322" width="18" height="2" />
     </g>
   </svg>
+
+  <!-- Drifting Underwater Marine Snow / Light Motes -->
+  <div class="jm-motes" aria-hidden="true">
+    <span class="jm-mote" style="top: 22%; left: 28%; animation-delay: 0s;"></span>
+    <span class="jm-mote" style="top: 36%; left: 66%; animation-delay: -2.4s;"></span>
+    <span class="jm-mote" style="top: 48%; left: 18%; animation-delay: -4.1s;"></span>
+    <span class="jm-mote" style="top: 30%; left: 82%; animation-delay: -1.3s;"></span>
+    <span class="jm-mote" style="top: 56%; left: 52%; animation-delay: -3.2s;"></span>
+    <span class="jm-mote" style="top: 44%; left: 38%; animation-delay: -5.5s;"></span>
+  </div>
 
   <!-- Seabed Landmarks & Props -->
   <div class="jm-reef__props" aria-hidden="true">

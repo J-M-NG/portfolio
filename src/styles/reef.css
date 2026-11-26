@@ -23,8 +23,12 @@
   --sand-2: #d4bf94;
   --sand-3: #c1a87a;
   --sand-ripple: #b69b6c;
-  --ray-color: rgba(255, 252, 232, 0.2);
-  --caustic-color: rgba(255, 253, 236, 0.34);
+  --pebble-dark: #7d8f9c;
+  --pebble-light: #b8c6cf;
+  --ray-top: rgba(255, 253, 232, 0.34);
+  --ray-mid: rgba(236, 252, 255, 0.14);
+  --ray-fade: rgba(236, 252, 255, 0);
+  --caustic-color: rgba(255, 253, 236, 0.38);
   --bio-glow: rgba(94, 242, 214, 0);
   --reef-pill-bg: rgba(255, 255, 255, 0.86);
   --reef-seam-shadow: rgba(20, 62, 94, 0.12);
@@ -45,8 +49,12 @@
     --sand-2: #162638;
     --sand-3: #0f1c2b;
     --sand-ripple: #0b1521;
-    --ray-color: rgba(112, 214, 255, 0.08);
-    --caustic-color: rgba(94, 242, 214, 0.14);
+    --pebble-dark: #102030;
+    --pebble-light: #304b66;
+    --ray-top: rgba(124, 218, 255, 0.16);
+    --ray-mid: rgba(94, 242, 214, 0.06);
+    --ray-fade: rgba(94, 242, 214, 0);
+    --caustic-color: rgba(94, 242, 214, 0.16);
     --bio-glow: rgba(94, 242, 214, 0.72);
     --reef-pill-bg: rgba(20, 32, 48, 0.82);
     --reef-seam-shadow: rgba(0, 0, 0, 0.35);
@@ -67,8 +75,12 @@
   --sand-2: #162638;
   --sand-3: #0f1c2b;
   --sand-ripple: #0b1521;
-  --ray-color: rgba(112, 214, 255, 0.08);
-  --caustic-color: rgba(94, 242, 214, 0.14);
+  --pebble-dark: #102030;
+  --pebble-light: #304b66;
+  --ray-top: rgba(124, 218, 255, 0.16);
+  --ray-mid: rgba(94, 242, 214, 0.06);
+  --ray-fade: rgba(94, 242, 214, 0);
+  --caustic-color: rgba(94, 242, 214, 0.16);
   --bio-glow: rgba(94, 242, 214, 0.72);
   --reef-pill-bg: rgba(20, 32, 48, 0.82);
   --reef-seam-shadow: rgba(0, 0, 0, 0.35);
@@ -204,6 +216,10 @@ body {
   z-index: 1;
 }
 
+.jm-surface-waves {
+  animation: surfaceWaveDrift 9s ease-in-out infinite;
+}
+
 .jm-sunbeams {
   animation: sunbeamSway 10s ease-in-out infinite;
   transform-origin: 50% 0%;
@@ -211,6 +227,36 @@ body {
 
 .jm-sand-caustics {
   animation: causticDrift 7s ease-in-out infinite;
+}
+
+.jm-motes {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 14;
+}
+
+.jm-mote {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: rgba(240, 252, 255, 0.45);
+  animation: moteDrift 9s ease-in-out infinite;
+}
+
+:root[data-theme="dark"] .jm-mote {
+  background: rgba(111, 255, 233, 0.55);
+  box-shadow: 0 0 6px rgba(111, 255, 233, 0.5);
+}
+
+@keyframes surfaceWaveDrift {
+  0%, 100% { transform: translateX(0px); }
+  50% { transform: translateX(5px); }
+}
+
+@keyframes moteDrift {
+  0%, 100% { transform: translate(0px, 0px); opacity: 0.2; }
+  50% { transform: translate(12px, -14px); opacity: 0.75; }
 }
 
 .jm-reef__props {
@@ -974,6 +1020,8 @@ body {
   .jm-bubble,
   .jm-sway,
   .jm-plankton,
+  .jm-surface-waves,
+  .jm-mote,
   .jm-sunbeams,
   .jm-sand-caustics,
   .jm-reef__surface-shimmer,
