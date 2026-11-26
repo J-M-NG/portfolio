@@ -1,10 +1,10 @@
 ---
-title: "Why I framed my portfolio as a living coral reef"
+title: "Why a coral reef"
 date: "26 November 2026"
-tag: "Product thinking"
+tag: "Portfolio"
 projectSlug: "project-reef"
 ---
 
-Inspired by the Forest app, I wanted a living visual metaphor where projects grow over time rather than appearing only once they are finished. Switching from a forest to a coral reef let the visual world harmonise naturally with J-M-NG/ui-kit's blue and slate palette, and unlocked a bioluminescent dark mode.
+I liked the idea from the Forest app of watching things grow over time, rather than only showing finished work. I started with a forest theme, then switched to a coral reef because it sat much better next to ui-kit's blues and gave dark mode a natural bioluminescent look.
 
-Each coral documents the user story, problem, and takeaways behind a real experiment, while GitHub Actions quietly refreshes live repository metadata in the background.
+Each coral is just a project at whatever stage it's actually at, from rough sketch to live tool.

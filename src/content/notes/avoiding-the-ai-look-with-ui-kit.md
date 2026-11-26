@@ -1,10 +1,10 @@
 ---
-title: "Avoiding the generic AI look with a single CSS file"
+title: "Avoiding the generic AI look with one CSS file"
 date: "12 November 2026"
-tag: "Design systems"
+tag: "UI kit"
 projectSlug: "ui-kit"
 ---
 
-When building Python-first dashboards in FastAPI or Streamlit, it is tempting to reach for heavy component libraries or let an AI generate ad-hoc styles. Both paths usually drift into inconsistent spacing, low-contrast dark modes, and repetitive card-heavy layouts.
+Most quick FastAPI or Streamlit tools end up looking like the same AI template: purple gradients, blurry navbars, low-contrast dark mode, and too many cards.
 
-Building J-M-NG/ui-kit around native semantic HTML and 186 automated contrast checks per theme solved both problems. One surprise along the way: Streamlit's st.html() sanitises injected style blocks and silently drops the entire stylesheet if a CSS comment looks like an HTML tag, so stripping comments and visually checking screenshots proved essential.
+Writing J-M-NG/ui-kit around plain semantic HTML and a script that checks all 186 colour pairs fixed most of that. The strangest bug was in Streamlit: st.html() silently throws away an entire style block if a CSS comment looks like an HTML tag. Stripping comments before injection and checking actual screenshots caught what unit tests didn't.

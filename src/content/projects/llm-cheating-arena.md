@@ -5,16 +5,16 @@ species: "brain"
 posX: 38
 posY: 86
 plantedDate: "7 November 2026"
-summary: "A watchable benchmark where LLMs play a loophole-seeded warehouse game and get graded separately on skill and honesty."
+summary: "A benchmark where LLMs play a warehouse game with hidden loopholes and get scored on both skill and honesty."
 takeaways:
-  - "Splitting true score from integrity exposes behaviour that single-number leaderboards completely hide."
-  - "Asking coding agents to flag ambiguities in tight task briefs surfaced edge cases early before they compounded."
-tools: ["Python", "Vanilla JS", "Simulation"]
+  - "Scoring skill and honesty separately shows behaviour that a single leaderboard number hides."
+  - "Telling coding agents to flag anything unclear in a short brief caught edge cases early."
+tools: ["Python", "Vanilla JS"]
 githubRepo: null
 demoUrl: null
 relatedNote: null
 ---
 
-Motivated by trustworthy-benchmark research, I wanted to see not just whether a model can solve a task, but whether it takes shortcuts when loopholes exist and admits to it afterwards.
+Most LLM benchmarks only show the final score, not whether a model cut corners to get it. Cheat Arena puts models in a small Python warehouse game seeded with loopholes, logs every exploit deterministically, and grades skill and honesty separately.
 
-The simulation runs in pure Python with a deterministic judge (313 offline tests passing) and outputs replay files for a lightweight vanilla JS viewer. Next step is running the full multi-model batch and publishing the replays.
+The offline simulation and judge are built (313 tests passing) with a plain JS replay page. Next step is running the full batch of models and putting the replays online.
