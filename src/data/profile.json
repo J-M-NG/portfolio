@@ -1,12 +1,11 @@
 {
   "name": "Matthew Ng",
-  "roleTag": "Strategy consultant",
   "headline": "Hi, I'm Matthew Ng.",
+  "wipNote": "Work in progress: still adding projects, screenshots, and rough notes.",
   "bio": "I'm a strategy consultant in London, originally trained in biochemistry at Imperial before moving into management at LSE and consulting across healthcare, life sciences, and tech. Outside of work, I tinker with small software projects, design systems, and AI agent tools, mostly to learn by building. When I'm away from a screen, you'll usually find me bouldering, playing basketball or golf, lifting, or out for a run.",
-  "statusLine": "London, UK · English, Mandarin, Filipino · Select any coral on the left to see what I'm building",
+  "nowLine": "Right now: building small web tools in London, refining this reef, and trying to climb more often.",
   "email": "ng.matt2001@gmail.com",
   "githubUrl": "https://github.com/J-M-NG",
   "linkedinUrl": "https://www.linkedin.com/in/ng-john-matthew/",
-  "resumeBannerTitle": "PDF CV on request",
-  "resumeBannerBody": "Prefer a PDF copy of my CV? Reach out via LinkedIn or email and I will send one over."
+  "resumeNote": "Need a PDF copy of my CV? Send me a note on LinkedIn or by email and I will send one over."
 }

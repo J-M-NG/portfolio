@@ -6,84 +6,24 @@
 
 :root,
 :root[data-theme="light"] {
-  /* Use clean body sans-serif everywhere instead of monospace */
   --jm-font-family-mono: var(--jm-font-family);
-
-  /* Underwater Cove Scene (Day — Sunlit Turquoise Shallows) */
-  --sea-surface: #94dfee;
   --sea-top: #5ec1da;
-  --sea-mid: #2f89b2;
   --sea-deep: #1b5b84;
-  --sea-floor-tint: #1d6488;
-  --reef-far: #247198;
-  --reef-mid: #1a567a;
-  --sand-haze: #8eb7b6;
-  --sand-highlight: #f5ebd1;
-  --sand-1: #e6d7b4;
-  --sand-2: #d4bf94;
-  --sand-3: #c1a87a;
-  --sand-ripple: #b69b6c;
-  --pebble-dark: #7d8f9c;
-  --pebble-light: #b8c6cf;
-  --ray-top: rgba(255, 253, 232, 0.34);
-  --ray-mid: rgba(236, 252, 255, 0.14);
-  --ray-fade: rgba(236, 252, 255, 0);
-  --caustic-color: rgba(255, 253, 236, 0.38);
   --bio-glow: rgba(94, 242, 214, 0);
-  --reef-pill-bg: rgba(255, 255, 255, 0.86);
-  --reef-seam-shadow: rgba(20, 62, 94, 0.12);
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --sea-surface: #0b223d;
-    --sea-top: #07172b;
-    --sea-mid: #0a1f38;
+    --sea-top: #0a2038;
     --sea-deep: #061324;
-    --sea-floor-tint: #091a30;
-    --reef-far: #0f2c4a;
-    --reef-mid: #0a2038;
-    --sand-haze: #132a42;
-    --sand-highlight: #2a4661;
-    --sand-1: #1e3348;
-    --sand-2: #162638;
-    --sand-3: #0f1c2b;
-    --sand-ripple: #0b1521;
-    --pebble-dark: #102030;
-    --pebble-light: #304b66;
-    --ray-top: rgba(124, 218, 255, 0.16);
-    --ray-mid: rgba(94, 242, 214, 0.06);
-    --ray-fade: rgba(94, 242, 214, 0);
-    --caustic-color: rgba(94, 242, 214, 0.16);
     --bio-glow: rgba(94, 242, 214, 0.72);
-    --reef-pill-bg: rgba(20, 32, 48, 0.82);
-    --reef-seam-shadow: rgba(0, 0, 0, 0.35);
   }
 }
 
 :root[data-theme="dark"] {
-  --sea-surface: #0b223d;
-  --sea-top: #07172b;
-  --sea-mid: #0a1f38;
+  --sea-top: #0a2038;
   --sea-deep: #061324;
-  --sea-floor-tint: #091a30;
-  --reef-far: #0f2c4a;
-  --reef-mid: #0a2038;
-  --sand-haze: #132a42;
-  --sand-highlight: #2a4661;
-  --sand-1: #1e3348;
-  --sand-2: #162638;
-  --sand-3: #0f1c2b;
-  --sand-ripple: #0b1521;
-  --pebble-dark: #102030;
-  --pebble-light: #304b66;
-  --ray-top: rgba(124, 218, 255, 0.16);
-  --ray-mid: rgba(94, 242, 214, 0.06);
-  --ray-fade: rgba(94, 242, 214, 0);
-  --caustic-color: rgba(94, 242, 214, 0.16);
   --bio-glow: rgba(94, 242, 214, 0.72);
-  --reef-pill-bg: rgba(20, 32, 48, 0.82);
-  --reef-seam-shadow: rgba(0, 0, 0, 0.35);
 }
 
 body {
@@ -92,7 +32,7 @@ body {
 }
 
 /* ============================================================================
-   Split-Screen Layout A (45% Sticky Reef / 55% Scrolling ui-kit Dossier)
+   Split-Screen Layout A (45% Sticky Reef / 55% Scrolling Editorial Dossier)
    ============================================================================ */
 .jm-split {
   display: flex;
@@ -109,19 +49,11 @@ body {
 .jm-reef {
   position: relative;
   width: 100%;
-  height: 450px;
+  height: 460px;
   overflow: hidden;
   flex-shrink: 0;
-  background: linear-gradient(
-    180deg,
-    var(--sea-surface) 0%,
-    var(--sea-top) 16%,
-    var(--sea-mid) 44%,
-    var(--sea-deep) 66%,
-    var(--sea-floor-tint) 100%
-  );
+  background-color: var(--sea-deep);
   border-bottom: var(--jm-border-width) solid var(--jm-colour-border);
-  transition: background 0.45s ease;
 }
 
 @media (min-width: 1024px) {
@@ -135,34 +67,56 @@ body {
   }
 }
 
+.jm-reef__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center bottom;
+  image-rendering: pixelated;
+  pointer-events: none;
+  z-index: 1;
+  transition: opacity 0.45s ease;
+}
+
+.jm-reef__bg--day {
+  opacity: 1;
+}
+
+.jm-reef__bg--night {
+  opacity: 0;
+}
+
+:root[data-theme="dark"] .jm-reef__bg--day {
+  opacity: 0;
+}
+
+:root[data-theme="dark"] .jm-reef__bg--night {
+  opacity: 1;
+}
+
 .jm-dossier {
   flex: 1;
   min-width: 0;
   background-color: var(--jm-colour-background);
-  position: relative;
-}
-
-@media (min-width: 1024px) {
-  .jm-dossier {
-    box-shadow: inset 14px 0 28px -18px var(--reef-seam-shadow);
-  }
 }
 
 .jm-dossier__header {
   position: sticky;
   top: 0;
   z-index: 30;
-  backdrop-filter: blur(8px);
+  background-color: var(--jm-colour-background);
 }
 
 .jm-dossier__header .jm-header__inner {
-  max-width: 46rem;
+  max-width: 44rem;
   margin: 0 auto;
   padding: var(--jm-space-3) var(--jm-space-6);
 }
 
 .jm-dossier__body {
-  max-width: 46rem;
+  max-width: 44rem;
   margin: 0 auto;
   padding: var(--jm-space-6);
 }
@@ -183,82 +137,28 @@ body {
   color: var(--jm-colour-link);
 }
 
+/* Editorial Hero Typography */
+.jm-wip-line {
+  font-size: var(--jm-font-size-xs);
+  color: var(--jm-colour-text-secondary);
+  margin: 0;
+}
+
+.jm-hero-title {
+  font-size: clamp(2rem, 3.2vw, 2.65rem);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+}
+
+.jm-lead-copy {
+  font-size: var(--jm-font-size-md);
+  line-height: 1.65;
+  color: var(--jm-colour-text);
+}
+
 /* ============================================================================
-   Reef HUD, Atmosphere & Scene Layers
+   Reef HUD & Scene Layers (Solid Crisp Surfaces, No Glassmorphism)
    ============================================================================ */
-.jm-reef__surface-shimmer {
-  position: absolute;
-  top: 0;
-  left: -10%;
-  right: -10%;
-  height: 22%;
-  pointer-events: none;
-  z-index: 2;
-  background: radial-gradient(
-      ellipse 45% 55% at 25% 0%,
-      rgba(255, 255, 255, 0.24) 0%,
-      transparent 75%
-    ),
-    radial-gradient(
-      ellipse 50% 60% at 72% 0%,
-      rgba(255, 255, 255, 0.18) 0%,
-      transparent 75%
-    );
-  animation: surfaceShimmer 8s ease-in-out infinite;
-}
-
-.jm-reef__backdrop {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.jm-surface-waves {
-  animation: surfaceWaveDrift 9s ease-in-out infinite;
-}
-
-.jm-sunbeams {
-  animation: sunbeamSway 10s ease-in-out infinite;
-  transform-origin: 50% 0%;
-}
-
-.jm-sand-caustics {
-  animation: causticDrift 7s ease-in-out infinite;
-}
-
-.jm-motes {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 14;
-}
-
-.jm-mote {
-  position: absolute;
-  width: 3px;
-  height: 3px;
-  background: rgba(240, 252, 255, 0.45);
-  animation: moteDrift 9s ease-in-out infinite;
-}
-
-:root[data-theme="dark"] .jm-mote {
-  background: rgba(111, 255, 233, 0.55);
-  box-shadow: 0 0 6px rgba(111, 255, 233, 0.5);
-}
-
-@keyframes surfaceWaveDrift {
-  0%, 100% { transform: translateX(0px); }
-  50% { transform: translateX(5px); }
-}
-
-@keyframes moteDrift {
-  0%, 100% { transform: translate(0px, 0px); opacity: 0.2; }
-  50% { transform: translate(12px, -14px); opacity: 0.75; }
-}
-
 .jm-reef__props {
   position: absolute;
   inset: 0;
@@ -280,29 +180,6 @@ body {
   z-index: 20;
 }
 
-/* Soft water depth vignette that binds sprites & seabed together and softens the right seam */
-.jm-reef__atmosphere {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 28;
-  background:
-    linear-gradient(
-      90deg,
-      rgba(8, 30, 52, 0.08) 0%,
-      transparent 10%,
-      transparent 88%,
-      rgba(8, 30, 52, 0.16) 100%
-    ),
-    linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.05) 0%,
-      transparent 30%,
-      transparent 82%,
-      rgba(8, 28, 48, 0.16) 100%
-    );
-}
-
 .jm-reef__hud {
   position: absolute;
   top: var(--jm-space-4);
@@ -320,15 +197,13 @@ body {
   right: var(--jm-space-4);
   z-index: 35;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
-  gap: var(--jm-space-2);
   pointer-events: none;
 }
 
 .jm-reef-pill {
-  background-color: var(--reef-pill-bg);
-  backdrop-filter: blur(8px);
+  background-color: var(--jm-colour-surface);
   color: var(--jm-colour-text);
   border: var(--jm-border-width) solid var(--jm-colour-border-strong);
   border-radius: var(--jm-radius-sm);
@@ -337,12 +212,10 @@ body {
   font-size: var(--jm-font-size-xs);
   font-weight: var(--jm-font-weight-semibold);
   cursor: pointer;
-  box-shadow: 0 2px 10px rgba(8, 28, 48, 0.16);
-  transition: background-color 0.15s ease, border-color 0.15s ease;
 }
 
 .jm-reef-pill:hover {
-  background-color: var(--jm-colour-surface);
+  background-color: var(--jm-colour-surface-sunken);
   border-color: var(--jm-colour-accent);
 }
 
@@ -351,12 +224,12 @@ body {
 }
 
 .jm-reef-pill--static:hover {
-  background-color: var(--reef-pill-bg);
+  background-color: var(--jm-colour-surface);
   border-color: var(--jm-colour-border-strong);
 }
 
 /* ============================================================================
-   Pixel Sprites (Corals, Props, Critters)
+   Pixel Sprites (Corals, Props, Calm Sea Life)
    ============================================================================ */
 .jm-pixel-sprite {
   image-rendering: pixelated;
@@ -370,29 +243,18 @@ body {
   position: absolute;
   transform: translate(-50%, -86%);
   pointer-events: none;
-  filter: drop-shadow(0 5px 4px rgba(10, 34, 54, 0.24));
-}
-
-.jm-reef-prop--arch {
-  opacity: 0.9;
-  filter: drop-shadow(0 6px 6px rgba(10, 34, 54, 0.22));
-}
-
-.jm-reef-prop--far {
-  opacity: 0.84;
-  filter: saturate(0.88) drop-shadow(0 4px 4px rgba(10, 34, 54, 0.18));
+  filter: drop-shadow(0 4px 3px rgba(10, 34, 54, 0.25));
 }
 
 .jm-reef-prop--seagrass {
   transform-origin: 50% 95%;
-  animation: coralSway 6s ease-in-out infinite;
+  animation: coralSway 7s ease-in-out infinite;
 }
 
 .jm-reef-prop--bottle {
   transform: translate(-50%, -84%) rotate(-8deg);
 }
 
-/* Dynamic Sea Creature Tracks */
 .jm-critter-track {
   position: absolute;
   pointer-events: none;
@@ -400,55 +262,32 @@ body {
 }
 
 .jm-critter-track--turtle {
-  animation: turtlePatrol 24s ease-in-out infinite;
+  animation: turtlePatrol 28s ease-in-out infinite;
 }
 
 .jm-critter-img--turtle {
-  animation: turtleTilt 4.8s ease-in-out infinite;
-  filter: drop-shadow(0 6px 6px rgba(8, 28, 48, 0.22));
-}
-
-.jm-critter-track--school-far {
-  opacity: 0.62;
-  animation: schoolFarSwim 20s linear infinite;
-}
-
-.jm-critter-img--school-far {
-  filter: saturate(0.75);
-}
-
-.jm-critter-track--school-mid {
-  animation: schoolMidSwim 16s ease-in-out infinite;
-}
-
-.jm-critter-track--tang {
-  animation: tangPatrol 14s ease-in-out infinite;
-}
-
-.jm-critter-track--clownfish {
-  animation: clownfishDart 10s ease-in-out infinite;
+  filter: drop-shadow(0 5px 5px rgba(8, 28, 48, 0.24));
 }
 
 .jm-critter-track--jellyfish {
-  animation: jellyDrift 9s ease-in-out infinite;
+  animation: jellyDrift 11s ease-in-out infinite;
 }
 
 .jm-critter-img--jellyfish {
   transform-origin: 50% 35%;
-  animation: jellyPulse 3s ease-in-out infinite;
+  animation: jellyPulse 3.6s ease-in-out infinite;
+}
+
+.jm-critter-track--clownfish {
+  animation: clownfishHover 9s ease-in-out infinite;
 }
 
 .jm-critter-track--crab {
-  animation: crabScuttle 12s ease-in-out infinite;
+  transform: translate(-50%, -85%);
+  filter: drop-shadow(0 3px 3px rgba(10, 34, 54, 0.28));
 }
 
-.jm-critter-img--crab {
-  transform-origin: 50% 85%;
-  animation: crabWaddle 1.4s ease-in-out infinite;
-  filter: drop-shadow(0 4px 3px rgba(10, 34, 54, 0.28));
-}
-
-/* Interactive Coral Nodes (Depth-Scaled & Grounded) */
+/* Interactive Coral Nodes */
 .jm-coral-node {
   --depth-scale: 1;
   position: absolute;
@@ -460,26 +299,20 @@ body {
   border: 0;
   padding: 4px;
   cursor: pointer;
-  transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.22s ease, filter 0.22s ease;
+  transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease, filter 0.2s ease;
 }
 
-.jm-coral-node--far .jm-coral-node__sprite-wrap {
-  filter: saturate(0.92) drop-shadow(0 5px 4px rgba(10, 36, 56, 0.22));
-}
-
-.jm-coral-node--mid .jm-coral-node__sprite-wrap {
-  filter: drop-shadow(0 6px 5px rgba(10, 36, 56, 0.26));
-}
-
-.jm-coral-node--near .jm-coral-node__sprite-wrap {
-  filter: drop-shadow(0 7px 6px rgba(10, 36, 56, 0.3));
+.jm-coral-node__sprite-wrap {
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 5px 4px rgba(10, 36, 56, 0.28));
 }
 
 .jm-coral-node:hover,
 .jm-coral-node:focus-visible,
 .jm-coral-node.is-highlighted,
 .jm-coral-node.is-selected {
-  transform: translate(-50%, -91%) scale(calc(var(--depth-scale) * 1.12));
+  transform: translate(-50%, -90%) scale(calc(var(--depth-scale) * 1.1));
   z-index: 45 !important;
 }
 
@@ -497,8 +330,8 @@ body {
 .jm-coral-node__ring {
   position: absolute;
   bottom: 18px;
-  width: 72%;
-  height: 13px;
+  width: 70%;
+  height: 12px;
   border-radius: 9999px;
   background: rgba(12, 38, 60, 0.26);
   pointer-events: none;
@@ -511,17 +344,11 @@ body {
   box-shadow: 0 0 0 2px #5ef2d6;
 }
 
-.jm-coral-node__sprite-wrap {
-  position: relative;
-  z-index: 1;
-}
-
 .jm-coral-node__tag {
   position: relative;
   z-index: 2;
   margin-top: -2px;
-  background-color: var(--reef-pill-bg);
-  backdrop-filter: blur(6px);
+  background-color: var(--jm-colour-surface);
   color: var(--jm-colour-text);
   border: var(--jm-border-width) solid var(--jm-colour-border-strong);
   border-radius: var(--jm-radius-sm);
@@ -530,7 +357,7 @@ body {
   font-size: 11px;
   font-weight: var(--jm-font-weight-semibold);
   white-space: nowrap;
-  transition: opacity 0.18s ease, transform 0.18s ease;
+  transition: opacity 0.16s ease, transform 0.16s ease;
 }
 
 .labels-off .jm-coral-node__tag {
@@ -547,14 +374,14 @@ body {
   transform: translateY(0);
 }
 
-/* Night bioluminescent glow */
+/* Night bioluminescent accents */
 :root[data-theme="dark"] .jm-coral-node__sprite-wrap,
 :root[data-theme="dark"] .jm-critter-img--jellyfish {
   filter: drop-shadow(0 0 7px var(--bio-glow));
 }
 
 :root[data-theme="dark"] .jm-reef-prop--clam {
-  filter: drop-shadow(0 0 6px rgba(180, 240, 255, 0.58));
+  filter: drop-shadow(0 0 5px rgba(180, 240, 255, 0.55));
 }
 
 :root[data-theme="light"] .night-only {
@@ -562,7 +389,7 @@ body {
 }
 
 /* ============================================================================
-   Dossier Project List, Stage Progress & Inline Detail Views
+   Dossier Stage Bar, Flat Specimen Cards & Detail Views
    ============================================================================ */
 .jm-button--small {
   padding: 0.3rem 0.65rem;
@@ -573,8 +400,8 @@ body {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(92px, 1fr));
   gap: 0.25rem;
-  padding: 0.3rem;
-  border-radius: var(--jm-radius-md);
+  padding: 0.25rem;
+  border-radius: var(--jm-radius-sm);
   background-color: var(--jm-colour-surface-sunken);
   border: var(--jm-border-width) solid var(--jm-colour-border);
 }
@@ -584,7 +411,7 @@ body {
   align-items: center;
   justify-content: center;
   gap: 0.4rem;
-  padding: 0.5rem 0.65rem;
+  padding: 0.45rem 0.65rem;
   border-radius: var(--jm-radius-sm);
   border: var(--jm-border-width) solid transparent;
   background: transparent;
@@ -594,7 +421,7 @@ body {
   font-weight: var(--jm-font-weight-semibold);
   white-space: nowrap;
   cursor: pointer;
-  transition: background-color 0.16s ease, color 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
 }
 
 .jm-stage-tab:hover {
@@ -606,7 +433,6 @@ body {
   background-color: var(--jm-colour-accent);
   color: var(--jm-colour-on-accent);
   border-color: var(--jm-colour-accent);
-  box-shadow: 0 2px 6px rgba(15, 45, 72, 0.16);
 }
 
 .jm-stage-tab.is-active:hover {
@@ -616,7 +442,7 @@ body {
 }
 
 .jm-stage-tab.is-empty-stage:not(.is-active) {
-  opacity: 0.6;
+  opacity: 0.58;
 }
 
 .jm-stage-tab__count {
@@ -638,6 +464,7 @@ body {
   color: var(--jm-colour-on-accent);
 }
 
+/* Flat, border-only specimen cards (no drop-shadows or hover-lift) */
 .jm-reef-cards {
   display: flex;
   flex-direction: column;
@@ -646,26 +473,25 @@ body {
 
 .jm-reef-card {
   width: 100%;
-  min-height: 126px;
+  min-height: 122px;
   display: flex;
   align-items: center;
   gap: var(--jm-space-4);
   padding: var(--jm-space-4);
-  border-radius: var(--jm-radius-md);
+  border-radius: var(--jm-radius-sm);
   border: var(--jm-border-width) solid var(--jm-colour-border);
   background-color: var(--jm-colour-surface);
   color: var(--jm-colour-text);
   text-align: left;
   cursor: pointer;
   font-family: var(--jm-font-family);
-  transition: border-color 0.16s ease, box-shadow 0.16s ease, transform 0.16s ease;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
 }
 
 .jm-reef-card:hover,
 .jm-reef-card:focus-visible {
   border-color: var(--jm-colour-accent);
-  box-shadow: 0 4px 14px rgba(15, 45, 72, 0.08);
-  transform: translateY(-1px);
+  background-color: var(--jm-colour-surface-sunken);
 }
 
 .jm-reef-card__thumb {
@@ -673,13 +499,12 @@ body {
   height: 56px;
   border-radius: var(--jm-radius-sm);
   border: var(--jm-border-width) solid var(--jm-colour-border);
-  background: linear-gradient(180deg, var(--sea-top) 0%, var(--sea-deep) 100%);
+  background-color: var(--sea-deep);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
   padding: 5px;
-  box-shadow: inset 0 -6px 10px rgba(8, 28, 48, 0.18);
 }
 
 .jm-reef-card__body {
@@ -706,13 +531,11 @@ body {
 
 .jm-reef-card__arrow {
   color: var(--jm-colour-text-secondary);
-  transition: transform 0.16s ease, color 0.16s ease;
 }
 
 .jm-reef-card:hover .jm-reef-card__arrow,
 .jm-reef-card:focus-visible .jm-reef-card__arrow {
   color: var(--jm-colour-accent);
-  transform: translateX(3px);
 }
 
 .jm-reef-card__desc {
@@ -729,10 +552,11 @@ body {
 .jm-reef-card__meta {
   font-size: var(--jm-font-size-xs);
   color: var(--jm-colour-text-secondary);
-  opacity: 0.88;
+  opacity: 0.85;
   margin-top: auto;
 }
 
+/* Editorial Notes List */
 .jm-project-list {
   border-top: var(--jm-border-width) solid var(--jm-colour-border);
 }
@@ -779,18 +603,20 @@ body {
 .jm-detail-hero {
   display: flex;
   gap: var(--jm-space-4);
-  align-items: flex-start;
+  align-items: center;
 }
 
 .jm-detail-sprite-box {
-  width: 92px;
-  height: 92px;
+  width: 84px;
+  height: 84px;
   padding: var(--jm-space-2);
+  border-radius: var(--jm-radius-sm);
+  border: var(--jm-border-width) solid var(--jm-colour-border);
+  background-color: var(--sea-deep);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  background: linear-gradient(180deg, var(--sea-top), var(--sea-deep));
 }
 
 .jm-stage-grid {
@@ -814,23 +640,6 @@ body {
   background-color: var(--jm-colour-accent);
   border-color: var(--jm-colour-accent);
   color: var(--jm-colour-on-accent);
-}
-
-.jm-two-col {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--jm-space-4);
-  align-items: stretch;
-}
-
-.jm-two-col > .jm-panel {
-  height: 100%;
-}
-
-@media (min-width: 640px) {
-  .jm-two-col {
-    grid-template-columns: 1fr 1fr;
-  }
 }
 
 .jm-takeaways {
@@ -867,7 +676,7 @@ body {
   border-radius: var(--jm-radius-sm);
   font-size: var(--jm-font-size-xs);
   font-weight: var(--jm-font-weight-semibold);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.16);
 }
 
 .is-hidden {
@@ -875,134 +684,64 @@ body {
 }
 
 /* ============================================================================
-   Underwater Ambient & Creature Animations (prefers-reduced-motion safe)
+   Calm, Deliberate Ambient Motion (prefers-reduced-motion safe)
    ============================================================================ */
-@keyframes surfaceShimmer {
-  0%, 100% { transform: translateX(0) scaleY(1); opacity: 0.85; }
-  50% { transform: translateX(3%) scaleY(1.08); opacity: 1; }
-}
-
-@keyframes sunbeamSway {
-  0%, 100% { transform: skewX(0deg); opacity: 0.9; }
-  50% { transform: skewX(2.2deg); opacity: 1; }
-}
-
-@keyframes causticDrift {
-  0%, 100% { transform: translateX(0px); opacity: 0.45; }
-  50% { transform: translateX(10px); opacity: 0.85; }
-}
-
 @keyframes bubbleRise {
-  0% { transform: translateY(0) translateX(0) scale(0.85); opacity: 0; }
-  15% { opacity: 0.78; }
-  85% { opacity: 0.55; }
-  100% { transform: translateY(-240px) translateX(10px) scale(1.1); opacity: 0; }
+  0% { transform: translateY(0) translateX(0); opacity: 0; }
+  15% { opacity: 0.7; }
+  85% { opacity: 0.45; }
+  100% { transform: translateY(-220px) translateX(8px); opacity: 0; }
 }
 
-/* Sea turtle: wide graceful upper-water glide with depth scaling and clean turn */
 @keyframes turtlePatrol {
-  0% { transform: translate(0px, 0px) scale(0.92) scaleX(1); }
-  25% { transform: translate(110px, -12px) scale(1.06) scaleX(1); }
-  47% { transform: translate(210px, 4px) scale(0.96) scaleX(1); }
-  50% { transform: translate(210px, 4px) scale(0.96) scaleX(-1); }
-  75% { transform: translate(96px, 14px) scale(0.86) scaleX(-1); }
-  97% { transform: translate(0px, 0px) scale(0.92) scaleX(-1); }
-  100% { transform: translate(0px, 0px) scale(0.92) scaleX(1); }
+  0% { transform: translate(0px, 0px) scale(0.94) scaleX(1); }
+  47% { transform: translate(185px, -6px) scale(1.04) scaleX(1); }
+  50% { transform: translate(185px, -6px) scale(1.04) scaleX(-1); }
+  97% { transform: translate(0px, 6px) scale(0.92) scaleX(-1); }
+  100% { transform: translate(0px, 0px) scale(0.94) scaleX(1); }
 }
 
-@keyframes turtleTilt {
-  0%, 100% { transform: rotate(-3deg); }
-  50% { transform: rotate(4deg); }
-}
-
-/* Distant background school gliding steadily across */
-@keyframes schoolFarSwim {
-  0% { transform: translate(0px, 0px) scale(0.82); opacity: 0.45; }
-  50% { transform: translate(160px, -8px) scale(0.9); opacity: 0.68; }
-  100% { transform: translate(0px, 0px) scale(0.82); opacity: 0.45; }
-}
-
-/* Mid-water school with clean turn-around and depth pulse */
-@keyframes schoolMidSwim {
-  0% { transform: translate(0px, 0px) scale(0.94) scaleX(-1); }
-  46% { transform: translate(-120px, -10px) scale(1.06) scaleX(-1); }
-  50% { transform: translate(-120px, -10px) scale(1.06) scaleX(1); }
-  96% { transform: translate(0px, 0px) scale(0.94) scaleX(1); }
-  100% { transform: translate(0px, 0px) scale(0.94) scaleX(-1); }
-}
-
-/* Blue tang patrolling across the rock arch with depth scaling */
-@keyframes tangPatrol {
-  0% { transform: translate(0px, 0px) scale(0.95) scaleX(-1); }
-  24% { transform: translate(-64px, -10px) scale(1.1) scaleX(-1); }
-  46% { transform: translate(-128px, 4px) scale(0.98) scaleX(-1); }
-  50% { transform: translate(-128px, 4px) scale(0.98) scaleX(1); }
-  74% { transform: translate(-58px, 12px) scale(0.88) scaleX(1); }
-  96% { transform: translate(0px, 0px) scale(0.95) scaleX(1); }
-  100% { transform: translate(0px, 0px) scale(0.95) scaleX(-1); }
-}
-
-/* Clownfish darting playfully around the mid-right corals */
-@keyframes clownfishDart {
-  0% { transform: translate(0px, 0px) scale(1) scaleX(1); }
-  18% { transform: translate(38px, -10px) scale(1.12) scaleX(1); }
-  32% { transform: translate(38px, -8px) scale(1.12) scaleX(1); }
-  48% { transform: translate(56px, 4px) scale(1.04) scaleX(1); }
-  52% { transform: translate(56px, 4px) scale(1.04) scaleX(-1); }
-  76% { transform: translate(12px, 10px) scale(0.92) scaleX(-1); }
-  96% { transform: translate(0px, 0px) scale(1) scaleX(-1); }
-  100% { transform: translate(0px, 0px) scale(1) scaleX(1); }
-}
-
-/* Jellyfish lazy vertical drift + organic bell propulsion */
 @keyframes jellyDrift {
-  0%, 100% { transform: translate(0px, 0px) rotate(-3deg); }
-  35% { transform: translate(-12px, -20px) rotate(3deg); }
-  70% { transform: translate(8px, -8px) rotate(-2deg); }
+  0%, 100% { transform: translate(0px, 0px); }
+  50% { transform: translate(-8px, -16px); }
 }
 
 @keyframes jellyPulse {
-  0%, 100% { transform: scaleX(1.08) scaleY(0.92); }
-  45% { transform: scaleX(0.93) scaleY(1.09); }
+  0%, 100% { transform: scaleX(1.06) scaleY(0.94); }
+  50% { transform: scaleX(0.95) scaleY(1.06); }
 }
 
-/* Hermit crab stop-and-go sideways scuttle on foreground sand */
-@keyframes crabScuttle {
-  0%, 15% { transform: translate(0px, 0px) scale(1); }
-  32%, 52% { transform: translate(28px, 2px) scale(1.05); }
-  68%, 82% { transform: translate(-10px, -1px) scale(0.98); }
-  100% { transform: translate(0px, 0px) scale(1); }
-}
-
-@keyframes crabWaddle {
-  0%, 100% { transform: rotate(-2.5deg); }
-  50% { transform: rotate(2.5deg); }
+@keyframes clownfishHover {
+  0%, 100% { transform: translate(0px, 0px) scaleX(1); }
+  48% { transform: translate(24px, -5px) scaleX(1); }
+  52% { transform: translate(24px, -5px) scaleX(-1); }
+  98% { transform: translate(0px, 2px) scaleX(-1); }
 }
 
 @keyframes coralSway {
   0%, 100% { transform: rotate(0deg); }
-  50% { transform: rotate(1.4deg); }
+  50% { transform: rotate(1.2deg); }
 }
 
 @keyframes planktonGlow {
   0%, 100% { opacity: 0.15; transform: translate(0, 0); }
-  50% { opacity: 0.95; transform: translate(5px, -8px); }
+  50% { opacity: 0.9; transform: translate(4px, -6px); }
 }
 
 .jm-bubble {
   position: absolute;
   width: 6px;
   height: 6px;
-  border: 1.5px solid rgba(255, 255, 255, 0.78);
-  background: rgba(255, 255, 255, 0.25);
+  border: 1.5px solid rgba(255, 255, 255, 0.72);
+  background: rgba(255, 255, 255, 0.22);
   pointer-events: none;
   z-index: 25;
-  animation: bubbleRise 6.5s linear infinite;
+  animation: bubbleRise 8s linear infinite;
 }
 
 .jm-sway {
   transform-origin: 50% 92%;
-  animation: coralSway 5.5s ease-in-out infinite;
+  animation: coralSway 6.5s ease-in-out infinite;
 }
 
 .jm-plankton {
@@ -1012,7 +751,7 @@ body {
   background: #6fffe9;
   box-shadow: 0 0 10px 3px rgba(111, 255, 233, 0.75);
   pointer-events: none;
-  animation: planktonGlow 4.2s ease-in-out infinite;
+  animation: planktonGlow 4.8s ease-in-out infinite;
   z-index: 32;
 }
 
@@ -1020,28 +759,19 @@ body {
   .jm-bubble,
   .jm-sway,
   .jm-plankton,
-  .jm-surface-waves,
-  .jm-mote,
-  .jm-sunbeams,
-  .jm-sand-caustics,
-  .jm-reef__surface-shimmer,
   .jm-reef-prop--seagrass,
   .jm-critter-track--turtle,
-  .jm-critter-img--turtle,
-  .jm-critter-track--school-far,
-  .jm-critter-track--school-mid,
-  .jm-critter-track--tang,
-  .jm-critter-track--clownfish,
   .jm-critter-track--jellyfish,
   .jm-critter-img--jellyfish,
-  .jm-critter-track--crab,
-  .jm-critter-img--crab {
+  .jm-critter-track--clownfish {
     animation: none !important;
   }
 
   .jm-coral-node,
   .jm-coral-node__tag,
-  .jm-project-row {
+  .jm-reef-card,
+  .jm-project-row,
+  .jm-reef__bg {
     transition: none !important;
   }
 }

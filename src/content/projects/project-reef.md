@@ -3,21 +3,19 @@ title: "Project Reef"
 stage: "reef"
 species: "staghorn"
 spriteVariant: "default"
-posX: 56
-posY: 70
+posX: 54
+posY: 77
 plantedDate: "26 November 2026"
-themes: ["Creative", "Learning Lab"]
-problem: "Traditional portfolios only show polished final outputs and hide the curiosity, rough ideas, and cross-project lessons learned along the way."
-userStory: "As a builder sharing my experiments, I want a living pixel coral reef paired with a clean dossier so visitors see both what I ship and how I think."
-learningGoal: "Pair a living growth-metaphor portfolio natively with J-M-NG/ui-kit blues across sunlit day and bioluminescent night themes, backed by hybrid GitHub Actions metadata sync."
+summary: "This site: a pixel-art coral reef paired with a plain editorial notebook for tracking side projects as they grow."
 takeaways:
-  - "Matching the visual metaphor (coral reef) to ui-kit native blues eliminated palette friction."
-  - "Layering pixel-stepped seabed terraces, perspective depth scaling, and animated sea creatures turned static sprites into a cohesive habitat."
-tools: ["Astro", "J-M-NG/ui-kit", "Custom Pixel Art", "GitHub Actions"]
+  - "Picking a coral reef metaphor instead of a generic dark-mode dev template let the visual side sit naturally next to ui-kit's blues."
+  - "Replacing code-drawn SVG backgrounds with a cohesive pixel-art cove and stripping out glassmorphism made the whole page feel calmer."
+tools: ["Astro", "J-M-NG/ui-kit", "Pixel art", "GitHub Actions"]
 githubRepo: "J-M-NG/portfolio"
 demoUrl: "https://j-m-ng.github.io/portfolio/"
-screenshotCaption: "Sticky split-screen living pixel coral reef paired with a native J-M-NG/ui-kit dossier."
 relatedNote: "why-a-coral-reef"
 ---
 
-This portfolio itself: a static Astro site hosted on GitHub Pages where each coral reflects a real project's growth stage and cross-links to field notes.
+Most portfolios only show finished work, which hides the messy half-built experiments where the actual learning happens. I wanted a place where an early sketch (a polyp) can sit alongside something shipped (a blooming coral) without pretending everything is a polished case study.
+
+The site compiles to static HTML via Astro on GitHub Pages. Growth stages and write-ups are edited by hand in Markdown, while a weekly GitHub Action quietly refreshes public repository stats in the background.

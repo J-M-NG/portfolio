@@ -2,22 +2,20 @@
 title: "UI Kit"
 stage: "reef"
 species: "fan"
-posX: 24
-posY: 66
+posX: 25
+posY: 74
 plantedDate: "11 November 2026"
-themes: ["Creative", "Workflow"]
-problem: "Python-first dashboards (FastAPI, Streamlit, plain HTML/JS) often end up looking like generic AI templates or require heavy React and npm pipelines just to stay consistent and accessible."
-userStory: "As a builder shipping Python and static web tools, I want a single framework-free CSS design system with semantic tokens and WCAG 2.2 AA contrast so every project looks crisp and accessible out of the box."
-learningGoal: "Design a GOV.UK-inspired, framework-free design system with automated contrast verification across 186 colour pairs per theme and clean Streamlit helpers without any build step."
+summary: "A single, framework-free CSS design system I built so my Python dashboards stop looking like generic AI templates."
 takeaways:
-  - "Automating contrast checks across all 186 semantic token pairs in both light and dark themes caught subtle readability issues early."
-  - "Building components on native semantic HTML (<details>, <dialog>, <dl>, <table>) kept JavaScript minimal and accessibility strong."
-  - "Testing CSS injection inside Streamlit revealed that st.html() drops an entire style block if a CSS comment looks like an HTML tag."
-tools: ["Vanilla CSS", "Vanilla JS", "Streamlit Helpers", "WCAG 2.2 AA"]
+  - "Checking all 186 colour pairs automatically in CI caught dark-mode contrast issues I would never have spotted by eye."
+  - "Leaning on native HTML elements (<details>, <dialog>, <dl>) got rid of almost all custom JavaScript."
+  - "Streamlit's st.html() silently drops an entire stylesheet if a CSS comment looks like an HTML tag; stripping comments before injection saved hours."
+tools: ["Vanilla CSS", "Vanilla JS", "Streamlit helpers", "WCAG 2.2 AA"]
 githubRepo: "J-M-NG/ui-kit"
 demoUrl: "https://j-m-ng.github.io/ui-kit/"
-screenshotCaption: "Single-file semantic CSS token system, component gallery, and Streamlit theme live on GitHub Pages."
 relatedNote: "avoiding-the-ai-look-with-ui-kit"
 ---
 
-Framework-free house style built for Python-first dashboards and static web tools, following GOV.UK accessibility and clarity patterns without GOV.UK branding.
+Every time I spun up a small FastAPI or Streamlit tool, I hit the same choice: pull in a heavy React setup or accept a generic, low-contrast AI layout. Neither felt right for small internal tools.
+
+So I wrote a single stylesheet inspired by GOV.UK's clarity and accessibility patterns (without borrowing its branding). There is no build step and no framework dependency. Every token pair in light and dark mode is checked by a small Python script, and there is a lightweight Streamlit helper for dropping it into Python apps cleanly.

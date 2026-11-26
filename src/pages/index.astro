@@ -29,6 +29,10 @@ const projects = projectEntries
     const stageMeta = getStageMeta(data.stage);
     const spriteSrc = getCoralSpritePath(data.stage, data.species, data.spriteVariant, baseUrl);
     const ghMeta = data.githubRepo ? repoCache[data.githubRepo] ?? null : null;
+    const paragraphs = (entry.body ?? '')
+      .split(/\r?\n\r?\n/)
+      .map((p) => p.trim())
+      .filter(Boolean);
     return {
       slug,
       title: data.title,
@@ -42,18 +46,16 @@ const projects = projectEntries
       posX: data.posX,
       posY: data.posY,
       plantedDate: data.plantedDate,
-      themes: data.themes,
-      problem: data.problem,
-      userStory: data.userStory,
-      learningGoal: data.learningGoal,
-      takeaways: data.takeaways,
-      tools: data.tools,
+      summary: data.summary,
+      paragraphs,
+      takeaways: data.takeaways ?? [],
+      tools: data.tools ?? [],
       githubRepo: data.githubRepo ?? null,
       demoUrl: data.demoUrl ?? null,
       githubMeta: ghMeta,
+      screenshotImage: data.screenshotImage ?? null,
       screenshotCaption: data.screenshotCaption ?? '',
       relatedNote: data.relatedNote ?? null,
-      body: entry.body?.trim() ?? '',
     };
   })
   .sort((a, b) => stageOrder[a.stage] - stageOrder[b.stage]);
@@ -74,7 +76,6 @@ const notes = noteEntries.map((entry) => {
   };
 });
 
-const allThemes = ['Workflow', 'Daily Friction', 'Learning Lab', 'Creative'];
 const syncedAt = githubMetaFile.syncedAt || '26 November 2026';
 
 const clientPayload = {
@@ -86,7 +87,7 @@ const clientPayload = {
 };
 ---
 
-<BaseLayout title={`${profile.name} — Project Reef`}>
+<BaseLayout title={profile.name}>
   <div class="jm-split">
     <ReefPane
       projects={projects.map((p) => ({
@@ -110,9 +111,9 @@ const clientPayload = {
           <nav class="jm-header__nav" aria-label="Primary">
             <ul>
               <li><a href="#about" data-show-dossier>About</a></li>
-              <li><a href="#projects" data-show-dossier>Reef</a></li>
+              <li><a href="#projects" data-show-dossier>Projects</a></li>
               <li><a href="#experience" data-show-dossier>Experience</a></li>
-              <li><a href="#notes" data-show-dossier>Field notes</a></li>
+              <li><a href="#notes" data-show-dossier>Notes</a></li>
               <li><a href="#contact" data-show-dossier>Contact</a></li>
             </ul>
           </nav>
@@ -121,32 +122,17 @@ const clientPayload = {
 
       <!-- VIEW 1: MAIN DOSSIER -->
       <main id="main" class="jm-dossier__body jm-stack jm-stack--loose">
-        <div class="jm-banner jm-banner--warning" role="region" aria-label="Work in progress notice">
-          <p class="jm-banner__title">Work in progress</p>
-          <p>
-            This portfolio is actively under construction. Projects, field notes, and background details are still being added and refined.
-          </p>
-        </div>
-
         <!-- About -->
         <section id="about" class="jm-stack">
-          <div class="jm-cluster">
-            <span class="jm-tag jm-tag--info">{profile.roleTag}</span>
-            <span class="jm-tag jm-tag--success">{projects.length} corals growing</span>
-          </div>
-          <h1>{profile.headline}</h1>
-          <p class="jm-secondary-text">{profile.bio}</p>
-          <p class="jm-secondary-text">{profile.statusLine}</p>
+          <p class="jm-wip-line">{profile.wipNote}</p>
+          <h1 class="jm-hero-title">{profile.headline}</h1>
+          <p class="jm-lead-copy">{profile.bio}</p>
+          <p class="jm-secondary-text">{profile.nowLine}</p>
         </section>
 
         <!-- Reef Index (Projects) -->
         <section id="projects" class="jm-stack">
-          <div>
-            <h2>Reef index</h2>
-            <p class="jm-secondary-text">
-              Hover a project to spotlight its coral on the left, or select one to read its story.
-            </p>
-          </div>
+          <h2>Reef index</h2>
 
           <div class="jm-stage-tabs" role="region" aria-label="Filter projects by growth stage">
             <button
@@ -198,7 +184,7 @@ const clientPayload = {
                     </span>
                     <span class="jm-reef-card__arrow" aria-hidden="true">→</span>
                   </span>
-                  <span class="jm-reef-card__desc">{p.problem}</span>
+                  <span class="jm-reef-card__desc">{p.summary}</span>
                   <span class="jm-reef-card__meta">
                     <span style="text-transform: capitalize;">{p.species} coral</span>
                     {p.tools.length > 0 && (
@@ -212,29 +198,19 @@ const clientPayload = {
 
           <div id="project-empty" class="jm-panel jm-empty is-hidden">
             <p class="jm-empty__title">No corals in this stage yet</p>
-            <p class="jm-secondary-text">Select another growth stage or show all projects.</p>
+            <p class="jm-secondary-text">Select another stage above to view the rest of the reef.</p>
           </div>
-
-          <p class="jm-secondary-text" style="font-size: var(--jm-font-size-xs);">
-            Growth stages are set manually; GitHub repository metadata synced on {syncedAt}.
-          </p>
         </section>
 
         <!-- Work Experience -->
         <Experience
           items={experience}
-          bannerTitle={profile.resumeBannerTitle}
-          bannerBody={profile.resumeBannerBody}
+          resumeNote={profile.resumeNote}
         />
 
         <!-- Field Notes -->
         <section id="notes" class="jm-stack">
-          <div>
-            <h2>Field notes</h2>
-            <p class="jm-secondary-text">
-              Short reflections on scoping, user stories, and vibecoding, linked to corals in the reef.
-            </p>
-          </div>
+          <h2>Notes</h2>
           <div id="notes-list" class="jm-project-list">
             {notes.map((n) => {
               const linkedProject = projects.find((p) => p.slug === n.projectSlug);
@@ -249,10 +225,10 @@ const clientPayload = {
                     <strong class="jm-project-row__title">{n.title}</strong>
                     <span class="jm-project-row__desc">
                       {n.tag}
-                      {linkedProject ? ` · Linked to ${linkedProject.title}` : ''}
+                      {linkedProject ? ` · ${linkedProject.title}` : ''}
                     </span>
                   </span>
-                  <span class="jm-secondary-text jm-num" style="flex-shrink: 0;">
+                  <span class="jm-secondary-text" style="flex-shrink: 0; font-size: var(--jm-font-size-xs);">
                     {n.date} →
                   </span>
                 </button>
@@ -265,7 +241,7 @@ const clientPayload = {
         <footer id="contact" class="jm-footer jm-stack">
           <h2>Get in touch</h2>
           <p class="jm-secondary-text">
-            Happy to chat about product ideas, vibecoding prototypes, or share a PDF copy of my resume.
+            Happy to chat about product ideas, side projects, or share a PDF copy of my CV.
           </p>
           <div class="jm-cluster">
             {profile.email && (
@@ -292,74 +268,49 @@ const clientPayload = {
               </a>
             )}
           </div>
-          <p class="jm-secondary-text">
-            Built with Astro and J-M-NG/ui-kit · Hosted on GitHub Pages
+          <p class="jm-secondary-text" style="font-size: var(--jm-font-size-xs);">
+            {profile.name} · London · Repo stats last synced {syncedAt}
           </p>
         </footer>
       </main>
 
-      <!-- VIEW 2: INLINE PROJECT STORY VIEW -->
+      <!-- VIEW 2: INLINE EDITORIAL PROJECT VIEW -->
       <section id="project-detail" class="jm-dossier__body jm-stack is-hidden" aria-live="polite">
         <div class="jm-section-head">
           <button type="button" class="jm-button jm-button--secondary jm-button--small" data-show-dossier>
-            ← Return to reef index
+            ← Back to index
           </button>
-          <span id="detail-planted" class="jm-secondary-text jm-num"></span>
+          <span id="detail-planted" class="jm-secondary-text" style="font-size: var(--jm-font-size-xs);"></span>
         </div>
 
         <div class="jm-detail-hero">
-          <div id="detail-sprite" class="jm-panel jm-detail-sprite-box"></div>
+          <div id="detail-sprite" class="jm-detail-sprite-box"></div>
           <div class="jm-stack jm-stack--tight">
             <div class="jm-cluster">
               <span id="detail-stage-tag" class="jm-tag"></span>
-              <span id="detail-species-tag" class="jm-tag" style="text-transform: capitalize;"></span>
-              <span class="jm-tag">Vibecoded</span>
+              <span id="detail-species-meta" class="jm-secondary-text" style="font-size: var(--jm-font-size-xs); text-transform: capitalize;"></span>
             </div>
             <h2 id="detail-title"></h2>
-            <div id="detail-themes" class="jm-cluster"></div>
+            <p id="detail-tools-line" class="jm-secondary-text" style="font-size: var(--jm-font-size-xs);"></p>
           </div>
         </div>
 
-        <div class="jm-stack jm-stack--tight">
-          <div class="jm-secondary-text">Growth lifecycle (4 stages)</div>
-          <div id="detail-stage-bar" class="jm-stage-grid"></div>
-        </div>
+        <div id="detail-stage-bar" class="jm-stage-grid" aria-label="Growth stage progress"></div>
 
-        <div class="jm-banner">
-          <p class="jm-banner__title">User story</p>
-          <p id="detail-user-story"></p>
-        </div>
+        <div id="detail-story" class="jm-stack"></div>
 
-        <div class="jm-two-col">
-          <section class="jm-panel">
-            <div class="jm-panel__body jm-stack jm-stack--tight">
-              <h3>Problem or spark</h3>
-              <p id="detail-problem" class="jm-secondary-text"></p>
-            </div>
-          </section>
-          <section class="jm-panel">
-            <div class="jm-panel__body jm-stack jm-stack--tight">
-              <h3>What I wanted to learn</h3>
-              <p id="detail-learning" class="jm-secondary-text"></p>
-            </div>
-          </section>
-        </div>
+        <figure id="detail-figure" class="jm-stack jm-stack--tight is-hidden">
+          <img id="detail-figure-img" src="" alt="" style="width: 100%; border-radius: var(--jm-radius-sm); border: 1px solid var(--jm-colour-border);" />
+          <figcaption id="detail-figure-caption" class="jm-secondary-text" style="font-size: var(--jm-font-size-xs);"></figcaption>
+        </figure>
 
-        <div class="jm-stack jm-stack--tight">
-          <h3>Key takeaways</h3>
+        <div id="detail-takeaways-wrap" class="jm-stack jm-stack--tight">
+          <h3>What stuck</h3>
           <ul id="detail-takeaways" class="jm-takeaways"></ul>
         </div>
 
-        <details class="jm-details">
-          <summary>View prototype preview &amp; build tools</summary>
-          <div class="jm-details__text jm-stack jm-stack--tight">
-            <p id="detail-screenshot"></p>
-            <div id="detail-tools" class="jm-cluster"></div>
-          </div>
-        </details>
-
-        <div class="jm-stack jm-stack--tight">
-          <h3>Auto-synced GitHub metadata</h3>
+        <div id="detail-github-wrap" class="jm-stack jm-stack--tight is-hidden">
+          <h3>Repository</h3>
           <dl id="detail-github" class="jm-summary-list jm-summary-list--no-actions"></dl>
         </div>
 
@@ -371,12 +322,12 @@ const clientPayload = {
       <section id="note-detail" class="jm-dossier__body jm-stack is-hidden" aria-live="polite">
         <div class="jm-section-head">
           <button type="button" class="jm-button jm-button--secondary jm-button--small" data-show-dossier>
-            ← Return to reef index
+            ← Back to index
           </button>
-          <a id="note-permalink" href="#" class="jm-secondary-text">Open standalone page</a>
+          <a id="note-permalink" href="#" class="jm-secondary-text" style="font-size: var(--jm-font-size-xs);">Permalink</a>
         </div>
         <div class="jm-stack jm-stack--tight">
-          <span id="note-meta" class="jm-secondary-text jm-num"></span>
+          <span id="note-meta" class="jm-secondary-text" style="font-size: var(--jm-font-size-xs);"></span>
           <h2 id="note-title"></h2>
         </div>
         <div id="note-body" class="jm-stack"></div>
@@ -395,7 +346,7 @@ const clientPayload = {
     const PROJECTS = DATA.projects || [];
     const NOTES = DATA.notes || [];
     const STAGES = DATA.stages || [];
-    const EMAIL = DATA.email || 'hello@example.com';
+    const EMAIL = DATA.email || '';
     const BASE_URL = DATA.baseUrl || '/';
 
     let currentTheme = 'light';
@@ -434,13 +385,13 @@ const clientPayload = {
       if (focusSlug && captionEl) {
         const project = PROJECTS.find((item) => item.slug === focusSlug);
         if (project) {
-          captionEl.textContent = `${project.title} · ${project.stageLabel} (${project.species})`;
+          captionEl.textContent = `${project.title} · ${project.stageLabel}`;
         }
       } else if (captionEl) {
         const count = PROJECTS.filter(matchesFilters).length;
         captionEl.textContent =
           count === PROJECTS.length
-            ? 'Select any coral to read its user story'
+            ? 'Select a coral to inspect the project'
             : `Showing ${count} of ${PROJECTS.length} corals`;
       }
     }
@@ -485,25 +436,21 @@ const clientPayload = {
         if (el) el.textContent = text;
       };
 
-      setText('detail-planted', `Planted ${p.plantedDate}`);
+      setText('detail-planted', `Started ${p.plantedDate}`);
       const spriteBox = document.getElementById('detail-sprite');
       if (spriteBox) {
-        spriteBox.innerHTML = `<img src="${p.spriteSrc}" alt="${p.title} coral sprite" class="jm-pixel-sprite" style="max-height: 74px; max-width: 74px; width: auto; height: auto;" />`;
+        spriteBox.innerHTML = `<img src="${p.spriteSrc}" alt="${p.title} coral sprite" class="jm-pixel-sprite" style="max-height: 70px; max-width: 70px; width: auto; height: auto;" />`;
       }
 
       const stageTag = document.getElementById('detail-stage-tag');
       if (stageTag) {
         stageTag.className = `jm-tag ${p.stageTagClass}`;
-        stageTag.textContent = `${p.stageLabel} · ${p.stageDesc}`;
+        stageTag.textContent = p.stageLabel;
       }
 
-      setText('detail-species-tag', `${p.species} coral`);
+      setText('detail-species-meta', `${p.species} coral`);
       setText('detail-title', p.title);
-
-      const themesEl = document.getElementById('detail-themes');
-      if (themesEl) {
-        themesEl.innerHTML = p.themes.map((t) => `<span class="jm-tag">${t}</span>`).join('');
-      }
+      setText('detail-tools-line', (p.tools || []).join(' · '));
 
       const stageIds = ['polyp', 'bud', 'branch', 'reef'];
       const activeIdx = stageIds.indexOf(p.stage);
@@ -514,39 +461,55 @@ const clientPayload = {
         ).join('');
       }
 
-      setText('detail-user-story', `"${p.userStory}"`);
-      setText('detail-problem', p.problem);
-      setText('detail-learning', p.learningGoal);
+      const storyEl = document.getElementById('detail-story');
+      if (storyEl) {
+        const paras = p.paragraphs && p.paragraphs.length ? p.paragraphs : [p.summary];
+        storyEl.innerHTML = paras.map((para) => `<p>${para}</p>`).join('');
+      }
 
+      const figureEl = document.getElementById('detail-figure');
+      const figureImg = document.getElementById('detail-figure-img');
+      const figureCap = document.getElementById('detail-figure-caption');
+      if (figureEl && figureImg && figureCap) {
+        if (p.screenshotImage) {
+          figureImg.setAttribute('src', `${BASE_URL}${p.screenshotImage.replace(/^\//, '')}`);
+          figureImg.setAttribute('alt', p.screenshotCaption || `${p.title} screenshot`);
+          figureCap.textContent = p.screenshotCaption || '';
+          figureEl.classList.remove('is-hidden');
+        } else {
+          figureEl.classList.add('is-hidden');
+        }
+      }
+
+      const takeawaysWrap = document.getElementById('detail-takeaways-wrap');
       const takeawaysEl = document.getElementById('detail-takeaways');
-      if (takeawaysEl) {
-        takeawaysEl.innerHTML = p.takeaways.map((t) => `<li>${t}</li>`).join('');
+      if (takeawaysWrap && takeawaysEl) {
+        if (p.takeaways && p.takeaways.length) {
+          takeawaysWrap.classList.remove('is-hidden');
+          takeawaysEl.innerHTML = p.takeaways.map((t) => `<li>${t}</li>`).join('');
+        } else {
+          takeawaysWrap.classList.add('is-hidden');
+        }
       }
 
-      setText('detail-screenshot', p.screenshotCaption || 'Prototype preview notes coming soon.');
-      const toolsEl = document.getElementById('detail-tools');
-      if (toolsEl) {
-        toolsEl.innerHTML = p.tools.map((t) => `<span class="jm-tag">${t}</span>`).join('');
-      }
-
+      const ghWrap = document.getElementById('detail-github-wrap');
       const ghEl = document.getElementById('detail-github');
-      if (ghEl) {
-        if (p.githubMeta) {
+      if (ghWrap && ghEl) {
+        if (p.githubRepo && p.githubMeta) {
+          ghWrap.classList.remove('is-hidden');
           ghEl.innerHTML = `
-            <div class="jm-summary-list__row"><dt>Repository</dt><dd class="jm-num">${p.githubRepo}</dd></div>
+            <div class="jm-summary-list__row"><dt>Repository</dt><dd>${p.githubRepo}</dd></div>
             <div class="jm-summary-list__row"><dt>Primary language</dt><dd>${p.githubMeta.primaryLang}</dd></div>
-            <div class="jm-summary-list__row"><dt>Last updated</dt><dd class="jm-num">${p.githubMeta.lastPush}</dd></div>
-            <div class="jm-summary-list__row"><dt>Activity</dt><dd class="jm-num">${p.githubMeta.commits} · ${p.githubMeta.stars}</dd></div>
+            <div class="jm-summary-list__row"><dt>Last updated</dt><dd>${p.githubMeta.lastPush}</dd></div>
+            <div class="jm-summary-list__row"><dt>Activity</dt><dd>${p.githubMeta.commits} · ${p.githubMeta.stars}</dd></div>
           `;
         } else if (p.githubRepo) {
+          ghWrap.classList.remove('is-hidden');
           ghEl.innerHTML = `
-            <div class="jm-summary-list__row"><dt>Repository</dt><dd class="jm-num">${p.githubRepo}</dd></div>
-            <div class="jm-summary-list__row"><dt>Sync status</dt><dd class="jm-secondary-text">Private or not yet synced; metadata refreshes on the next scheduled build.</dd></div>
+            <div class="jm-summary-list__row"><dt>Repository</dt><dd>${p.githubRepo}</dd></div>
           `;
         } else {
-          ghEl.innerHTML = `
-            <div class="jm-summary-list__row"><dt>Status</dt><dd class="jm-secondary-text">Private repository or local workspace; public GitHub metrics are not linked.</dd></div>
-          `;
+          ghWrap.classList.add('is-hidden');
         }
       }
 
@@ -558,7 +521,7 @@ const clientPayload = {
           noteWrap.innerHTML = `
             <div class="jm-panel">
               <div class="jm-panel__body jm-section-head">
-                <span><strong>Related field note:</strong> ${linkedNote.title}</span>
+                <span><strong>Related note:</strong> ${linkedNote.title}</span>
                 <button type="button" class="jm-button jm-button--secondary jm-button--small" data-open-note="${linkedNote.slug}">
                   Read note
                 </button>
@@ -585,12 +548,12 @@ const clientPayload = {
         }
         if (p.demoUrl) {
           actions.push(
-            `<a href="${p.demoUrl}" target="_blank" rel="noopener noreferrer" class="jm-button jm-button--secondary">Try live prototype</a>`
+            `<a href="${p.demoUrl}" target="_blank" rel="noopener noreferrer" class="jm-button jm-button--secondary">Open live site</a>`
           );
         }
         if (!actions.length) {
           actions.push(
-            `<span class="jm-secondary-text">Private project: public repository link not published.</span>`
+            `<span class="jm-secondary-text" style="font-size: var(--jm-font-size-sm);">Private repository.</span>`
           );
         }
         actionsEl.innerHTML = actions.join('');
@@ -620,14 +583,14 @@ const clientPayload = {
       if (permalinkEl) permalinkEl.setAttribute('href', `${BASE_URL}notes/${note.slug}/`);
       if (bodyEl) {
         bodyEl.innerHTML = note.paragraphs
-          .map((para) => `<p class="jm-secondary-text">${para}</p>`)
+          .map((para) => `<p>${para}</p>`)
           .join('');
       }
 
       if (linkedEl) {
         if (proj) {
           linkedEl.innerHTML = `
-            <span class="jm-secondary-text">Linked coral</span>
+            <span class="jm-secondary-text">Linked project</span>
             <button type="button" class="jm-button jm-button--secondary jm-button--small" data-open-project="${proj.slug}">
               <img src="${proj.spriteSrc}" alt="" class="jm-pixel-sprite" style="height: 18px; width: auto;" />
               Inspect ${proj.title}
@@ -734,10 +697,10 @@ const clientPayload = {
 
     // Copy email
     document.getElementById('copy-email-btn')?.addEventListener('click', () => {
-      if (navigator.clipboard && navigator.clipboard.writeText) {
+      if (EMAIL && navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(EMAIL).catch(() => {});
       }
-      showToast(`Copied ${EMAIL} to clipboard`);
+      if (EMAIL) showToast(`Copied ${EMAIL} to clipboard`);
     });
 
     applyFilters();

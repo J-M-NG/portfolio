@@ -9,20 +9,17 @@ interface ExperienceItem {
 
 interface Props {
   items: ExperienceItem[];
-  bannerTitle: string;
-  bannerBody: string;
+  resumeNote: string;
 }
 
-const { items, bannerTitle, bannerBody } = Astro.props;
+const { items, resumeNote } = Astro.props;
 ---
 
 <section id="experience" class="jm-stack">
-  <h2>Work experience</h2>
-
-  <div class="jm-banner" role="region" aria-label={bannerTitle}>
-    <p class="jm-banner__title">{bannerTitle}</p>
-    <p>
-      {bannerBody} <a href="#contact">Go to contact details</a>.
+  <div class="jm-stack jm-stack--tight">
+    <h2>Work experience</h2>
+    <p class="jm-secondary-text">
+      {resumeNote} <a href="#contact">Contact details</a>.
     </p>
   </div>
 
